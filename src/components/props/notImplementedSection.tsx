@@ -12,7 +12,7 @@ export const NotImplementedSection = () => {
       <h2 className={styles.title}>Nothing here yet</h2>
       <p className={styles.text}>
         Help us to make this feature!{' '}
-        <a href="https://newstreamteam.github.io/NewStream-Main/contributors.html" className={styles.link}>
+        <a href="http://fairplay.video/contributors" className={styles.link}>
           Take a look at #contributors
         </a>
       </p>
