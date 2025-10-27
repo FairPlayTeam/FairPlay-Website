@@ -35,7 +35,7 @@ export default function HeroImage() {
                 alt="Video thumbnail"
                 width={380}
                 height={220}
-                className="video-thumbnail rounded-[20px] shadow-[0_15px_30px_rgba(0,0,0,0.1)] transform translate-x-5 origin-[center_center] backface-hidden max-w-full h-auto"
+                className="video-thumbnail rounded-[20px] shadow-[0_15px_30px_rgba(0,0,0,0.1)] transform -translate-x-5 origin-[center_center] backface-hidden max-w-full h-auto"
               />
             </div>
 
