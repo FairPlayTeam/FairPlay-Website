@@ -19,8 +19,8 @@ export default function DownloadButton({ children, onClick, className = "", vari
       cursor-pointer
       inline-flex
       items-center justify-center
-      text-[15px] font-bold text-[var(--color-text)]
-      rounded-full bg-[var(--color-accent-dark)]
+      text-[15px] font-bold text-(--color-text)
+      rounded-full bg-(--color-accent-dark)
       ${styles} ${className}`}>
       {children}
     </button>

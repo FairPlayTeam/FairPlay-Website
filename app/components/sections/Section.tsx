@@ -17,7 +17,7 @@ export default function Section({children, className = "", variant = "primary", 
     <div id={id} className={`${baseStyles} ${className}`.trim()}>
       {variant === "primary" && (
         <div
-          className="absolute inset-0 -z-10 rounded-2xl p-[2px]"
+          className="absolute inset-0 -z-10 rounded-2xl p-0.5"
           style={{
             background: "linear-gradient(145deg, #3c3c3c, #0f0f0f, #3c3c3c)",
             mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",

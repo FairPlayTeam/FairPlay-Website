@@ -40,7 +40,7 @@ export default function Topbar() {
   return (
     <>
         <motion.header
-          className="main-header bg-[#0f0f0f00] py-[12px] px-[20px] sm:px-[40px] sticky top-0 z-[1000] transition-all duration-300 ease-out"
+          className="main-header bg-[#0f0f0f00] py-3 px-5 sm:px-10 sticky top-0 z-1000 transition-all duration-300 ease-out"
           initial={{
             y: -50,
             opacity: 0
@@ -85,14 +85,14 @@ export default function Topbar() {
         {isMenuOpen && (
           <>
             <motion.div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[999]"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-999"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.aside
-              className="fixed right-0 top-0 h-full w-[80%] max-w-[320px] bg-[#0f0f0f] text-[var(--color-text)] border-l border-[var(--color-border)] shadow-[0_0_25px_rgba(0,0,0,0.6)] z-[1000] p-6 flex flex-col"
+              className="fixed right-0 top-0 h-full w-[80%] max-w-[320px] bg-[#0f0f0f] text-(--color-text) border-l border-(--color-border) shadow-[0_0_25px_rgba(0,0,0,0.6)] z-1000 p-6 flex flex-col"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -103,7 +103,7 @@ export default function Topbar() {
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   aria-label="Close menu"
-                  className="text-[var(--color-text)] transition-colors cursor-pointer"
+                  className="text-(--color-text) transition-colors cursor-pointer"
                 >
                   <FaTimes size={24} />
                 </button>

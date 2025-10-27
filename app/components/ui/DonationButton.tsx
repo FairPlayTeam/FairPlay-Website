@@ -19,8 +19,8 @@ export default function Button({ children, onClick, className = "", variant = "p
       cursor-pointer
       inline-flex
       items-center justify-center
-      text-[15px] font-bold text-[var(--color-text)]
-      rounded-full bg-[var(--color-donate)]
+      text-[15px] font-bold text-(--color-text)
+      rounded-full bg-(--color-donate)
       transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
       ${styles} ${className}`}>
       {children}

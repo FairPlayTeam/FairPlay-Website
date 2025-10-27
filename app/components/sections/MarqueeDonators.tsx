@@ -98,10 +98,10 @@ export default function MarqueeDonators() {
   const items = DONORS.map((donor, index) => (
     <div
       key={`donor-${index}`}
-      className="flex items-center gap-2 shrink-0 rounded-full border-2 border-[var(--color-border)] bg-[var(--color-container)] shadow-md px-5 py-2 transition-all duration-300"
+      className="flex items-center gap-2 shrink-0 rounded-full border-2 border-(--color-border) bg-(--color-container) shadow-md px-5 py-2 transition-all duration-300"
     >
-      <span className="text-lg font-extrabold text-[var(--color-text-amount)]">{donor.amount}</span>
-      <span className="font-medium text-[var(--color-text)]">{donor.name}</span>
+      <span className="text-lg font-extrabold text-(--color-text-amount)">{donor.amount}</span>
+      <span className="font-medium text-(--color-text)">{donor.name}</span>
     </div>
   ));
 
@@ -110,7 +110,7 @@ export default function MarqueeDonators() {
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="my-12 overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)]"
+      className="my-12 overflow-hidden py-2 mask-[linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)]"
       aria-label="Donators list"
     >
       <div

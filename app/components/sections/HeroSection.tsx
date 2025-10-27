@@ -10,7 +10,7 @@ export default function HeroSection() {
         hero-vitrine
         flex flex-col-reverse lg:flex-row items-center justify-between
         gap-[50px]
-        pt-[40px]
+        pt-10
         min-h-[calc(100vh-100px)]
         text-left
       "
