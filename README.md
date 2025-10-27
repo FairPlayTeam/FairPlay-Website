@@ -1,7 +1,7 @@
 # FairPlay - Where Creativity Stays Human
 
 **FairPlay** is a free, open-source streaming platform that puts *people* back at the heart of online creativity.  
-No algorithms, no ads, no distractions — just meaningful videos, community engagement, and open collaboration.
+No algorithms, no ads, no distractions - just meaningful videos, community engagement, and open collaboration.
 
  **Find us at** [our website](https://fairplay.video)
 
