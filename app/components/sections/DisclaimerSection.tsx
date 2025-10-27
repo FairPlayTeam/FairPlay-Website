@@ -14,7 +14,7 @@ export default function HeroSection() {
             contribute to its development! A "live build" version of Fairplay is also
             available at{" "}
             
-            <Link href="https://lab.fairplay.video/">lab.fairplay.video</Link>
+            <Link href="https://lab.fairplay.video/">the "lab"</Link>
             </p>
         </div>
     </section>

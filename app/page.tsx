@@ -22,18 +22,18 @@ export default function HomePage() {
 
         <HeroSection />
 
+
         <FadeInSection>
           <Section variant="secondary">
             <div className="intro-card mx-auto max-w-[800px] text-center">
                 <h2 className="text-[34px] mb-[25px] font-bold">A Project in Progress</h2>
                 <p className="text-[19px] text-[var(--color-medium-gray)]">
-                FairPlay is currently under development. You'll be introduced to the user
-                interface and some features, but please note that the project is still
-                under development. We thank you for your patience and invite you to
-                contribute to its development! A "live build" version of Fairplay is also
-                available at{" "}
-
-                <Link href="https://lab.fairplay.video/" >lab.fairplay.video</Link>
+                  FairPlay is currently under development. You'll be introduced to the user
+                  interface and some features, but please note that the project is still
+                  under development. We thank you for your patience and invite you to
+                  contribute to its development! A "live build" version of Fairplay is also
+                  available at{" "}
+                  <Link href="https://lab.fairplay.video/" >the "lab"</Link>
                 </p>
             </div>
           </Section>
@@ -81,7 +81,7 @@ export default function HomePage() {
                 <p className="text-[16px] mb-[25px] text-center lg:text-left">
                   Tired of short, addictive, and useless content polluting your feed? Our browser extension allows you to hide them and take back control.
                 </p>
-                <ul className="mb-[35px] flex flex-col items-center items-start">
+                <ul className="mb-[35px] flex flex-col items-start">
                   <li className="flex items-center text-[16px] mb-[10px]">
                     <FaCheckCircle className="text-[var(--color-accent)] text-[18px] mr-[10px]"/> Remove and block YouTube Shorts from your feed.
                   </li>
@@ -147,10 +147,10 @@ export default function HomePage() {
             <div className="intro-card mx-auto max-w-[800px] text-center">
               <h2 className="text-[34px] mb-[25px] font-bold">Support FairPlay, Support Quality Content</h2>
               <p className="text-[19px] text-[var(--color-medium-gray)] mb-[30px]">
-              FairPlay is 100% free and ad-free, and that will always be our commitment.
-              If you appreciate our mission and our platform, your donation directly
-              helps us cover infrastructure costs, improve features, and grow our community. 
-              Every contribution counts, big or small.
+                FairPlay is 100% free and ad-free, and that will always be our commitment.
+                If you appreciate our mission and our platform, your donation directly
+                helps us cover infrastructure costs, improve features, and grow our community. 
+                Every contribution counts, big or small.
               </p>
               <DonationButton  onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="secondary">Donate</DonationButton>
 
