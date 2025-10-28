@@ -12,6 +12,7 @@ import DonationButton from "./components/ui/DonationButton";
 import Footer from "./components/sections/Footer";
 import MarqueeDonors from "./components/sections/MarqueeDonators";
 import FadeInSection from "./components/sections/FadeInSection";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -57,10 +58,13 @@ export default function HomePage() {
           <Section id="extension">
             <div className="flex flex-col lg:flex-row gap-[50px] text-left">
               <div className="flex flex-1 justify-center items-center w-full lg:w-auto">
-                <img 
+                {/* TODO: add the correct image here this is a placeholder */}
+                <Image 
+                  src="globe.svg" 
                   className="h-auto max-w-full" 
-                  src="images/addon.png" 
                   alt="Visual of the FairPlay browser extension"
+                  width={100}
+                  height={100}
                 />
               </div>
               <div className="flex-1 w-full">
@@ -113,7 +117,7 @@ export default function HomePage() {
                   Join our community
                 </h2>
                 <p className="text-[16px] mb-[25px] max-w-lg">
-                  FairPlay is more than a platform, it's a movement. By joining our community, you contribute to shaping the future of streaming and Internet. Share your passions, discover new perspectives, and connect with others Fairplayers.
+                  FairPlay is more than a platform, it&apos;s a movement. By joining our community, you contribute to shaping the future of streaming and Internet. Share your passions, discover new perspectives, and connect with others Fairplayers.
                 </p>
                 <Button onClick={() => window.location.href="https://discord.gg/6g5cBUVra9"}>Discover our Discord</Button>
               </div>

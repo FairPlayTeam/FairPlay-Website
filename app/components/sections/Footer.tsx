@@ -20,7 +20,7 @@ export default function Footer({ variant = "primary" }: FooterProps) {
             ? FairPlay offers a refreshing alternative to mainstream video
             services. Watch high-quality content with no interruptions, no
             subscriptions, and no tracking. Our community-driven platform is
-            open source, ethical, and respects your privacy. Whether you're into{" "}
+            open source, ethical, and respects your privacy. Whether you&apos;re into{" "}
             <strong className="text-(--color-text-bold)">
               documentaries, tutorials, or inspiring stories
             </strong>
