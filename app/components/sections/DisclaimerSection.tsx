@@ -10,7 +10,7 @@ export default function DisclaimerSection() {
         FairPlay is currently under development. You'll be introduced to the user
         interface and some features, but please note that the project is still
         under development. We thank you for your patience and invite you to
-        contribute to its development! A "live build" version of Fairplay is also
+        contribute to its development! The "live build" version of Fairplay is
         available at{" "}
         
         <Link href="https://lab.fairplay.video/">lab.fairplay.video</Link>

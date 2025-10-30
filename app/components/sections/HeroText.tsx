@@ -45,7 +45,8 @@ export default function HeroText() {
           w-full flex justify-center lg:justify-start
         `}
       >
-        <ExploreButton onClick={() => window.location.href="https://fairplay.video/feed"}/>
+        {/* might change link to https://fairplay.video/feed when it's ready */}
+        <ExploreButton onClick={() => window.location.href="https://lab.fairplay.video"}/>
       </div>
     </div>
   );
