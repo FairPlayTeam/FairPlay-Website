@@ -25,7 +25,7 @@ export default function HeroText() {
           ${animate ? "opacity-100 translate-x-0 delay-100" : "opacity-0 -translate-x-[50px]"}
         `}
       >
-        Fairplay - where creativity stays human
+        Fairplay, where creativity stays human
       </h1>
 
       <p
@@ -45,7 +45,7 @@ export default function HeroText() {
           w-full flex justify-center lg:justify-start
         `}
       >
-        <ExploreButton onClick={() => window.location.href="/feed"}/>
+        <ExploreButton onClick={() => window.location.href="/home"}/>
       </div>
     </div>
   );

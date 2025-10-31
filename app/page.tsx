@@ -7,8 +7,6 @@ import Section from "./components/sections/Section";
 import DisclaimerSection from "./components/sections/DisclaimerSection";
 import Button from "./components/ui/Button";
 import FeatureGrid from "./components/sections/FeatureGrid";
-import DownloadButton from "./components/ui/DownloadButton";
-import DonationButton from "./components/ui/DonationButton";
 import Footer from "./components/sections/Footer";
 import MarqueeDonors from "./components/sections/MarqueeDonators";
 import FadeInSection from "./components/sections/FadeInSection";
@@ -16,7 +14,7 @@ import FadeInSection from "./components/sections/FadeInSection";
 export default function HomePage() {
   return (
     <>
-      <Topbar />
+      <Topbar variant="public"/>
 
       <main className="mx-auto max-w-[1400px] px-5 md:px-[70px]">
 
@@ -82,7 +80,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <div className="flex justify-center lg:justify-start">
-                  <DownloadButton onClick={() => window.location.href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"} variant="secondary">Install (Edge)</DownloadButton>
+                  <Button onClick={() => window.location.href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"} variant="download">Install (Edge)</Button>
                 </div>
               </div>
             </div>
@@ -141,7 +139,7 @@ export default function HomePage() {
               helps us cover infrastructure costs, improve features, and grow our community. 
               Every contribution counts, big or small.
               </p>
-              <DonationButton  onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="secondary">Donate</DonationButton>
+              <Button  onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary">Donate</Button>
 
               <MarqueeDonors />
 
