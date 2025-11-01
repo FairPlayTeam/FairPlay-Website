@@ -113,16 +113,20 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 body{
     background-color: var(--color-background);
     color: var(--color-white);
-    font-family: Lato,sans-serif;
+    font-family: Lato, sans-serif;
     line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     height:100%;
     position: relative; 
 }
+
 body:before{
     background: radial-gradient(circle at 70% 7%, #3b508de0, #0000 10%),
                 radial-gradient(circle at 5% 30%, #3b508de0, #0000 15%),
@@ -134,9 +138,10 @@ body:before{
     position: absolute;
     z-index: -1;
 }
-h1,h2,h3{
+
+h1, h2, h3{
     color: var(--color-white);
-    font-family: Montserrat,sans-serif;
+    font-family: Montserrat, sans-serif;
     font-weight: 700;
     line-height: 1.2;
 }

@@ -34,7 +34,8 @@ function TopbarPublic() {
     const header = document.querySelector<HTMLElement>(".main-header");
     const headerHeight = header ? header.offsetHeight + 50 : 0;
     if (section) {
-      const top = section.getBoundingClientRect().top + window.scrollY - headerHeight;
+      const top =
+        section.getBoundingClientRect().top + window.scrollY - headerHeight;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
@@ -68,20 +69,42 @@ function TopbarPublic() {
           <Logo />
           <nav className="hidden md:block">
             <ul className="flex items-center gap-[30px]">
-              <li><TopbarButton onClick={() => scrollToSection("about")}>About</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("values")}>Our Values</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("community")}>Community</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("extension")}>Extension</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("development")}>Development</TopbarButton></li>
-              <li><TopbarButton>Roadmap</TopbarButton></li>
               <li>
-                <Button onClick={() => (window.location.href = "http://ko-fi.com/fairplay_")} variant="donatePrimary" className="btn-donate">
+                <TopbarButton href="#about">About</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#values">Our Values</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#community">Community</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#extension">Extension</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#development">Development</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#roadmap">Roadmap</TopbarButton>
+              </li>
+              <li>
+                <Button
+                  onClick={() =>
+                    (window.location.href = "http://ko-fi.com/fairplay_")
+                  }
+                  variant="donatePrimary"
+                  className="btn-donate"
+                >
                   Donate
                 </Button>
               </li>
             </ul>
           </nav>
-          <button onClick={() => setIsMenuOpen(true)} className="md:hidden text-white focus:outline-none cursor-pointer" aria-label="Open menu">
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="md:hidden text-white focus:outline-none cursor-pointer"
+            aria-label="Open menu"
+          >
             <FaBars size={24} />
           </button>
         </div>
@@ -106,20 +129,79 @@ function TopbarPublic() {
             >
               <div className="flex justify-between items-center mb-8">
                 <Logo />
-                <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu" className="text-(--color-text) transition-colors cursor-pointer">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="text-(--color-text) transition-colors cursor-pointer"
+                >
                   <FaTimes size={24} />
                 </button>
               </div>
               <nav>
                 <ul className="flex flex-col gap-5 text-left">
-                  <li><TopbarButton onClick={() => { setIsMenuOpen(false); scrollToSection("about"); }}>About</TopbarButton></li>
-                  <li><TopbarButton onClick={() => { setIsMenuOpen(false); scrollToSection("values"); }}>Our Values</TopbarButton></li>
-                  <li><TopbarButton onClick={() => { setIsMenuOpen(false); scrollToSection("community"); }}>Community</TopbarButton></li>
-                  <li><TopbarButton onClick={() => { setIsMenuOpen(false); scrollToSection("extension"); }}>Extension</TopbarButton></li>
-                  <li><TopbarButton onClick={() => { setIsMenuOpen(false); scrollToSection("development"); }}>Development</TopbarButton></li>
-                  <li><TopbarButton onClick={() => setIsMenuOpen(false)}>Roadmap</TopbarButton></li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        scrollToSection("about");
+                      }}
+                    >
+                      About
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        scrollToSection("values");
+                      }}
+                    >
+                      Our Values
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        scrollToSection("community");
+                      }}
+                    >
+                      Community
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        scrollToSection("extension");
+                      }}
+                    >
+                      Extension
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        scrollToSection("development");
+                      }}
+                    >
+                      Development
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton onClick={() => setIsMenuOpen(false)}>
+                      Roadmap
+                    </TopbarButton>
+                  </li>
                   <li className="mt-8">
-                    <Button onClick={() => (window.location.href = "http://ko-fi.com/fairplay_")} variant="donateSecondary" className="w-full">
+                    <Button
+                      onClick={() =>
+                        (window.location.href = "http://ko-fi.com/fairplay_")
+                      }
+                      variant="donateSecondary"
+                      className="w-full"
+                    >
                       Donate
                     </Button>
                   </li>
@@ -141,7 +223,10 @@ function TopbarAuth() {
 
   useEffect(() => {
     if (!user) {
-      profile.me().then((u) => setUser(u)).catch(() => {});
+      profile
+        .me()
+        .then((u) => setUser(u))
+        .catch(() => {});
     }
   }, [user, setUser]);
 
@@ -154,7 +239,13 @@ function TopbarAuth() {
     <header className="flex justify-between items-center border-b border-gray-200 px-6 py-3 bg-white w-full">
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/favicon.png" alt="FairPlay Logo" width={40} height={40} className="rounded-md" />
+          <Image
+            src="/favicon.png"
+            alt="FairPlay Logo"
+            width={40}
+            height={40}
+            className="rounded-md"
+          />
           <h1 className="text-2xl font-bold text-gray-900">FairPlay</h1>
         </Link>
 
@@ -164,7 +255,10 @@ function TopbarAuth() {
             placeholder="Rechercher des vidéos"
             className="flex-1 px-3 py-2 text-gray-800 focus:outline-none"
           />
-          <button className="px-3 bg-gray-200 hover:bg-gray-300 transition" aria-label="Search">
+          <button
+            className="px-3 bg-gray-200 hover:bg-gray-300 transition"
+            aria-label="Search"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 text-gray-800"
@@ -173,7 +267,11 @@ function TopbarAuth() {
               stroke="currentColor"
               strokeWidth="2"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"
+              />
             </svg>
           </button>
         </div>
