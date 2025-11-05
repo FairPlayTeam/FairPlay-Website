@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import Topbar from "./components/sections/Topbar";
 import HeroSection from "./components/sections/HeroSection";
@@ -13,6 +14,26 @@ import FadeInSection from "./components/sections/FadeInSection";
 import ExtensionPreview from "./components/sections/ExtensionPreview";
 
 export default function HomePage() {
+  useEffect(() => {
+    const handleScrollToHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const section = document.querySelector<HTMLElement>(hash);
+        const header = document.querySelector<HTMLElement>(".main-header");
+        const headerHeight = header ? header.offsetHeight + 50 : 0;
+
+        if (section) {
+          const top = section.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }
+    };
+    handleScrollToHash();
+    window.addEventListener("hashchange", handleScrollToHash);
+
+    return () => window.removeEventListener("hashchange", handleScrollToHash);
+  }, []);
+  
   return (
     <>
       <Topbar />

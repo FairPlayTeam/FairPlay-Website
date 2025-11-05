@@ -13,17 +13,6 @@ interface TopbarProps {
 export default function Topbar({ animateOnLoad = true }: TopbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id);
-    const header = document.querySelector<HTMLElement>(".main-header");
-    const headerHeight = header ? header.offsetHeight + 50 : 0;
-
-    if (section) {
-      const top = section.getBoundingClientRect().top + window.scrollY - headerHeight;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
-
   // make opacity and blur change depending on scroll rate
   useEffect(() => {
     const handleScroll = () => {
@@ -56,12 +45,12 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
           <Logo />
           <nav className="hidden md:block">
             <ul className="flex items-center gap-[30px]">
-              <li><TopbarButton onClick={() => scrollToSection("about")}>About</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("values")}>Our Values</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("community")}>Community</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("extension")}>Extension</TopbarButton></li>
-              <li><TopbarButton onClick={() => scrollToSection("development")}>Development</TopbarButton></li>
-              <li><TopbarButton>Roadmap</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/#about"}>About</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/#values"}>Our Values</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/#community"}>Community</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/#extension"}>Extension</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/#development"}>Development</TopbarButton></li>
+              <li><TopbarButton onClick={() => window.location.href="/roadmap"}>Roadmap</TopbarButton></li>
               <li>
                 <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donatePrimary" className="btn-donate">
                   Donate
@@ -108,12 +97,12 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
               </div>
               <nav>
                 <ul className="flex flex-col gap-5 text-left">
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); scrollToSection("about");}}>About</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); scrollToSection("values");}}>Our Values</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); scrollToSection("community");}}>Community</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); scrollToSection("extension");}}>Extension</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); scrollToSection("development");}}>Development</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false)}}>Roadmap</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/#about"}}>About</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/#values"}}>Our Values</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/#community"}}>Community</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/#extension"}}>Extension</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/#development"}}>Development</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false); window.location.href="/roadmap"}}>Roadmap</TopbarButton></li>
                   <li className="mt-8">
                     <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary" className="w-full">
                       Donate
