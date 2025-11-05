@@ -37,13 +37,14 @@ export default function Button({ children, onClick, className = "", variant = "p
       return(
         <button
           onClick={onClick}
-          disabled={loading}
-          className={`w-full py-3 rounded-lg font-semibold transition ${
-            loading
-              ? 'opacity-60 cursor-not-allowed'
-              : 'cursor-pointer bg-(--blue-pastel-700) hover:bg-(--blue-500) text-(--white) shadow-md'
-          }`}
-        >
+          className={`
+          cursor-pointer
+          inline-flex
+          items-center justify-center
+          text-[15px] font-bold text-(--color-text)
+          rounded-full bg-(--color-accent-dark)
+          px-[35px] py-2.5
+          ${className}`}>
           {children}
         </button>
       );
@@ -74,21 +75,6 @@ export default function Button({ children, onClick, className = "", variant = "p
           text-[15px] font-bold text-(--color-text)
           rounded-full bg-(--color-donate)
           transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
-          px-[35px] py-2.5
-          ${className}`}>
-          {children}
-        </button>
-      );
-    case "download":
-      return(
-        <button
-          onClick={onClick}
-          className={`
-          cursor-pointer
-          inline-flex
-          items-center justify-center
-          text-[15px] font-bold text-(--color-text)
-          rounded-full bg-(--color-accent-dark)
           px-[35px] py-2.5
           ${className}`}>
           {children}

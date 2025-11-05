@@ -114,6 +114,9 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
 body{
     background-color: var(--color-background);
     color: var(--color-white);
@@ -140,4 +143,12 @@ h1,h2,h3{
     font-family: Montserrat,sans-serif;
     font-weight: 700;
     line-height: 1.2;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-thumb {
+  background: #5a5a5a;
+  border-radius: 2px;
 }

@@ -80,7 +80,7 @@ export default function HomePage() {
                     </li>
                   </ul>
                 <div className="flex justify-center lg:justify-start">
-                  <Button onClick={() => window.location.href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"} variant="download">Install (Edge)</Button>
+                  <Button onClick={() => window.location.href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"} variant="secondary">Install (Edge)</Button>
                 </div>
               </div>
             </div>
