@@ -10,11 +10,12 @@ import FeatureGrid from "./components/sections/FeatureGrid";
 import Footer from "./components/sections/Footer";
 import MarqueeDonors from "./components/sections/MarqueeDonators";
 import FadeInSection from "./components/sections/FadeInSection";
+import ExtensionPreview from "./components/sections/ExtensionPreview";
 
 export default function HomePage() {
   return (
     <>
-      <Topbar variant="public"/>
+      <Topbar />
 
       <main className="mx-auto max-w-[1400px] px-5 md:px-[70px]">
 
@@ -55,11 +56,7 @@ export default function HomePage() {
           <Section id="extension" className="mt-[100px]">
             <div className="flex flex-col lg:flex-row gap-[50px] text-left">
               <div className="flex flex-1 justify-center items-center w-full lg:w-auto">
-                <img 
-                  className="h-auto max-w-full" 
-                  src="images/addon.png" 
-                  alt="Visual of the FairPlay browser extension"
-                />
+                <ExtensionPreview />
               </div>
               <div className="flex-1 w-full">
                 <h2 className="text-[34px] font-bold mb-[25px] text-center lg:text-left">
@@ -68,17 +65,20 @@ export default function HomePage() {
                 <p className="text-[16px] mb-[25px] text-center lg:text-left">
                   Tired of short, addictive, and useless content polluting your feed? Our browser extension allows you to hide them and take back control.
                 </p>
-                <ul className="mb-[35px] flex flex-col items-start">
-                  <li className="flex items-center text-[16px] mb-2.5">
-                    <FaCheckCircle className="text-(--color-accent) text-[18px] mr-2.5"/> Remove and block YouTube Shorts from your feed.
-                  </li>
-                  <li className="flex items-center text-[16px] mb-2.5">
-                    <FaCheckCircle className="text-(--color-accent) text-[18px] mr-2.5"/> Removes TikTok and Snapchat videos.
-                  </li>
-                  <li className="flex items-center text-[16px] mb-2.5">
-                    <FaCheckCircle className="text-(--color-accent) text-[18px] mr-2.5"/> Block custom domains.
-                  </li>
-                </ul>
+                  <ul className="mb-[35px] flex flex-col items-start gap-3">
+                    <li className="flex items-start text-[16px]">
+                      <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                      Remove and block YouTube Shorts from your feed.
+                    </li>
+                    <li className="flex items-start text-[16px]">
+                      <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                      Removes TikTok and Snapchat videos.
+                    </li>
+                    <li className="flex items-start text-[16px]">
+                      <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                      Block custom domains.
+                    </li>
+                  </ul>
                 <div className="flex justify-center lg:justify-start">
                   <Button onClick={() => window.location.href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"} variant="download">Install (Edge)</Button>
                 </div>
