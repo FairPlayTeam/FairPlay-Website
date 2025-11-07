@@ -92,7 +92,8 @@ export default function RoadmapPage() {
 
   return (
     <>
-    <Topbar animateOnLoad={false}/>
+    <Topbar animateOnLoad={false} />
+    
     <main className="min-h-screen  text-(--color-text) px-6 py-20">
       <section className="text-center mb-16">
         <h1 className="text-5xl font-bold mb-4">Project Roadmap</h1>
@@ -105,8 +106,8 @@ export default function RoadmapPage() {
         {roadmap.map((item, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: i * 0.2 }}
             className="relative bg-(--color-container) rounded-2xl p-6 backdrop-blur-lg border border-(--color-border) hover:scale-[1.01] transition-all duration-300"
           >
