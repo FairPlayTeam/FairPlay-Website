@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface DocsSidebarProps {
-  sections: { id: string; title: string; icon: JSX.Element }[];
+  sections: { id: string; title: string; icon: ReactNode }[];
   activeSection: string;
 }
 
