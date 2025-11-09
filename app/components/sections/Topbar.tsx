@@ -50,7 +50,7 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
               <li><TopbarButton href="#community">Community</TopbarButton></li>
               <li><TopbarButton href="#extension">Extension</TopbarButton></li>
               <li><TopbarButton href="#development">Development</TopbarButton></li>
-              <li><TopbarButton href="#roadmap">Roadmap</TopbarButton></li>
+              <li><TopbarButton href="/roadmap">Roadmap</TopbarButton></li>
               <li>
                 <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donatePrimary" className="btn-donate">
                   Donate
@@ -102,7 +102,7 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
                   <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#community">Community</TopbarButton></li>
                   <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#extension">Extension</TopbarButton></li>
                   <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#development">Development</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false)}} href="#roadmap">Roadmap</TopbarButton></li>
+                  <li><TopbarButton onClick={() => {setIsMenuOpen(false)}} href="/roadmap">Roadmap</TopbarButton></li>
                   <li className="mt-8">
                     <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary" className="w-full">
                       Donate
