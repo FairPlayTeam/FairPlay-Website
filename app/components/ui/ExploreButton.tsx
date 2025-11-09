@@ -10,9 +10,9 @@ export default function ExploreButton({ onClick, className = "" }: ExploreButton
       onClick={onClick}
       className={`
         flex gap-2 items-center shadow-xl cursor-pointer
-        text-[var(--color-text-dark)] bg-gray-50 backdrop-blur-md
+        text-(--color-text-dark) bg-gray-50 backdrop-blur-md
         lg:font-semibold isolation-auto border-gray-50 relative z-10
-        px-[17px] py-[6px] overflow-hidden border-2 rounded-full group
+        px-[17px] py-1.5 overflow-hidden border-2 rounded-full group
         ${className}
       `}
     >

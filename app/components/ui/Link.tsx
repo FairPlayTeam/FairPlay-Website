@@ -17,14 +17,14 @@ export default function Link({ href, children, className = "", variant = "primar
     href={href}
     className={`
         relative inline-block
-        border-b-2 border-dotted border-[var(--color-links)]
-        rounded-[2px]
-        text-[var(--color-links)]
+        border-b-2 border-dotted border-(--color-links)
+        rounded-xs
+        text-(--color-links)
         no-underline
         leading-[1.1]
-        pb-[1px]
+        pb-px
         transition-colors duration-200 ease-in-out
-        hover:text-[var(--color-links-hover)]
+        hover:text-(--color-links-hover)
         group
         ${className}
     `}
@@ -35,7 +35,7 @@ export default function Link({ href, children, className = "", variant = "primar
           className="
           inline-block text-[0.9em] ml-[5px]
           transition-transform duration-200 ease-in-out
-          group-hover:translate-x-[2px]
+          group-hover:translate-x-0.5
           "
       >
         <MdArrowOutward />
