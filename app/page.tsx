@@ -40,8 +40,6 @@ export default function HomePage() {
 
       <main className="mx-auto max-w-[1400px] px-5 md:px-[70px]">
 
-        <HeroSection />
-
         <FadeInSection>
           <Section variant="secondary" className="mt-[100px]">
             <DisclaimerSection />
@@ -153,12 +151,12 @@ export default function HomePage() {
         <FadeInSection>
           <Section variant="secondary" className="mt-[100px]">
             <div className="intro-card mx-auto max-w-[800px] text-center">
-              <h2 className="text-[33px] mb-[25px] font-bold">Support FairPlay, Support Quality Content</h2>
-              <p className="text-[18px] text-(--color-medium-gray) mb-[30px]">
-              FairPlay is 100% free and ad-free, and that will always be our commitment.
-              If you appreciate our mission and our platform, your donation directly
-              helps us cover infrastructure costs, improve features, and grow our community. 
-              Every contribution counts, big or small.
+              <h2 className="text-[34px] mb-[25px] font-bold">Support FairPlay, Support Quality Content</h2>
+              <p className="text-[19px] text-[var(--color-medium-gray)] mb-[30px]">
+                FairPlay is 100% free and ad-free, and that will always be our commitment.
+                If you appreciate our mission and our platform, your donation directly
+                helps us cover infrastructure costs, improve features, and grow our community. 
+                Every contribution counts, big or small.
               </p>
               <Button  onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary">Donate</Button>
 
