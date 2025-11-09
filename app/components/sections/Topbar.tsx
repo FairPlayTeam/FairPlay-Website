@@ -4,9 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Logo from "../ui/Logo";
 import TopbarButton from "../ui/TopbarButton";
-import DonationButton from "../ui/DonationButton";
+import Button from "../ui/Button";
 
-export default function Topbar() {
+interface TopbarProps {
+  animateOnLoad?: boolean;
+}
+
+export default function Topbar({ animateOnLoad = true }: TopbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // make opacity and blur change depending on scroll rate
@@ -28,21 +32,15 @@ export default function Topbar() {
 
   return (
     <>
-        <motion.header
-          className="main-header bg-[#0f0f0f00] py-3 px-5 sm:px-10 sticky top-0 z-1000 transition-all duration-300 ease-out"
-          initial={{
-            y: -50,
-            opacity: 0
-          }}
-          animate={{
-            y: 0,
-            opacity: 1
-          }}
-          transition={{
-            duration: 1.5,
-            ease: [0.43, 0.13, 0.23, 0.96],
-          }}
-        >
+      <motion.header
+        className="main-header bg-[#0f0f0f00] py-3 px-5 sm:px-10 sticky top-0 z-1000 transition-all duration-300 ease-out"
+        initial={animateOnLoad ? { y: -50, opacity: 0 } : { y: 0, opacity: 1 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          duration: animateOnLoad ? 1.5 : 0,
+          ease: [0.43, 0.13, 0.23, 0.96],
+        }}
+      >
         <div className="flex items-center justify-between mx-auto max-w-[1400px]">
           <Logo />
           <nav className="hidden md:block">
@@ -54,9 +52,9 @@ export default function Topbar() {
               <li><TopbarButton href="#development">Development</TopbarButton></li>
               <li><TopbarButton href="#roadmap">Roadmap</TopbarButton></li>
               <li>
-                <DonationButton onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="primary" className="btn-donate">
+                <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donatePrimary" className="btn-donate">
                   Donate
-                </DonationButton>
+                </Button>
               </li>
             </ul>
           </nav>
@@ -106,9 +104,9 @@ export default function Topbar() {
                   <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#development">Development</TopbarButton></li>
                   <li><TopbarButton onClick={() => {setIsMenuOpen(false)}} href="#roadmap">Roadmap</TopbarButton></li>
                   <li className="mt-8">
-                    <DonationButton onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="secondary" className="w-full">
+                    <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary" className="w-full">
                       Donate
-                    </DonationButton>
+                    </Button>
                   </li>
                 </ul>
               </nav>
