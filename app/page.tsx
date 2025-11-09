@@ -40,6 +40,8 @@ export default function HomePage() {
 
       <main className="mx-auto max-w-[1400px] px-5 md:px-[70px]">
 
+        <HeroSection />
+        
         <FadeInSection>
           <Section variant="secondary" className="mt-[100px]">
             <DisclaimerSection />
