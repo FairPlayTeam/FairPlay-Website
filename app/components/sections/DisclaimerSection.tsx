@@ -13,7 +13,7 @@ export default function DisclaimerSection() {
         contribute to its development! The "live build" version of Fairplay is
         available at{" "}
         
-        <Link href="https://lab.fairplay.video/">lab.fairplay.video</Link>
+        <Link href="https://lab.fairplay.video/">the "lab"</Link>
         </p>
     </div>
   );
