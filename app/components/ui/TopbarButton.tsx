@@ -1,15 +1,9 @@
+import Link from "next/link";
 import React from "react";
 
-interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  className?: string;
-}
-
-export default function TopbarButton({ children, onClick, className = "" }: ButtonProps) {
+export default function TopbarButton({ children, className = "", ...props }: React.ComponentProps<typeof Link>) {
   return (
-    <button
-      onClick={onClick}
+    <Link
       className={`
         relative inline-flex items-center justify-center 
         cursor-pointer
@@ -24,8 +18,9 @@ export default function TopbarButton({ children, onClick, className = "" }: Butt
         hover:after:w-full
         ${className}
       `}
+      {...props}
     >
       {children}
-    </button>
+    </Link>
   );
 }

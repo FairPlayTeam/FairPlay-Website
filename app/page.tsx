@@ -130,7 +130,7 @@ export default function HomePage() {
                   Join our community
                 </h2>
                 <p className="text-[18px] mb-[25px] max-w-lg">
-                  FairPlay is more than a platform, it's a movement. By joining our community, you contribute to shaping the future of streaming and Internet. Share your passions, discover new perspectives, and connect with others Fairplayers.
+                  FairPlay is more than a platform, it&apos;s a movement. By joining our community, you contribute to shaping the future of streaming and Internet. Share your passions, discover new perspectives, and connect with others Fairplayers.
                 </p>
                 <Button onClick={() => window.location.href="https://discord.gg/6g5cBUVra9"}>Discover our Discord</Button>
               </div>
