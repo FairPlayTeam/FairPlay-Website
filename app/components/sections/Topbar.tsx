@@ -5,6 +5,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import Logo from "../ui/Logo";
 import TopbarButton from "../ui/TopbarButton";
 import Button from "../ui/Button";
+import { MdArrowOutward } from "react-icons/md";
 
 interface TopbarProps {
   animateOnLoad?: boolean;
@@ -45,14 +46,32 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
           <Logo />
           <nav className="hidden md:block">
             <ul className="flex items-center gap-[30px]">
-              <li><TopbarButton href="#about">About</TopbarButton></li>
-              <li><TopbarButton href="#values">Our Values</TopbarButton></li>
-              <li><TopbarButton href="#community">Community</TopbarButton></li>
-              <li><TopbarButton href="#extension">Extension</TopbarButton></li>
-              <li><TopbarButton href="#development">Development</TopbarButton></li>
-              <li><TopbarButton href="/roadmap">Roadmap</TopbarButton></li>
               <li>
-                <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donatePrimary" className="btn-donate">
+                <TopbarButton href="#about">About Us</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#values">Our Values</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#extension">Extension</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#development">Development</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="#community">Community</TopbarButton>
+              </li>
+              <li>
+                <TopbarButton href="/roadmap">Roadmap</TopbarButton>
+              </li>
+              <li>
+                <Button
+                  onClick={() =>
+                    (window.location.href = "http://ko-fi.com/fairplay_")
+                  }
+                  variant="donatePrimary"
+                  className="btn-donate"
+                >
                   Donate
                 </Button>
               </li>
@@ -97,14 +116,74 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
               </div>
               <nav>
                 <ul className="flex flex-col gap-5 text-left">
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#about">About</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#values">Our Values</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#community">Community</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#extension">Extension</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false);}} href="#development">Development</TopbarButton></li>
-                  <li><TopbarButton onClick={() => {setIsMenuOpen(false)}} href="/roadmap">Roadmap</TopbarButton></li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="#about"
+                    >
+                      About
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="#values"
+                    >
+                      Our Values
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="#community"
+                    >
+                      Community
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="#extension"
+                    >
+                      Extension
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="#development"
+                    >
+                      Development
+                    </TopbarButton>
+                  </li>
+                  <li>
+                    <TopbarButton
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                      }}
+                      href="/roadmap"
+                    >
+                      Roadmap
+                    </TopbarButton>
+                  </li>
                   <li className="mt-8">
-                    <Button onClick={() => window.location.href="http://ko-fi.com/fairplay_"} variant="donateSecondary" className="w-full">
+                    <Button
+                      onClick={() =>
+                        (window.location.href = "http://ko-fi.com/fairplay_")
+                      }
+                      variant="donateSecondary"
+                      className="w-full"
+                    >
                       Donate
                     </Button>
                   </li>

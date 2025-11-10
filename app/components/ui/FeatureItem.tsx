@@ -7,23 +7,27 @@ interface SectionProps {
   className?: string;
 }
 
-export default function FeatureItem({children, className = ""}: SectionProps) {
+export default function FeatureItem({
+  children,
+  className = "",
+}: SectionProps) {
   return (
-    <div 
-        style={{
-            border: "1px solid",
-            borderColor: "var(--color-border)",
-        }}
-        className={`
+    <div
+      style={{
+        border: "1px solid",
+        borderColor: "var(--color-border)",
+      }}
+      className={`
             bg-(--color-container-dark)
             p-[30px]
             rounded-xl
             transition-transform duration-300 ease-in-out
             hover:-translate-y-1
+            h-[300px]
         ${className}
         `}
     >
-        {children}
+      {children}
     </div>
   );
 }

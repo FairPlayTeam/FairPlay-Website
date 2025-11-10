@@ -45,8 +45,9 @@ export default function HeroText() {
           w-full flex justify-center lg:justify-start
         `}
       >
-        <ExploreButton onClick={() => window.location.href="/home"}/>
+        <ExploreButton onClick={() => (window.location.href = "/home")} />
       </div>
     </div>
   );
 }
+

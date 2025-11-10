@@ -7,7 +7,12 @@ interface DocsSectionProps {
   index: number;
 }
 
-export default function DocsSection({ id, title, children, index }: DocsSectionProps) {
+export default function DocsSection({
+  id,
+  title,
+  children,
+  index,
+}: DocsSectionProps) {
   return (
     <motion.section
       id={id}

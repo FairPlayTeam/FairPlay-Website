@@ -5,7 +5,10 @@ interface DocsSidebarProps {
   activeSection: string;
 }
 
-export default function DocsSidebar({ sections, activeSection }: DocsSidebarProps) {
+export default function DocsSidebar({
+  sections,
+  activeSection,
+}: DocsSidebarProps) {
   return (
     <aside className="md:col-span-1 bg-(--color-container) rounded-2xl p-3 backdrop-blur-md border border-(--color-border) h-fit sticky top-24 shadow-md">
       <nav className="flex flex-col gap-4">
