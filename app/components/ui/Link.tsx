@@ -35,18 +35,16 @@ export default function Link({
     `}
     >
       <span>{children}</span>
-      {variant === "primary" ? (
+      {variant === "primary" && (
         <span
           className="
-          inline-block text-[0.9em] ml-[5px]
-          transition-transform duration-200 ease-in-out
-          group-hover:translate-x-0.5
+            inline-block text-[0.9em] ml-[5px]
+            transition-transform duration-200 ease-in-out
+            group-hover:translate-x-0.5
           "
         >
           <MdArrowOutward />
         </span>
-      ) : (
-        ""
       )}
     </NextLink>
   );

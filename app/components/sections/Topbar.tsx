@@ -61,13 +61,7 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
                 <TopbarButton href=".#community">Community</TopbarButton>
               </li>
               <li>
-                <Button
-                  onClick={() => (window.location.href = "/roadmap")}
-                  variant="primary"
-                  className="font-light py-[5] rounded-full"
-                >
-                  Roadmap
-                </Button>
+                <TopbarButton href="/roadmap" variant="secondary">Roadmap</TopbarButton>
               </li>
               <li>
                 <Button
