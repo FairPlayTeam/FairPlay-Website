@@ -89,7 +89,7 @@ export default function DocsPage() {
           <ul>
             <li>Harassment, discrimination, or disrespectful behavior.</li>
             <li>Spreading misinformation.</li>
-            <li>Sharing NSFW Content.</li>
+            <li>Sharing NSFW content.</li>
             <li>Engaging in political or religious discussions in the comments of videos unrelated to those topics.</li>
             <li>Engaging in illegal activities.</li>
           </ul>
