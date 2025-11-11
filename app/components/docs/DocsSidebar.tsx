@@ -17,8 +17,8 @@ export default function DocsSidebar({
             key={section.id}
             href={`#${section.id}`}
             className={`flex items-center gap-3 text-base font-medium transition-all duration-300 p-2 rounded-lg ${activeSection === section.id
-                ? "bg-(--color-links)/20 text-(--color-links) shadow-inner"
-                : "text-(--color-text-para) hover:bg-(--color-links)/10 hover:text-(--color-links)"
+              ? "bg-(--color-links)/20 text-(--color-links) shadow-inner"
+              : "text-(--color-text-para) hover:bg-(--color-links)/10 hover:text-(--color-links)"
               }`}
           >
             <span className="text-lg">{section.icon}</span>

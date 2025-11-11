@@ -111,8 +111,8 @@ export default function HomePage() {
                 <div className="flex justify-center lg:justify-start">
                   <Button
                     onClick={() =>
-                    (window.location.href =
-                      "https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb")
+                      (window.location.href =
+                        "https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb")
                     }
                     variant="secondary"
                   >
@@ -141,15 +141,18 @@ export default function HomePage() {
                   (window.location.href = "https://github.com/FairPlayTeam")
                 }
               >
-                <PiGithubLogo />&nbsp;Source code{" "}
+                <PiGithubLogo />
+                &nbsp;Source code{" "}
               </Button>
               <Button onClick={() => (window.location.href = "/docs#api")}>
                 {" "}
-                <PiCodeLight />&nbsp;API Documentation
+                <PiCodeLight />
+                &nbsp;API Documentation
               </Button>
               <Button onClick={() => (window.location.href = "/contributors")}>
                 {" "}
-                  <PiBookOpenTextLight />&nbsp;Contribution guide
+                <PiBookOpenTextLight />
+                &nbsp;Contribution guide
               </Button>
             </div>
           </Section>

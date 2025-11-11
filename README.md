@@ -1,9 +1,9 @@
 # FairPlay - Where Creativity Stays Human
 
-**FairPlay** is a free, open-source streaming platform that puts *people* back at the heart of online creativity.  
+**FairPlay** is a free, open-source streaming platform that puts _people_ back at the heart of online creativity.  
 No algorithms, no ads, no distractions - just meaningful videos, community engagement, and open collaboration.
 
- **Find us at** [our website](https://fairplay.video)
+**Find us at** [our website](https://fairplay.video)
 
 ---
 
@@ -16,13 +16,13 @@ FairPlay was created to reclaim the human side of creativity — a place where r
 
 ---
 
-
 FairPlay is currently under development. You'll be introduced to the user interface and some features, but please note that the project is still under development.
 
 This is the [Next.js](https://nextjs.org) version of the Fairplay Website. It currently includes the landing page, more will be implemented soon.
 
 ## Open source!
-You can contribute and make the internet a better place at  [our repository](https://github.com/FairPlayTeam/FairPlay-Website)
+
+You can contribute and make the internet a better place at [our repository](https://github.com/FairPlayTeam/FairPlay-Website)
 
 ## Getting Started
 

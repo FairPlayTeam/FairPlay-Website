@@ -31,7 +31,7 @@
 
   --color-container: var(--gray-700-transparent);
   --color-container-dark: var(--gray-900-transparent);
-  
+
   --color-text: var(--white);
   --color-text-para: var(--gray-100);
   --color-text-amount: var(--gray-200);
@@ -82,7 +82,7 @@
 
     --color-container: var(--gray-700-transparent);
     --color-container-dark: var(--gray-900-transparent);
-    
+
     --color-text: var(--white);
     --color-text-para: var(--gray-100);
     --color-text-amount: var(--gray-200);
@@ -101,32 +101,35 @@ html {
   scroll-padding-top: 5rem;
 }
 
-body{
-    background-color: var(--color-background);
-    color: var(--color-white);
-    font-family: Lato, sans-serif;
-    line-height: 1.6;
-    height:100%;
-    position: relative; 
+body {
+  background-color: var(--color-background);
+  color: var(--color-white);
+  font-family: Lato, sans-serif;
+  line-height: 1.6;
+  height: 100%;
+  position: relative;
 }
 
-body:before{
-    background: radial-gradient(circle at 70% 7%, #3b508de0, #0000 10%),
-                radial-gradient(circle at 5% 30%, #3b508de0, #0000 15%),
-                radial-gradient(circle at 90% 60%, #3b508de0, #0000 10%),
-                radial-gradient(circle at 50% 100%, #3b508de0, #0000 10%);
-    content: "";
-    filter: blur(200px);
-    inset: 0;
-    position: absolute;
-    z-index: -1;
+body:before {
+  background:
+    radial-gradient(circle at 70% 7%, #3b508de0, #0000 10%),
+    radial-gradient(circle at 5% 30%, #3b508de0, #0000 15%),
+    radial-gradient(circle at 90% 60%, #3b508de0, #0000 10%),
+    radial-gradient(circle at 50% 100%, #3b508de0, #0000 10%);
+  content: "";
+  filter: blur(200px);
+  inset: 0;
+  position: absolute;
+  z-index: -1;
 }
 
-h1, h2, h3{
-    color: var(--color-white);
-    font-family: Montserrat, sans-serif;
-    font-weight: 700;
-    line-height: 1.2;
+h1,
+h2,
+h3 {
+  color: var(--color-white);
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 ::-webkit-scrollbar {
