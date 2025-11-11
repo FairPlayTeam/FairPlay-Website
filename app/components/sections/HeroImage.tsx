@@ -13,13 +13,13 @@ export default function HeroImage() {
 
   return (
     <div
-      className={`hero-image flex justify-center items-center py-12 transition-all duration-1000 ${
-        animate ? "animate-heroImageEntrance" : "opacity-0 translate-y-[70px] scale-90"
-      }`}
+      className={`hero-image flex justify-center items-center py-12 transition-all duration-1000 ${animate
+          ? "animate-heroImageEntrance"
+          : "opacity-0 translate-y-[70px] scale-90"
+        }`}
     >
       <div className="video-card-container perspective-[1000px]">
         <div
-
           className="video-card-3d-effect
             bg-(--color-background)
             rounded-[15px]

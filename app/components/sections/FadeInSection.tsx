@@ -7,7 +7,10 @@ interface FadeInSectionProps {
   className?: string;
 }
 
-export default function FadeInSection({ children, className = "" }: FadeInSectionProps) {
+export default function FadeInSection({
+  children,
+  className = "",
+}: FadeInSectionProps) {
   const { ref, visible } = useFadeInOnScroll();
 
   return (

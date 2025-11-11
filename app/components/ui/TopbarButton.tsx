@@ -1,7 +1,11 @@
 import Link from "next/link";
 import React from "react";
 
-export default function TopbarButton({ children, className = "", ...props }: React.ComponentProps<typeof Link>) {
+export default function TopbarButton({
+  children,
+  className = "",
+  ...props
+}: React.ComponentProps<typeof Link>) {
   return (
     <Link
       className={`

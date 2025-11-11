@@ -3,7 +3,10 @@ interface ExploreButtonProps {
   className?: string;
 }
 
-export default function ExploreButton({ onClick, className = "" }: ExploreButtonProps) {
+export default function ExploreButton({
+  onClick,
+  className = "",
+}: ExploreButtonProps) {
   return (
     <button
       type="button"

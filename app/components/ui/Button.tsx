@@ -4,15 +4,25 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
-  variant?: "primary" | "secondary" | "donatePrimary" | "donateSecondary" | "download";
+  variant?:
+  | "primary"
+  | "secondary"
+  | "donatePrimary"
+  | "donateSecondary"
+  | "download";
 }
 
-export default function Button({ children, onClick, className = "", variant = "primary" }: ButtonProps) {
+export default function Button({
+  children,
+  onClick,
+  className = "",
+  variant = "primary",
+}: ButtonProps) {
   const [loading, setLoading] = useState(false);
-  
-  switch (variant){
+
+  switch (variant) {
     case "primary":
-      return(
+      return (
         <button
           onClick={onClick}
           style={{
@@ -34,7 +44,7 @@ export default function Button({ children, onClick, className = "", variant = "p
         </button>
       );
     case "secondary":
-      return(
+      return (
         <button
           onClick={onClick}
           className={`
@@ -44,12 +54,13 @@ export default function Button({ children, onClick, className = "", variant = "p
           text-[15px] font-bold text-(--color-text)
           rounded-full bg-(--color-accent-dark)
           px-[35px] py-2.5
-          ${className}`}>
+          ${className}`}
+        >
           {children}
         </button>
       );
     case "donatePrimary":
-      return(
+      return (
         <button
           onClick={onClick}
           className={`
@@ -60,12 +71,13 @@ export default function Button({ children, onClick, className = "", variant = "p
           rounded-full bg-(--color-donate)
           transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
           px-[15px] py-[5px]
-          ${className}`}>
+          ${className}`}
+        >
           {children}
         </button>
       );
     case "donateSecondary":
-      return(
+      return (
         <button
           onClick={onClick}
           className={`
@@ -76,7 +88,8 @@ export default function Button({ children, onClick, className = "", variant = "p
           rounded-full bg-(--color-donate)
           transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
           px-[35px] py-2.5
-          ${className}`}>
+          ${className}`}
+        >
           {children}
         </button>
       );

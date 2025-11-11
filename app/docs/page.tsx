@@ -25,10 +25,13 @@ export default function DocsPage() {
       content: (
         <>
           <p>
-            Welcome to the Fairplay documentation. This guide helps you understand how the platform works and how to contribute.
+            Welcome to the Fairplay documentation. This guide helps you
+            understand how the platform works and how to contribute.
           </p>
           <p>
-            Fairplay is an <strong>open-source streaming platform</strong> built to redefine how creators and viewers connect in a healthy environment.
+            Fairplay is an <strong>open-source streaming platform</strong> built
+            to redefine how creators and viewers connect in a healthy
+            environment.
           </p>
         </>
       ),
@@ -39,7 +42,9 @@ export default function DocsPage() {
       icon: <FaCogs size={16} />,
       content: (
         <>
-          <p>To get started, clone the repository and install the dependencies:</p>
+          <p>
+            To get started, clone the repository and install the dependencies:
+          </p>
 
           <SyntaxHighlighter
             language="bash"
@@ -50,30 +55,52 @@ export default function DocsPage() {
               background: "var(--gray-700-transparent)",
             }}
           >
-{`git clone https://github.com/FairPlayTeam/FairPlay-Website
+            {`git clone https://github.com/FairPlayTeam/FairPlay-Website
 cd FairPlay-Website
 npm install
 npm run dev`}
           </SyntaxHighlighter>
 
-          <p className="mt-4">This project consists of four main repositories:</p>
+          <p className="mt-4">
+            This project consists of four main repositories:
+          </p>
           <ul className="list-disc ml-5 mt-2">
             <li>
-              Website: <Link href="https://github.com/FairPlayTeam/FairPlay-Website">FairPlay-Website</Link>
+              Website:{" "}
+              <Link href="https://github.com/FairPlayTeam/FairPlay-Website">
+                FairPlay-Website
+              </Link>
             </li>
             <li>
-              Expo frontend (TypeScript): <Link href="https://github.com/FairPlayTeam/frontend">frontend</Link>
+              Expo frontend (TypeScript):{" "}
+              <Link href="https://github.com/FairPlayTeam/frontend">
+                frontend
+              </Link>
             </li>
             <li>
-              TypeScript backend: <Link href="https://github.com/FairPlayTeam/ts-backend">ts-backend</Link>
+              TypeScript backend:{" "}
+              <Link href="https://github.com/FairPlayTeam/ts-backend">
+                ts-backend
+              </Link>
             </li>
             <li>
-              Rust backend: <Link href="https://github.com/FairPlayTeam/backend">backend</Link>
+              Rust backend:{" "}
+              <Link href="https://github.com/FairPlayTeam/backend">
+                backend
+              </Link>
             </li>
           </ul>
 
           <p className="mt-3">
-            FairPlay uses <Link href="https://nextjs.org" variant="secondary">Next.js</Link> and <Link href="https://tailwindcss.com" variant="secondary">TailwindCSS</Link> for its frontend.
+            FairPlay uses{" "}
+            <Link href="https://nextjs.org" variant="secondary">
+              Next.js
+            </Link>{" "}
+            and{" "}
+            <Link href="https://tailwindcss.com" variant="secondary">
+              TailwindCSS
+            </Link>{" "}
+            for its frontend.
           </p>
         </>
       ),
@@ -85,10 +112,17 @@ npm run dev`}
       content: (
         <>
           <p>
-            The live build <Link href="https://lab.fairplay.video" variant="secondary">lab.fairplay.video</Link> uses Expo/React Native, while this website is built with Next.js and TailwindCSS.
+            The live build{" "}
+            <Link href="https://lab.fairplay.video" variant="secondary">
+              lab.fairplay.video
+            </Link>{" "}
+            uses Expo/React Native, while this website is built with Next.js and
+            TailwindCSS.
           </p>
 
-          <p className="mt-4">Here is the main color palette used across our frontend:</p>
+          <p className="mt-4">
+            Here is the main color palette used across our frontend:
+          </p>
 
           <div className="grid grid-cols-6 gap-2 mt-10">
             {[
@@ -133,7 +167,8 @@ npm run dev`}
           </div>
 
           <p className="mt-10">
-            We are using the <code>next-icons</code> icon set across the frontend.
+            We are using the <code>next-icons</code> icon set across the
+            frontend.
           </p>
         </>
       ),
@@ -145,22 +180,33 @@ npm run dev`}
       content: (
         <>
           <p>
-            Our backend is fully open-source. You can use our API for free, see more details on our {" "}
-            <Link href="https://apiv2.fairplay.video/docs/" variant="secondary">API enpoints list</Link>.
+            Our backend is fully open-source. You can use our API for free, see
+            more details on our{" "}
+            <Link href="https://apiv2.fairplay.video/docs/" variant="secondary">
+              API enpoints list
+            </Link>
+            .
           </p>
           <p>
-            It is currently written in TypeScript, with plans to migrate to Rust for enhanced performance.
+            It is currently written in TypeScript, with plans to migrate to Rust
+            for enhanced performance.
           </p>
 
           <h3 className="font-bold text-xl mt-6">Storage</h3>
           <p>
-            Videos are processed using <code>ffmpeg</code> into HLS playlists (.m3u8) and stored as S3 objects.  
-            Avatars and banners are saved in MinIO buckets, while the user database runs on PostgreSQL.
+            Videos are processed using <code>ffmpeg</code> into HLS playlists
+            (.m3u8) and stored as S3 objects. Avatars and banners are saved in
+            MinIO buckets, while the user database runs on PostgreSQL.
           </p>
           <p>
-            Our backend runs entirely on self-hosted servers, made possible by generous donations!  
-            We currently operate with 2TB of video storage and a dedicated compute server, all managed with <code>Docker</code>.  
-            Thanks to <Link href="https://www.4hostings.com/" variant="secondary">4-Hosting</Link> for providing hosting support.
+            Our backend runs entirely on self-hosted servers, made possible by
+            generous donations! We currently operate with 2TB of video storage
+            and a dedicated compute server, all managed with <code>Docker</code>
+            . Thanks to{" "}
+            <Link href="https://www.4hostings.com/" variant="secondary">
+              4-Hosting
+            </Link>{" "}
+            for providing hosting support.
           </p>
         </>
       ),
@@ -172,8 +218,12 @@ npm run dev`}
       content: (
         <>
           <p>
-            Contributions are welcome! Before submitting a pull request, please read the{" "}
-            <Link href="/docs/contribution-guidelines">contribution guidelines</Link>.
+            Contributions are welcome! Before submitting a pull request, please
+            read the{" "}
+            <Link href="/docs/contribution-guidelines">
+              contribution guidelines
+            </Link>
+            .
           </p>
           <p>
             Discussions and planning take place in our{" "}
@@ -195,10 +245,12 @@ npm run dev`}
           }
         }
       },
-      { threshold: 0.9 }
+      { threshold: 0.9 },
     );
 
-    document.querySelectorAll("section[id]").forEach((el) => observer.observe(el));
+    document
+      .querySelectorAll("section[id]")
+      .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -206,25 +258,34 @@ npm run dev`}
     <>
       <head>
         <title>Fairplay Docs</title>
-        <meta name="description" content="Learn how to use, configure, and contribute to Fairplay, the open-source streaming ecosystem." />
+        <meta
+          name="description"
+          content="Learn how to use, configure, and contribute to Fairplay, the open-source streaming ecosystem."
+        />
       </head>
-      
+
       <Topbar animateOnLoad={false} />
 
       <main className="min-h-screen text-(--color-text) px-6 py-20 scroll-smooth">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Documentation</h1>
           <p className="text-(--color-text-para) text-lg max-w-2xl mx-auto">
-            Learn how to use, configure, and contribute to Fairplay, the open-source streaming ecosystem.
+            Learn how to use, configure, and contribute to Fairplay, the
+            open-source streaming ecosystem.
           </p>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <DocsSidebar sections={sections} activeSection={activeSection}/>
+          <DocsSidebar sections={sections} activeSection={activeSection} />
 
           <div className="md:col-span-3 space-y-16">
             {sections.map((section, i) => (
-              <DocsSection key={section.id} id={section.id} title={section.title} index={i}>
+              <DocsSection
+                key={section.id}
+                id={section.id}
+                title={section.title}
+                index={i}
+              >
                 {section.content}
               </DocsSection>
             ))}

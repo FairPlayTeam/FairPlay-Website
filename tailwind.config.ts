@@ -16,7 +16,8 @@ const config: Config = {
         },
       },
       animation: {
-        heroImageEntrance: "heroImageEntrance 2s cubic-bezier(.23,1,.32,1) forwards",
+        heroImageEntrance:
+          "heroImageEntrance 2s cubic-bezier(.23,1,.32,1) forwards",
       },
     },
   },

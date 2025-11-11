@@ -11,11 +11,16 @@ interface LinkProps {
   variant?: "primary" | "secondary";
 }
 
-export default function Link({ href, children, className = "", variant = "primary"}: LinkProps) {
+export default function Link({
+  href,
+  children,
+  className = "",
+  variant = "primary",
+}: LinkProps) {
   return (
     <NextLink
-    href={href}
-    className={`
+      href={href}
+      className={`
         relative inline-block
         border-b-2 border-dotted border-(--color-links)
         rounded-xs
@@ -29,18 +34,20 @@ export default function Link({ href, children, className = "", variant = "primar
         ${className}
     `}
     >
-    <span>{children}</span>
-    {variant === "primary" ? (
-      <span
+      <span>{children}</span>
+      {variant === "primary" ? (
+        <span
           className="
           inline-block text-[0.9em] ml-[5px]
           transition-transform duration-200 ease-in-out
           group-hover:translate-x-0.5
           "
-      >
-        <MdArrowOutward />
-      </span>
-    ):""}
+        >
+          <MdArrowOutward />
+        </span>
+      ) : (
+        ""
+      )}
     </NextLink>
   );
 }
