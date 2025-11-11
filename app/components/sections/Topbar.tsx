@@ -5,7 +5,6 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import Logo from "../ui/Logo";
 import TopbarButton from "../ui/TopbarButton";
 import Button from "../ui/Button";
-import { MdArrowOutward } from "react-icons/md";
 
 interface TopbarProps {
   animateOnLoad?: boolean;
@@ -47,19 +46,19 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
           <nav className="hidden md:block">
             <ul className="flex items-center gap-[30px]">
               <li>
-                <TopbarButton href="#about">About Us</TopbarButton>
+                <TopbarButton href=".#about">About Us</TopbarButton>
               </li>
               <li>
-                <TopbarButton href="#values">Our Values</TopbarButton>
+                <TopbarButton href=".#values">Our Values</TopbarButton>
               </li>
               <li>
-                <TopbarButton href="#extension">Extension</TopbarButton>
+                <TopbarButton href=".#extension">Extension</TopbarButton>
               </li>
               <li>
-                <TopbarButton href="#development">Development</TopbarButton>
+                <TopbarButton href=".#development">Development</TopbarButton>
               </li>
               <li>
-                <TopbarButton href="#community">Community</TopbarButton>
+                <TopbarButton href=".#community">Community</TopbarButton>
               </li>
               <li>
                 <Button
