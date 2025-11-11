@@ -96,11 +96,11 @@ export default function HomePage() {
                 <ul className="mb-[35px] flex flex-col items-start gap-3">
                   <li className="flex items-start text-[16px]">
                     <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
-                    Remove and block YouTube Shorts from your feed.
+                    Remove YouTube Shorts from your feed.
                   </li>
                   <li className="flex items-start text-[16px]">
                     <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
-                    Removes TikTok and Snapchat videos.
+                    Remove TikTok and Snapchat videos.
                   </li>
                   <li className="flex items-start text-[16px]">
                     <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
