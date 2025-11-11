@@ -89,7 +89,8 @@ export default function DocsPage() {
           <ul>
             <li>Harassment, discrimination, or disrespectful behavior.</li>
             <li>Spreading misinformation.</li>
-            <li>Political or religious discussions in content or comments.</li>
+            <li>Sharing NSFW Content.</li>
+            <li>Engaging in political or religious discussions in the comments of videos unrelated to those topics.</li>
             <li>Engaging in illegal activities.</li>
           </ul>
           <p>Violation may result in account suspension or termination.</p>
@@ -186,8 +187,7 @@ export default function DocsPage() {
 
           <h3>Q: What content is allowed?</h3>
           <p>
-            A: Relevant and entertaining content only. No misinformation,
-            political, or religious content. See our{" "}
+            A: Everything that does not include missinformation or NSFW content. See our{" "}
             <a href="#codeOfConduct">Code of Conduct</a>.
           </p>
 
