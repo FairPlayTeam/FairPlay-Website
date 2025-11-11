@@ -15,4 +15,3 @@ export default function Logo({ className = "" }: ButtonProps) {
     </Link>
   );
 }
-

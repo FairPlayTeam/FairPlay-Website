@@ -118,4 +118,3 @@ export default function Footer({ variant = "primary" }: FooterProps) {
     </footer>
   );
 }
-
