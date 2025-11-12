@@ -5,11 +5,11 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   variant?:
-  | "primary"
-  | "secondary"
-  | "donatePrimary"
-  | "donateSecondary"
-  | "download";
+    | "primary"
+    | "secondary"
+    | "donatePrimary"
+    | "donateSecondary"
+    | "download";
 }
 
 export default function Button({
