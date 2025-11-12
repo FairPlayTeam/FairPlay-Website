@@ -187,7 +187,7 @@ export default function DocsPage() {
 
           <h3>Q: What content is allowed?</h3>
           <p>
-            A: Everything that does not include missinformation or NSFW content. See our{" "}
+            A: Anything that does not include misinformation or NSFW content. See our{" "}
             <a href="#codeOfConduct">Code of Conduct</a>.
           </p>
 
