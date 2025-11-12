@@ -44,58 +44,6 @@
   --color-donate: var(--pink-500);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* base colors */
-    --blue-pastel-100: #94afff;
-    --blue-pastel-700: #4564c0;
-    --blue-400: #53a6ff;
-    --blue-500: #2b90fc;
-    --gray-100: #e2e2e2;
-    --gray-200: #bbbbbb;
-    --gray-300: #8b8b8b;
-    --gray-400: #666666;
-    --gray-700: #212121;
-    --gray-900: #0f0f0f;
-    --pink-500: #ff69b4;
-    --white: #ffffff;
-    --black: #000000;
-
-    /* transparency variants */
-    --gray-700-transparent: #2121218c;
-    --gray-900-transparent: #0f0f0f8c;
-
-    /* links */
-    --color-links: var(--blue-400);
-    --color-links-hover: var(--blue-500);
-
-    /* semantic tokens */
-    --color-border: var(--gray-700);
-    --color-background: var(--gray-900);
-
-    --color-container: var(--gray-700-transparent);
-    --color-container-dark: var(--gray-900-transparent);
-
-    --color-text: var(--white);
-    --color-text-para: var(--gray-100);
-    --color-text-amount: var(--gray-200);
-    --color-text-bold: var(--gray-300);
-    --color-text-footer: var(--gray-400);
-    --color-text-dark: var(--black);
-
-    --color-accent: var(--blue-pastel-100);
-    --color-accent-dark: var(--blue-pastel-700);
-    --color-donate: var(--pink-500);
-  }
-}
-
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;

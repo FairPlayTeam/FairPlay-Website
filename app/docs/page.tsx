@@ -256,14 +256,6 @@ npm run dev`}
 
   return (
     <>
-      <head>
-        <title>Fairplay Docs</title>
-        <meta
-          name="description"
-          content="Learn how to use, configure, and contribute to Fairplay, the open-source streaming ecosystem."
-        />
-      </head>
-
       <Topbar animateOnLoad={false} />
 
       <main className="min-h-screen text-(--color-text) px-6 py-20 scroll-smooth">

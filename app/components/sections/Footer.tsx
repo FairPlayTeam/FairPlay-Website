@@ -56,25 +56,25 @@ export default function Footer({ variant = "primary" }: FooterProps) {
 
         <div className="flex flex-wrap justify-center md:justify-center gap-4 sm:gap-6">
           <Link
-            href="/cgu"
+            href="/terms"
             className="text-gray-300 hover:text-(--color-text) transition-colors duration-200"
           >
             Terms of Use
           </Link>
           <Link
-            href="/cgu#privacy-policy"
+            href="/terms#privacy-policy"
             className="text-gray-300 hover:text-(--color-text) transition-colors duration-200"
           >
             Privacy Policy
           </Link>
           <Link
-            href="/cgu#conduct"
+            href="/terms#conduct"
             className="text-gray-300 hover:text-(--color-text) transition-colors duration-200"
           >
             Code of Conduct
           </Link>
           <Link
-            href="/cgu#faq"
+            href="/terms#faq"
             className="text-gray-300 hover:text-(--color-text) transition-colors duration-200"
           >
             FAQ

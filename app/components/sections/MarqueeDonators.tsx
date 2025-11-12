@@ -20,7 +20,6 @@ export default function MarqueeDonators() {
   const rafRef = useRef<number | null>(null);
   const offsetRef = useRef(0);
   const speedRef = useRef(10); // px per second
-  const pausedRef = useRef(false);
   const singleWidthRef = useRef(0);
 
   const startAnimation = useCallback(() => {
@@ -28,12 +27,6 @@ export default function MarqueeDonators() {
 
     let lastTime: number | null = null;
     const step = (timestamp: number) => {
-      if (pausedRef.current) {
-        lastTime = timestamp;
-        rafRef.current = requestAnimationFrame(step);
-        return;
-      }
-
       if (!lastTime) lastTime = timestamp;
       const deltaTime = (timestamp - lastTime) / 1000; // in seconds
       lastTime = timestamp;
@@ -86,14 +79,6 @@ export default function MarqueeDonators() {
     };
   }, [startAnimation, stopAnimation, handleResize]);
 
-  const handleMouseEnter = useCallback(() => {
-    pausedRef.current = true;
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    pausedRef.current = false;
-  }, []);
-
   // marquee's items generation
   const items = DONORS.map((donor, index) => (
     <div
@@ -110,8 +95,6 @@ export default function MarqueeDonators() {
   return (
     <div
       ref={containerRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className="my-12 overflow-hidden py-2 mask-[linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)]"
       aria-label="Donators list"
     >

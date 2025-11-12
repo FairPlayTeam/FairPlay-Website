@@ -99,7 +99,7 @@ export default function RoadmapPage() {
     <>
       <Topbar animateOnLoad={false} />
 
-      <main className="min-h-screen  text-(--color-text) px-6 py-20">
+      <main className="min-h-screen text-(--color-text) px-6 py-20">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Project Roadmap</h1>
           <p className="text-(--color-text-para) text-lg max-w-2xl mx-auto">

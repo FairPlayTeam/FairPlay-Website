@@ -18,7 +18,7 @@ import {
   FaRedo,
 } from "react-icons/fa";
 
-export default function DocsPage() {
+export default function TermsPage() {
   const sections = [
     {
       id: "introduction",
@@ -326,14 +326,6 @@ export default function DocsPage() {
 
   return (
     <>
-      <head>
-        <title>Fairplay Terms</title>
-        <meta
-          name="description"
-          content="Learn how to use, configure, and contribute to Fairplay, the open-source streaming ecosystem."
-        />
-      </head>
-
       <Topbar animateOnLoad={false} />
 
       <main className="min-h-screen text-(--color-text) px-6 py-20 scroll-smooth">
