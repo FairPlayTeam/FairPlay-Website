@@ -61,7 +61,9 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
                 <TopbarButton href=".#community">Community</TopbarButton>
               </li>
               <li>
-                <TopbarButton href="/roadmap" variant="secondary">Roadmap</TopbarButton>
+                <TopbarButton href="/roadmap" variant="secondary">
+                  Roadmap
+                </TopbarButton>
               </li>
               <li>
                 <Button
