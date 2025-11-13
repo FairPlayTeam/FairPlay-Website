@@ -7,10 +7,9 @@ No algorithms, no ads, no distractions - just meaningful videos, community engag
 
 ---
 
-## Our mission?
+## Our Mission
 
-The internet is increasingly filled with bots, AI-generated content, and algorithmic noise.  
-FairPlay was created to reclaim the human side of creativity — a place where real skills, passions, and stories can thrive.
+The internet is increasingly filled with bots, AI-generated content, and algorithmic noise. FairPlay was created to reclaim the human side of creativity — a place where real skills, passions, and stories can thrive.
 
 > “Your passions deserve more than an algorithm.”
 
@@ -18,33 +17,12 @@ FairPlay was created to reclaim the human side of creativity — a place where r
 
 FairPlay is currently under development. You'll be introduced to the user interface and some features, but please note that the project is still under development.
 
-This is the [Next.js](https://nextjs.org) version of the Fairplay Website. It currently includes the landing page, more will be implemented soon.
+This is the [Next.js](https://nextjs.org) version of the FairPlay website. It currently includes the landing page. More features will be implemented soon.
 
-## Open source!
+## Open Source
 
-You can contribute and make the internet a better place at [our repository](https://github.com/FairPlayTeam/FairPlay-Website)
+FairPlay is an open source project, and we're always looking for contributors to make the internet a better place. To learn how to contribute, visit the [Contributing Guide](https://github.com/FairPlayTeam/FairPlay-Website/blob/main/CONTRIBUTING.md).
 
-## Getting Started
+## Community
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+FairPlay is built by a community of developers who believe the internet should stay **human**. You can be a part of our community by joining the discussion on our [Discord Server](https://discord.gg/ssP35cTceU).
