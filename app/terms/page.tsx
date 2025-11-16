@@ -90,7 +90,10 @@ export default function TermsPage() {
             <li>Harassment, discrimination, or disrespectful behavior.</li>
             <li>Spreading misinformation.</li>
             <li>Sharing NSFW content.</li>
-            <li>Engaging in political or religious discussions in the comments of videos unrelated to those topics.</li>
+            <li>
+              Engaging in political or religious discussions in the comments of
+              videos unrelated to those topics.
+            </li>
             <li>Engaging in illegal activities.</li>
           </ul>
           <p>Violation may result in account suspension or termination.</p>
@@ -187,8 +190,8 @@ export default function TermsPage() {
 
           <h3>Q: What content is allowed?</h3>
           <p>
-            A: Anything that does not include misinformation or NSFW content. See our{" "}
-            <a href="#codeOfConduct">Code of Conduct</a>.
+            A: Anything that does not include misinformation or NSFW content.
+            See our <a href="#codeOfConduct">Code of Conduct</a>.
           </p>
 
           <h3>Q: Can I contribute?</h3>

@@ -136,16 +136,27 @@ export default function HomePage() {
               everyone to build on our platform.
             </p>
             <div className="flex flex-col lg:flex-row justify-center gap-5">
-              <Button className="gap-2" onClick={() => (window.location.href = "https://github.com/FairPlayTeam")}>
+              <Button
+                className="gap-2"
+                onClick={() =>
+                  (window.location.href = "https://github.com/FairPlayTeam")
+                }
+              >
                 <PiGithubLogo />
                 &nbsp;Source code{" "}
               </Button>
-              <Button className="gap-2" onClick={() => (window.location.href = "/docs#api")}>
+              <Button
+                className="gap-2"
+                onClick={() => (window.location.href = "/docs#api")}
+              >
                 {" "}
                 <PiCodeLight />
                 &nbsp;API Documentation
               </Button>
-              <Button className="gap-2" onClick={() => (window.location.href = "/contributors")}>
+              <Button
+                className="gap-2"
+                onClick={() => (window.location.href = "/contributors")}
+              >
                 {" "}
                 <PiBookOpenTextLight />
                 &nbsp;Contribution guide
