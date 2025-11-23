@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ExploreButton from "../ui/ExploreButton";
+import ExploreButton from "@/components/ui/ExploreButton";
 
 export default function HeroText() {
   const [animate, setAnimate] = useState(false);

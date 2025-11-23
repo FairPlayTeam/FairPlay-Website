@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "../ui/Link";
+import Link from "@/components/ui/Link";
 
 export default function DisclaimerSection() {
   return (

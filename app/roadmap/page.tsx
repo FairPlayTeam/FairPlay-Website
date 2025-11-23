@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { FaArrowRight, FaCheck, FaTimes, FaCircleNotch } from "react-icons/fa";
-import Topbar from "../components/sections/Topbar";
-import Footer from "../components/sections/Footer";
-import Link from "../components/ui/Link";
-import Button from "../components/ui/Button";
+import Topbar from "@/components/sections/Topbar";
+import Footer from "@/components/sections/Footer";
+import Link from "@/components/ui/Link";
+import Button from "@/components/ui/Button";
 
 type RoadmapStatus = "done" | "progress" | "planned";
 

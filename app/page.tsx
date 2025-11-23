@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import Topbar from "./components/sections/Topbar";
-import HeroSection from "./components/sections/HeroSection";
-import Section from "./components/sections/Section";
-import DisclaimerSection from "./components/sections/DisclaimerSection";
-import Button from "./components/ui/Button";
-import FeatureGrid from "./components/sections/FeatureGrid";
-import Footer from "./components/sections/Footer";
-import MarqueeDonors from "./components/sections/MarqueeDonators";
-import FadeInSection from "./components/sections/FadeInSection";
-import ExtensionPreview from "./components/sections/ExtensionPreview";
+import Topbar from "@/components/sections/Topbar";
+import HeroSection from "@/components/sections/HeroSection";
+import Section from "@/components/sections/Section";
+import DisclaimerSection from "@/components/sections/DisclaimerSection";
+import Button from "@/components/ui/Button";
+import FeatureGrid from "@/components/sections/FeatureGrid";
+import Footer from "@/components/sections/Footer";
+import MarqueeDonors from "@/components/sections/MarqueeDonators";
+import FadeInSection from "@/components/sections/FadeInSection";
+import ExtensionPreview from "@/components/sections/ExtensionPreview";
 import { PiGithubLogo, PiCodeLight, PiBookOpenTextLight } from "react-icons/pi";
 
 export default function HomePage() {

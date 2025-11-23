@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Topbar from "../components/sections/Topbar";
-import Footer from "../components/sections/Footer";
-import DocsSection from "../components/docs/DocsSection";
-import DocsSidebar from "../components/docs/DocsSidebar";
-import Link from "../components/ui/Link";
+import Topbar from "@/components/sections/Topbar";
+import Footer from "@/components/sections/Footer";
+import DocsSection from "@/components/docs/DocsSection";
+import DocsSidebar from "@/components/docs/DocsSidebar";
+import Link from "@/components/ui/Link";
 import {
   FaLightbulb,
   FaCogs,

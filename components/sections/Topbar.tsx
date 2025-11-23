@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
-import Logo from "../ui/Logo";
-import TopbarButton from "../ui/TopbarButton";
-import Button from "../ui/Button";
+import Logo from "@/components/ui/Logo";
+import TopbarButton from "@/components/ui/TopbarButton";
+import Button from "@/components/ui/Button";
 
 interface TopbarProps {
   animateOnLoad?: boolean;

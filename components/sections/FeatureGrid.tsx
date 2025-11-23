@@ -8,8 +8,8 @@ import {
   FaLightbulb,
   FaBalanceScale,
 } from "react-icons/fa";
-import FeatureItem from "../ui/FeatureItem";
-import Link from "../ui/Link";
+import FeatureItem from "@/components/ui/FeatureItem";
+import Link from "@/components/ui/Link";
 
 interface SectionProps {
   className?: string;

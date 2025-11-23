@@ -1,6 +1,6 @@
 "use client";
-import Section from "../components/sections/Section";
-import Button from "../components/ui/Button";
+import Section from "@/components/sections/Section";
+import Button from "@/components/ui/Button";
 import { FaArrowRight } from "react-icons/fa";
 
 export default function DisclaimerPage() {
