@@ -1,6 +1,6 @@
 "use client";
 import { ReactNode } from "react";
-import useFadeInOnScroll from "../../hooks/useFadeInOnScroll";
+import useFadeInOnScroll from "../../../hooks/useFadeInOnScroll";
 
 interface FadeInSectionProps {
   children: ReactNode;
