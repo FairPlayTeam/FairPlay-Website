@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -29,16 +30,16 @@ export default function Button({
             border: "1px solid",
             borderColor: "var(--color-accent)",
           }}
-          className={`
-            inline-flex items-center justify-center 
-            px-6 py-3 text-[16px] font-bold rounded-lg 
-            bg-transparent text-(--color-accent) 
-            cursor-pointer 
-            transition-all duration-300 ease-in-out
-            hover:shadow-lg hover:-translate-y-0.5 
-            hover:bg-(--color-accent) hover:text-(--color-background)
-          ${className}
-          `}
+          className={cn(
+            "inline-flex items-center justify-center",
+            "px-6 py-3 text-[16px] font-bold rounded-lg",
+            "bg-transparent text-(--color-accent)",
+            "cursor-pointer",
+            "transition-all duration-300 ease-in-out",
+            "hover:shadow-lg hover:-translate-y-0.5",
+            "hover:bg-(--color-accent) hover:text-(--color-background)",
+            className
+          )}
         >
           {children}
         </button>
@@ -47,14 +48,14 @@ export default function Button({
       return (
         <button
           onClick={onClick}
-          className={`
-          cursor-pointer
-          inline-flex
-          items-center justify-center
-          text-[15px] font-bold text-(--color-text)
-          rounded-full bg-(--color-accent-dark)
-          px-[35px] py-2.5
-          ${className}`}
+          className={cn(
+            "cursor-pointer",
+            "inline-flex items-center justify-center",
+            "text-[15px] font-bold text-(--color-text)",
+            "rounded-full bg-(--color-accent-dark)",
+            "px-[35px] py-2.5",
+            className
+          )}
         >
           {children}
         </button>
@@ -63,15 +64,15 @@ export default function Button({
       return (
         <button
           onClick={onClick}
-          className={`
-          cursor-pointer
-          inline-flex
-          items-center justify-center
-          text-[15px] font-bold text-(--color-text)
-          rounded-full bg-(--color-donate)
-          transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
-          px-[15px] py-[5px]
-          ${className}`}
+          className={cn(
+            "cursor-pointer",
+            "inline-flex items-center justify-center",
+            "text-[15px] font-bold text-(--color-text)",
+            "rounded-full bg-(--color-donate)",
+            "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+            "px-[15px] py-[5px]",
+            className
+          )}
         >
           {children}
         </button>
@@ -80,15 +81,15 @@ export default function Button({
       return (
         <button
           onClick={onClick}
-          className={`
-          cursor-pointer
-          inline-flex
-          items-center justify-center
-          text-[15px] font-bold text-(--color-text)
-          rounded-full bg-(--color-donate)
-          transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]
-          px-[35px] py-2.5
-          ${className}`}
+          className={cn(
+            "cursor-pointer",
+            "inline-flex items-center justify-center",
+            "text-[15px] font-bold text-(--color-text)",
+            "rounded-full bg-(--color-donate)",
+            "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+            "px-[35px] py-2.5",
+            className
+          )}
         >
           {children}
         </button>

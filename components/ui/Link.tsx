@@ -3,6 +3,7 @@
 import { MdArrowOutward } from "react-icons/md";
 import NextLink from "next/link";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface LinkProps {
   href: string;
@@ -20,19 +21,19 @@ export default function Link({
   return (
     <NextLink
       href={href}
-      className={`
-        relative inline-block
-        border-b-2 border-dotted border-(--color-links)
-        rounded-xs
-        text-(--color-links)
-        no-underline
-        leading-[1.1]
-        pb-px
-        transition-colors duration-200 ease-in-out
-        hover:text-(--color-links-hover)
-        group
-        ${className}
-    `}
+      className={cn(
+        "relative inline-block",
+        "border-b-2 border-dotted border-(--color-links)",
+        "rounded-xs",
+        "text-(--color-links)",
+        "no-underline",
+        "leading-[1.1]",
+        "pb-px",
+        "transition-colors duration-200 ease-in-out",
+        "hover:text-(--color-links-hover)",
+        "group",
+        className
+      )}
     >
       <span>{children}</span>
       {variant === "primary" && (

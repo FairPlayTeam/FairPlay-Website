@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface SectionProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ export default function Section({
       : "py-[50px]";
 
   return (
-    <div id={id} className={`text-center ${baseStyles} ${className}`.trim()}>
+    <div id={id} className={cn("text-center", baseStyles, className)}>
       {variant === "primary" && (
         <div
           className="absolute inset-0 -z-10 rounded-2xl p-0.5"

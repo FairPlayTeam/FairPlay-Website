@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import FeatureItem from "@/components/ui/FeatureItem";
 import Link from "@/components/ui/Link";
+import { cn } from "@/lib/utils";
 
 interface SectionProps {
   className?: string;
@@ -18,11 +19,11 @@ interface SectionProps {
 export default function FeatureGrid({ className = "" }: SectionProps) {
   return (
     <div
-      className={`grid gap-10 text-left ${className} 
-      grid-cols-1 
-      sm:grid-cols-2 
-      lg:grid-cols-3
-    `}
+      className={cn(
+        "grid gap-10 text-left",
+        "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+        className
+      )}
     >
       <FeatureItem>
         <FaHandHoldingUsd className="text-(--color-accent) text-[45px] mb-5" />

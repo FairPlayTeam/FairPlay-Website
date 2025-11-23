@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface SectionProps {
   children: React.ReactNode;
@@ -17,15 +18,15 @@ export default function FeatureItem({
         border: "1px solid",
         borderColor: "var(--color-border)",
       }}
-      className={`
-            bg-(--color-container-dark)
-            p-[30px]
-            rounded-xl
-            transition-transform duration-300 ease-in-out
-            hover:-translate-y-1
-            h-[300px]
-        ${className}
-        `}
+      className={cn(
+        "bg-(--color-container-dark)",
+        "p-[30px]",
+        "rounded-xl",
+        "transition-transform duration-300 ease-in-out",
+        "hover:-translate-y-1",
+        "h-[300px]",
+        className
+      )}
     >
       {children}
     </div>
