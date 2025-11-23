@@ -20,18 +20,19 @@
   /* transparency variants */
   --gray-700-transparent: #2121218c;
   --gray-900-transparent: #0f0f0f8c;
+}
 
-  /* links */
+
+@theme {
   --color-links: var(--blue-400);
   --color-links-hover: var(--blue-500);
 
-  /* semantic tokens */
   --color-border: var(--gray-700);
   --color-background: var(--gray-900);
 
   --color-container: var(--gray-700-transparent);
   --color-container-dark: var(--gray-900-transparent);
-
+  
   --color-text: var(--white);
   --color-text-para: var(--gray-100);
   --color-text-amount: var(--gray-200);
@@ -86,4 +87,8 @@ h3 {
 ::-webkit-scrollbar-thumb {
   background: #5a5a5a;
   border-radius: 2px;
+}
+
+label:has(+input[aria-invalid="true"]) {
+  color: var(--color-red-500);
 }

@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
-interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  className?: string;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?:
     | "primary"
     | "secondary"
@@ -13,87 +10,66 @@ interface ButtonProps {
     | "download";
 }
 
+const baseButtonClasses =
+  "cursor-pointer inline-flex items-center justify-center font-bold";
+
+const variantConfig = {
+  primary: {
+    classes: [
+      "px-6 py-3 text-[16px] rounded-lg",
+      "bg-transparent text-(--color-accent)",
+      "border border-accent",
+      "transition-all duration-300 ease-in-out",
+      "hover:shadow-lg hover:-translate-y-0.5",
+      "hover:bg-(--color-accent) hover:text-(--color-background)",
+    ],
+  },
+  secondary: {
+    classes: [
+      "text-[15px] text-(--color-text)",
+      "rounded-full bg-(--color-accent-dark)",
+      "px-[35px] py-2.5",
+    ],
+  },
+  donatePrimary: {
+    classes: [
+      "text-[15px] text-(--color-text)",
+      "rounded-full bg-(--color-donate)",
+      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+      "px-[15px] py-[5px]",
+    ],
+  },
+  donateSecondary: {
+    classes: [
+      "text-[15px] text-(--color-text)",
+      "rounded-full bg-(--color-donate)",
+      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+      "px-[35px] py-2.5",
+    ],
+  },
+  download: {
+    classes: [],
+  },
+} as const;
+
 export default function Button({
   children,
-  onClick,
   className = "",
   variant = "primary",
+  onClick,
+  ...props
 }: ButtonProps) {
   const [loading, setLoading] = useState(false);
 
-  switch (variant) {
-    case "primary":
-      return (
-        <button
-          onClick={onClick}
-          style={{
-            border: "1px solid",
-            borderColor: "var(--color-accent)",
-          }}
-          className={cn(
-            "inline-flex items-center justify-center",
-            "px-6 py-3 text-[16px] font-bold rounded-lg",
-            "bg-transparent text-(--color-accent)",
-            "cursor-pointer",
-            "transition-all duration-300 ease-in-out",
-            "hover:shadow-lg hover:-translate-y-0.5",
-            "hover:bg-(--color-accent) hover:text-(--color-background)",
-            className
-          )}
-        >
-          {children}
-        </button>
-      );
-    case "secondary":
-      return (
-        <button
-          onClick={onClick}
-          className={cn(
-            "cursor-pointer",
-            "inline-flex items-center justify-center",
-            "text-[15px] font-bold text-(--color-text)",
-            "rounded-full bg-(--color-accent-dark)",
-            "px-[35px] py-2.5",
-            className
-          )}
-        >
-          {children}
-        </button>
-      );
-    case "donatePrimary":
-      return (
-        <button
-          onClick={onClick}
-          className={cn(
-            "cursor-pointer",
-            "inline-flex items-center justify-center",
-            "text-[15px] font-bold text-(--color-text)",
-            "rounded-full bg-(--color-donate)",
-            "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
-            "px-[15px] py-[5px]",
-            className
-          )}
-        >
-          {children}
-        </button>
-      );
-    case "donateSecondary":
-      return (
-        <button
-          onClick={onClick}
-          className={cn(
-            "cursor-pointer",
-            "inline-flex items-center justify-center",
-            "text-[15px] font-bold text-(--color-text)",
-            "rounded-full bg-(--color-donate)",
-            "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
-            "px-[35px] py-2.5",
-            className
-          )}
-        >
-          {children}
-        </button>
-      );
-    default:
-  }
+  const config = variantConfig[variant] || variantConfig.download;
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(baseButtonClasses, ...config.classes, className)}
+      {...props}
+    >
+      {children}
+    </button>
+  );
 }
