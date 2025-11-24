@@ -50,7 +50,7 @@ export default function Footer({ variant = "primary" }: FooterProps) {
       )}
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-[1400px] mx-auto mb-8 text-center md:text-left">
-        <div className="text-2xl font-bold font-[Montserrat] text-text">
+        <div className="text-2xl font-bold font-heading text-text">
           FairPlay
         </div>
 
