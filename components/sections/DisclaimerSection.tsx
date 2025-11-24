@@ -12,7 +12,7 @@ export default function DisclaimerSection() {
         is still under development. We thank you for your patience and invite
         you to contribute to its development! A &quot;live build&quot; version
         of FairPlay is also available at{" "}
-        <Link href="https://lab.fairplay.video/">the "lab"</Link>
+        <Link href="https://lab.fairplay.video/">the &quot;lab&quot;</Link>
       </p>
     </div>
   );

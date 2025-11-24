@@ -283,8 +283,9 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            FairPlay is provided "as is" and "as available" without warranties.
-            We do not guarantee uninterrupted or error-free services.
+            FairPlay is provided &quot;as is&quot; and &quot;as available&quot;
+            without warranties. We do not guarantee uninterrupted or error-free
+            services.
           </p>
         </>
       ),
