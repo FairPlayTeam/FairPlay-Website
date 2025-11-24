@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
-import Logo from "../ui/Logo";
-import TopbarButton from "../ui/TopbarButton";
-import Button from "../ui/Button";
+import Logo from "@/components/ui/Logo";
+import TopbarButton from "@/components/ui/TopbarButton";
+import Button from "@/components/ui/Button";
 
 interface TopbarProps {
   animateOnLoad?: boolean;
@@ -99,7 +99,7 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.aside
-              className="fixed right-0 top-0 h-full w-[80%] max-w-[320px] bg-[#0f0f0f] text-(--color-text) border-l border-(--color-border) shadow-[0_0_25px_rgba(0,0,0,0.6)] z-1000 p-6 flex flex-col"
+              className="fixed right-0 top-0 h-full w-[80%] max-w-[320px] bg-[#0f0f0f] text-text border-l border-border shadow-[0_0_25px_rgba(0,0,0,0.6)] z-1000 p-6 flex flex-col"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -110,7 +110,7 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   aria-label="Close menu"
-                  className="text-(--color-text) transition-colors cursor-pointer"
+                  className="text-text transition-colors cursor-pointer"
                 >
                   <FaTimes size={24} />
                 </button>

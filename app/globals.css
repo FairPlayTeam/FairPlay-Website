@@ -20,18 +20,19 @@
   /* transparency variants */
   --gray-700-transparent: #2121218c;
   --gray-900-transparent: #0f0f0f8c;
+}
 
-  /* links */
+
+@theme {
   --color-links: var(--blue-400);
   --color-links-hover: var(--blue-500);
 
-  /* semantic tokens */
   --color-border: var(--gray-700);
   --color-background: var(--gray-900);
 
   --color-container: var(--gray-700-transparent);
   --color-container-dark: var(--gray-900-transparent);
-
+  
   --color-text: var(--white);
   --color-text-para: var(--gray-100);
   --color-text-amount: var(--gray-200);
@@ -52,7 +53,7 @@ html {
 body {
   background-color: var(--color-background);
   color: var(--color-white);
-  font-family: Lato, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   height: 100%;
   position: relative;
@@ -75,7 +76,7 @@ h1,
 h2,
 h3 {
   color: var(--color-white);
-  font-family: Montserrat, sans-serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -86,4 +87,18 @@ h3 {
 ::-webkit-scrollbar-thumb {
   background: #5a5a5a;
   border-radius: 2px;
+}
+
+label:has(+input[aria-invalid="true"]) {
+  color: var(--color-red-500);
+}
+
+/* Utilities */
+
+@utility font-heading {
+  font-family: var(--font-heading);
+}
+
+@utility font-body {
+  font-family: var(--font-body);
 }

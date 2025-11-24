@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { FaArrowRight, FaCheck, FaTimes, FaCircleNotch } from "react-icons/fa";
-import Topbar from "../components/sections/Topbar";
-import Footer from "../components/sections/Footer";
-import Link from "../components/ui/Link";
-import Button from "../components/ui/Button";
+import Topbar from "@/components/sections/Topbar";
+import Footer from "@/components/sections/Footer";
+import Link from "@/components/ui/Link";
+import Button from "@/components/ui/Button";
 
 type RoadmapStatus = "done" | "progress" | "planned";
 
@@ -82,7 +82,7 @@ export default function RoadmapPage() {
       phase: "Phase 5",
       title: "Beta Release",
       description: (
-        <>Official Beta release of the Fairplay streaming platform.</>
+        <>Official Beta release of the FairPlay streaming platform.</>
       ),
       status: "planned",
       date: "Q1 2026",
@@ -99,10 +99,10 @@ export default function RoadmapPage() {
     <>
       <Topbar animateOnLoad={false} />
 
-      <main className="min-h-screen text-(--color-text) px-6 py-20">
+      <main className="min-h-screen text-text px-6 py-20">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Project Roadmap</h1>
-          <p className="text-(--color-text-para) text-lg max-w-2xl mx-auto">
+          <p className="text-text-para text-lg max-w-2xl mx-auto">
             A clear vision of our evolution. Each step builds the foundation of
             a free and human project. Thank you for making this possible!
           </p>
@@ -115,10 +115,10 @@ export default function RoadmapPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: i * 0.2 }}
-              className="relative bg-(--color-container) rounded-2xl p-6 backdrop-blur-lg border border-(--color-border) hover:scale-[1.01] transition-all duration-300"
+              className="relative bg-container rounded-2xl p-6 backdrop-blur-lg border border-border hover:scale-[1.01] transition-all duration-300"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm uppercase tracking-widest text-(--color-text-bold)">
+                <span className="text-sm uppercase tracking-widest text-text-bold">
                   {item.phase}
                 </span>
                 <span className="flex items-center space-x-2 text-gray-400">
@@ -141,10 +141,8 @@ export default function RoadmapPage() {
                 </span>
               </div>
               <h2 className="text-2xl font-semibold mb-2">{item.title}</h2>
-              <p className="text-(--color-text-para)">{item.description}</p>
-              <p className="text-sm mt-4 text-(--color-text-amount)">
-                {item.date}
-              </p>
+              <p className="text-text-para">{item.description}</p>
+              <p className="text-sm mt-4 text-text-amount">{item.date}</p>
             </motion.div>
           ))}
         </div>

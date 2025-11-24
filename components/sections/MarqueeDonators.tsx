@@ -83,12 +83,12 @@ export default function MarqueeDonators() {
   const items = DONORS.map((donor, index) => (
     <div
       key={`donor-${index}`}
-      className="flex items-center gap-2 shrink-0 rounded-full border-2 border-(--color-border) bg-(--color-container) shadow-md px-5 py-2 transition-all duration-300"
+      className="flex items-center gap-2 shrink-0 rounded-full border-2 border-border bg-container shadow-md px-5 py-2 transition-all duration-300"
     >
-      <span className="text-lg font-extrabold text-(--color-text-amount)">
+      <span className="text-lg font-extrabold text-text-amount">
         {donor.amount}
       </span>
-      <span className="font-medium text-(--color-text)">{donor.name}</span>
+      <span className="font-medium text-text">{donor.name}</span>
     </div>
   ));
 

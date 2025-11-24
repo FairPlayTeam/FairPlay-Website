@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import Topbar from "./components/sections/Topbar";
-import HeroSection from "./components/sections/HeroSection";
-import Section from "./components/sections/Section";
-import DisclaimerSection from "./components/sections/DisclaimerSection";
-import Button from "./components/ui/Button";
-import FeatureGrid from "./components/sections/FeatureGrid";
-import Footer from "./components/sections/Footer";
-import MarqueeDonors from "./components/sections/MarqueeDonators";
-import FadeInSection from "./components/sections/FadeInSection";
-import ExtensionPreview from "./components/sections/ExtensionPreview";
+import Topbar from "@/components/sections/Topbar";
+import HeroSection from "@/components/sections/HeroSection";
+import Section from "@/components/sections/Section";
+import DisclaimerSection from "@/components/sections/DisclaimerSection";
+import Button from "@/components/ui/Button";
+import FeatureGrid from "@/components/sections/FeatureGrid";
+import Footer from "@/components/sections/Footer";
+import MarqueeDonors from "@/components/sections/MarqueeDonators";
+import FadeInSection from "@/components/sections/FadeInSection";
+import ExtensionPreview from "@/components/sections/ExtensionPreview";
 import { PiGithubLogo, PiCodeLight, PiBookOpenTextLight } from "react-icons/pi";
 
 export default function HomePage() {
@@ -55,7 +55,7 @@ export default function HomePage() {
               <h2 className="text-[33px] mb-[25px] font-bold">
                 Our Mission: Redefining Streaming
               </h2>
-              <p className="text-[18px] text-(--color-medium-gray)">
+              <p className="text-[18px] text-medium-gray">
                 The internet is in bad shape. <b>47%</b> of internet traffic
                 comes from bots, <b>52%</b> of internet content is AI-generated
                 including <b>71%</b> of images on social media like YouTube.
@@ -63,7 +63,7 @@ export default function HomePage() {
                 mass-produced fast-paced content,{" "}
                 <b>What space is left for humans?</b>
                 <br />
-                That’s why we launched Fairplay. We want to make it a place
+                That’s why we launched FairPlay. We want to make it a place
                 where your skills, interests, and content are truly highlighted.
               </p>
             </div>
@@ -96,15 +96,15 @@ export default function HomePage() {
                 </p>
                 <ul className="mb-[35px] flex flex-col items-start gap-3">
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Remove YouTube Shorts from your feed.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Remove TikTok and Snapchat videos.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Block custom domains.
                   </li>
                 </ul>
@@ -129,7 +129,7 @@ export default function HomePage() {
             <h2 className="text-[33px] mb-[25px] font-bold">
               FairPlay: An open and evolving project
             </h2>
-            <p className="text-[18px] text-(--color-medium-gray) m-10">
+            <p className="text-[18px] text-medium-gray m-10">
               We believe in the power of collaboration. FairPlay is entirely
               Open Source, meaning its code is accessible and modifiable by
               everyone. Our public and free API encourages innovation and allows
@@ -176,7 +176,7 @@ export default function HomePage() {
                   FairPlay is more than a platform, it&apos;s a movement. By
                   joining our community, you contribute to shaping the future of
                   streaming and Internet. Share your passions, discover new
-                  perspectives, and connect with others Fairplayers.
+                  perspectives, and connect with others FairPlayers.
                 </p>
                 <Button
                   onClick={() =>
@@ -206,7 +206,7 @@ export default function HomePage() {
               <h2 className="text-[34px] mb-[25px] font-bold">
                 Support FairPlay, Support Quality Content
               </h2>
-              <p className="text-[19px var(--color-medium-gray)] mb-[30px]">
+              <p className="text-[19px] text-medium-gray mb-[30px]">
                 FairPlay is 100% free and ad-free, and that will always be our
                 commitment. If you appreciate our mission and our platform, your
                 donation directly helps us cover infrastructure costs, improve

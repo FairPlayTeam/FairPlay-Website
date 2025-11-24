@@ -1,6 +1,7 @@
 "use client";
 import { ReactNode } from "react";
-import useFadeInOnScroll from "../../hooks/useFadeInOnScroll";
+import useFadeInOnScroll from "@/hooks/useFadeInOnScroll";
+import { cn } from "@/lib/utils";
 
 interface FadeInSectionProps {
   children: ReactNode;
@@ -16,11 +17,11 @@ export default function FadeInSection({
   return (
     <div
       ref={ref}
-      className={`
-        transition-all duration-1000 ease-out
-        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-        ${className}
-      `}
+      className={cn(
+        "transition-all duration-1000 ease-out",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
+        className
+      )}
     >
       {children}
     </div>

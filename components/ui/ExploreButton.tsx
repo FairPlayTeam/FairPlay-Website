@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 interface ExploreButtonProps {
   onClick?: () => void;
   className?: string;
@@ -11,13 +13,13 @@ export default function ExploreButton({
     <button
       type="button"
       onClick={onClick}
-      className={`
-        flex gap-2 items-center shadow-xl cursor-pointer
-        text-(--color-text-dark) bg-gray-50 backdrop-blur-md
-        lg:font-semibold isolation-auto border-gray-50 relative z-10
-        px-[17px] py-2 overflow-hidden border-2 rounded-full group
-        ${className}
-      `}
+      className={cn(
+        "flex gap-2 items-center shadow-xl cursor-pointer",
+        "text-text-dark bg-gray-50 backdrop-blur-md",
+        "lg:font-semibold isolation-auto border-gray-50 relative z-10",
+        "px-[17px] py-2 overflow-hidden border-2 rounded-full group",
+        className
+      )}
     >
       Explore
       <svg

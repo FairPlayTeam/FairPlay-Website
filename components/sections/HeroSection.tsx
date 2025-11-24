@@ -1,7 +1,7 @@
 "use client";
 
-import HeroImage from "./HeroImage";
-import HeroText from "./HeroText";
+import HeroImage from "@/components/sections/HeroImage";
+import HeroText from "@/components/sections/HeroText";
 
 export default function HeroSection() {
   return (
