@@ -27,6 +27,19 @@ export default function TermsPage() {
       content: (
         <>
           <p>
+            The part of the website is currently being written!
+          </p>
+        </>
+      ),
+    },
+    /*
+    {
+      id: "introduction",
+      title: "Introduction",
+      icon: <FaLightbulb size={16} />,
+      content: (
+        <>
+          <p>
             Welcome to <strong>FairPlay</strong>! These Terms and Conditions
             govern your access to and use of the FairPlay website, applications,
             and services. By accessing or using our Services, you agree to these
@@ -151,7 +164,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    },
+    }, */
     {
       id: "faq",
       title: "Frequently Asked Questions",
@@ -230,7 +243,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    },
+    }, /*
     {
       id: "intellectualProperty",
       title: "Intellectual Property",
@@ -305,7 +318,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    },
+    }, */
   ];
 
   const [activeSection, setActiveSection] = useState<string>("introduction");
