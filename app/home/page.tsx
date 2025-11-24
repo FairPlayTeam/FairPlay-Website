@@ -23,7 +23,7 @@ export default function DisclaimerPage() {
             onClick={() =>
               (window.location.href = "https://lab.fairplay.video")
             }
-            className="px-6 py-3 flex items-center gap-3"
+            className="inline-flex px-6 py-3 items-center gap-3"
           >
             Continue <FaArrowRight />
           </Button>
