@@ -28,7 +28,7 @@ export default function HeroText() {
             : "opacity-0 -translate-x-[50px]"
         )}
       >
-        Fairplay, where creativity stays human
+        FairPlay, where creativity stays human
       </h1>
 
       <p

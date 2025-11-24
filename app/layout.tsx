@@ -16,7 +16,7 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Fairplay",
+  title: "FairPlay",
   description: "Your passions deserve more than an algorithm",
 };
 

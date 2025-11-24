@@ -82,7 +82,7 @@ export default function RoadmapPage() {
       phase: "Phase 5",
       title: "Beta Release",
       description: (
-        <>Official Beta release of the Fairplay streaming platform.</>
+        <>Official Beta release of the FairPlay streaming platform.</>
       ),
       status: "planned",
       date: "Q1 2026",

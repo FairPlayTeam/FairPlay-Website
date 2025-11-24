@@ -25,11 +25,11 @@ export default function DocsPage() {
       content: (
         <>
           <p>
-            Welcome to the Fairplay documentation. This guide helps you
+            Welcome to the FairPlay documentation. This guide helps you
             understand how the platform works and how to contribute.
           </p>
           <p>
-            Fairplay is an <strong>open-source streaming platform</strong> built
+            FairPlay is an <strong>open-source streaming platform</strong> built
             to redefine how creators and viewers connect in a healthy
             environment.
           </p>
@@ -262,7 +262,7 @@ npm run dev`}
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Documentation</h1>
           <p className="text-text-para text-lg max-w-2xl mx-auto">
-            Learn how to use, configure, and contribute to Fairplay, the
+            Learn how to use, configure, and contribute to FairPlay, the
             open-source streaming ecosystem.
           </p>
         </section>

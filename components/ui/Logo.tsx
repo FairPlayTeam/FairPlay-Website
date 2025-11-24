@@ -11,7 +11,7 @@ export default function Logo({ className = "" }: ButtonProps) {
       className={`
     text-text text-[26px] font-[Montserrat,sans-serif] font-bold ${className}`}
     >
-      Fairplay
+      FairPlay
     </Link>
   );
 }

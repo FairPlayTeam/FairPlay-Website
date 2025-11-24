@@ -63,7 +63,7 @@ export default function HomePage() {
                 mass-produced fast-paced content,{" "}
                 <b>What space is left for humans?</b>
                 <br />
-                That’s why we launched Fairplay. We want to make it a place
+                That’s why we launched FairPlay. We want to make it a place
                 where your skills, interests, and content are truly highlighted.
               </p>
             </div>
@@ -176,7 +176,7 @@ export default function HomePage() {
                   FairPlay is more than a platform, it&apos;s a movement. By
                   joining our community, you contribute to shaping the future of
                   streaming and Internet. Share your passions, discover new
-                  perspectives, and connect with others Fairplayers.
+                  perspectives, and connect with others FairPlayers.
                 </p>
                 <Button
                   onClick={() =>
