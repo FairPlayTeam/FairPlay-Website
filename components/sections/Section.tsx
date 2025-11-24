@@ -17,7 +17,7 @@ export default function Section({
 }: SectionProps) {
   const baseStyles =
     variant === "primary"
-      ? "relative rounded-2xl shadow-xl bg-[var(--color-container)] p-[20px] md:p-[50px]"
+      ? "relative rounded-2xl shadow-xl bg-container p-[20px] md:p-[50px]"
       : "py-[50px]";
 
   return (

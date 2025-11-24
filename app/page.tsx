@@ -55,7 +55,7 @@ export default function HomePage() {
               <h2 className="text-[33px] mb-[25px] font-bold">
                 Our Mission: Redefining Streaming
               </h2>
-              <p className="text-[18px] text-(--color-medium-gray)">
+              <p className="text-[18px] text-medium-gray">
                 The internet is in bad shape. <b>47%</b> of internet traffic
                 comes from bots, <b>52%</b> of internet content is AI-generated
                 including <b>71%</b> of images on social media like YouTube.
@@ -96,15 +96,15 @@ export default function HomePage() {
                 </p>
                 <ul className="mb-[35px] flex flex-col items-start gap-3">
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Remove YouTube Shorts from your feed.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Remove TikTok and Snapchat videos.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-(--color-accent) text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
                     Block custom domains.
                   </li>
                 </ul>
@@ -129,7 +129,7 @@ export default function HomePage() {
             <h2 className="text-[33px] mb-[25px] font-bold">
               FairPlay: An open and evolving project
             </h2>
-            <p className="text-[18px] text-(--color-medium-gray) m-10">
+            <p className="text-[18px] text-medium-gray m-10">
               We believe in the power of collaboration. FairPlay is entirely
               Open Source, meaning its code is accessible and modifiable by
               everyone. Our public and free API encourages innovation and allows
@@ -206,7 +206,7 @@ export default function HomePage() {
               <h2 className="text-[34px] mb-[25px] font-bold">
                 Support FairPlay, Support Quality Content
               </h2>
-              <p className="text-[19px var(--color-medium-gray)] mb-[30px]">
+              <p className="text-[19px] text-medium-gray mb-[30px]">
                 FairPlay is 100% free and ad-free, and that will always be our
                 commitment. If you appreciate our mission and our platform, your
                 donation directly helps us cover infrastructure costs, improve

@@ -22,7 +22,7 @@ export default function HeroImage() {
       <div className="video-card-container perspective-[1000px]">
         <div
           className="video-card-3d-effect
-            bg-(--color-background)
+            bg-background
             rounded-xl
             shadow-2xl
             transform rotate-x-10 rotate-y-[-40deg] rotate-[5deg]
@@ -30,8 +30,8 @@ export default function HeroImage() {
             transition-transform duration-300 ease-in-out
           "
         >
-          <div className="video-card relative bg-(--color-background) rounded-2xl w-[380px] z-1">
-            <div className="video-player-placeholder bg-(--color-background) h-[220px] w-full rounded-2xl">
+          <div className="video-card relative bg-background rounded-2xl w-[380px] z-1">
+            <div className="video-player-placeholder bg-background h-[220px] w-full rounded-2xl">
               <Image
                 src="/images/hero-video-thumbnail.png"
                 alt="Video thumbnail"
@@ -42,20 +42,20 @@ export default function HeroImage() {
             </div>
 
             <div className="video-info p-4">
-              <h3 className="video-title text-(--color-text) text-lg font-bold leading-[1.7] mb-2 mt-0">
+              <h3 className="video-title text-text text-lg font-bold leading-[1.7] mb-2 mt-0">
                 The Obviously True Theorem No One Can Prove
               </h3>
-              <p className="video-rating text-(--color-text-para) text-sm mb-2.5">
+              <p className="video-rating text-text-para text-sm mb-2.5">
                 4.5 / 5
               </p>
               <div className="video-tags flex gap-2">
-                <span className="tag bg-(--gray-700) rounded-full text-(--color-text) text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   math
                 </span>
-                <span className="tag bg-(--gray-700) rounded-full text-(--color-text) text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   theorem
                 </span>
-                <span className="tag bg-(--gray-700) rounded-full text-(--color-text) text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   puzzle
                 </span>
               </div>

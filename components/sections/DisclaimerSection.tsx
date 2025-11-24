@@ -6,7 +6,7 @@ export default function DisclaimerSection() {
   return (
     <div className="intro-card mx-auto max-w-[800px] text-center">
       <h2 className="text-[34px] mb-[25px] font-bold">A Project in Progress</h2>
-      <p className="text-[19px] text-(--color-para)">
+      <p className="text-[19px] text-para">
         FairPlay is currently under development. You&apos;ll be introduced to
         the user interface and some features, but please note that the project
         is still under development. We thank you for your patience and invite

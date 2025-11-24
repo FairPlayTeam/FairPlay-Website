@@ -318,7 +318,7 @@ export default function TermsPage() {
           }
         }
       },
-      { threshold: 0.9 },
+      { threshold: 0.9 }
     );
 
     document
@@ -331,10 +331,10 @@ export default function TermsPage() {
     <>
       <Topbar animateOnLoad={false} />
 
-      <main className="min-h-screen text-(--color-text) px-6 py-20 scroll-smooth">
+      <main className="min-h-screen text-text px-6 py-20 scroll-smooth">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Terms</h1>
-          <p className="text-(--color-text-para) text-lg max-w-2xl mx-auto"></p>
+          <p className="text-text-para text-lg max-w-2xl mx-auto"></p>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">

@@ -14,12 +14,9 @@ export default function FeatureItem({
 }: SectionProps) {
   return (
     <div
-      style={{
-        border: "1px solid",
-        borderColor: "var(--color-border)",
-      }}
       className={cn(
-        "bg-(--color-container-dark)",
+        "bg-container-dark",
+        "border border-border",
         "p-[30px]",
         "rounded-xl",
         "transition-transform duration-300 ease-in-out",

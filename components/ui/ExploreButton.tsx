@@ -15,7 +15,7 @@ export default function ExploreButton({
       onClick={onClick}
       className={cn(
         "flex gap-2 items-center shadow-xl cursor-pointer",
-        "text-(--color-text-dark) bg-gray-50 backdrop-blur-md",
+        "text-text-dark bg-gray-50 backdrop-blur-md",
         "lg:font-semibold isolation-auto border-gray-50 relative z-10",
         "px-[17px] py-2 overflow-hidden border-2 rounded-full group",
         className

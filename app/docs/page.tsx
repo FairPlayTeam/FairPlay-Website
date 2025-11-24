@@ -148,7 +148,7 @@ npm run dev`}
                 title={`Click to copy ${color}`}
               >
                 <div
-                  className="w-20 h-10 rounded-lg flex items-center justify-center text-[10px] p-3 border border-(--color-border)"
+                  className="w-20 h-10 rounded-lg flex items-center justify-center text-[10px] p-3 border border-border"
                   style={{
                     backgroundColor: color,
                     color:
@@ -159,7 +159,7 @@ npm run dev`}
                 >
                   {color}
                 </div>
-                <span className="text-xs mt-1 text-(--color-text-para) group-hover:text-(--color-links)">
+                <span className="text-xs mt-1 text-text-para group-hover:text-links">
                   {name}
                 </span>
               </button>
@@ -245,7 +245,7 @@ npm run dev`}
           }
         }
       },
-      { threshold: 0.9 },
+      { threshold: 0.9 }
     );
 
     document
@@ -258,10 +258,10 @@ npm run dev`}
     <>
       <Topbar animateOnLoad={false} />
 
-      <main className="min-h-screen text-(--color-text) px-6 py-20 scroll-smooth">
+      <main className="min-h-screen text-text px-6 py-20 scroll-smooth">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Documentation</h1>
-          <p className="text-(--color-text-para) text-lg max-w-2xl mx-auto">
+          <p className="text-text-para text-lg max-w-2xl mx-auto">
             Learn how to use, configure, and contribute to Fairplay, the
             open-source streaming ecosystem.
           </p>

@@ -33,7 +33,7 @@ export default function HeroText() {
 
       <p
         className={cn(
-          "text-[19px] text-(--color-text-para) mb-[35px] max-w-[600px]",
+          "text-[19px] text-text-para mb-[35px] max-w-[600px]",
           "transition-all duration-800 ease-out",
           animate
             ? "opacity-100 translate-x-0 delay-300"

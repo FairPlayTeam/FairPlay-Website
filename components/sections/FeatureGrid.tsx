@@ -26,7 +26,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       )}
     >
       <FeatureItem>
-        <FaHandHoldingUsd className="text-(--color-accent) text-[45px] mb-5" />
+        <FaHandHoldingUsd className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">100% Free. Forever.</h3>
         <p className="select-none">
           Access an unlimited library of videos with no fees or subscriptions.
@@ -36,7 +36,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       </FeatureItem>
 
       <FeatureItem>
-        <FaAd className="text-(--color-accent) text-[45px] mb-5" />
+        <FaAd className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">Zero Ads. Zero Interruptions.</h3>
         <p className="select-none">
           Enjoy your videos in complete serenity. FairPlay is built without any
@@ -45,7 +45,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       </FeatureItem>
 
       <FeatureItem>
-        <FaUsers className="text-(--color-accent) text-[45px] mb-5" />
+        <FaUsers className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">An Engaged Community.</h3>
         <p className="select-none">
           FairPlay is a platform built by and for its users. Suggest ideas,
@@ -58,7 +58,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       </FeatureItem>
 
       <FeatureItem>
-        <FaCodeBranch className="text-(--color-accent) text-[45px] mb-5" />
+        <FaCodeBranch className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">Open Source & Free API.</h3>
         <p className="select-none">
           Our code is open to all. Contribute and build on our foundation. The
@@ -68,7 +68,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       </FeatureItem>
 
       <FeatureItem>
-        <FaLightbulb className="text-(--color-accent) text-[45px] mb-5" />
+        <FaLightbulb className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">
           Relevant & Captivating Content.
         </h3>
@@ -80,7 +80,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
       </FeatureItem>
 
       <FeatureItem>
-        <FaBalanceScale className="text-(--color-accent) text-[45px] mb-5" />
+        <FaBalanceScale className="text-accent text-[45px] mb-5" />
         <h3 className="text-[24px] mb-[15px]">Fairness and Respect.</h3>
         <p className="select-none">
           Our moderation focuses on promoting a healthy environment, excluding

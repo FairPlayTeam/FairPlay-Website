@@ -23,14 +23,14 @@ export default function Link({
       href={href}
       className={cn(
         "relative inline-block",
-        "border-b-2 border-dotted border-(--color-links)",
+        "border-b-2 border-dotted border-links",
         "rounded-xs",
-        "text-(--color-links)",
+        "text-links",
         "no-underline",
         "leading-[1.1]",
         "pb-px",
         "transition-colors duration-200 ease-in-out",
-        "hover:text-(--color-links-hover)",
+        "hover:text-links-hover",
         "group",
         className
       )}
