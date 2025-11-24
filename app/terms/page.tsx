@@ -27,7 +27,8 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            The part of the website is currently being written!
+            The part of the website is currently being written! Please check back later for the
+            full Terms and Conditions.
           </p>
         </>
       ),
