@@ -49,7 +49,7 @@ export default function ExtensionPreview() {
         type="text"
         id="customDomain"
         placeholder="e.g. example.com"
-        className="w-full bg-(--gray-500) border border-border text-text rounded-md p-3 placeholder-text-amount focus:outline-none focus:ring-2 focus:ring-accent-dark"
+        className="w-full bg-gray-500 border border-border text-text rounded-md p-3 placeholder-text-amount focus:outline-none focus:ring-2 focus:ring-accent-dark"
       />
 
       <ul id="customDomainList" className="list-none p-0 mt-3 text-text-para" />
