@@ -13,7 +13,7 @@
   --gray-500: #272626;
   --gray-700: #212121;
   --gray-900: #0f0f0f;
-  --pink-500: #ff69b4;
+  --purple-500: #1a57e5;
   --white: #ffffff;
   --black: #000000;
 
@@ -21,7 +21,6 @@
   --gray-700-transparent: #2121218c;
   --gray-900-transparent: #0f0f0f8c;
 }
-
 
 @theme {
   --color-links: var(--blue-400);
@@ -32,7 +31,7 @@
 
   --color-container: var(--gray-700-transparent);
   --color-container-dark: var(--gray-900-transparent);
-  
+
   --color-text: var(--white);
   --color-text-para: var(--gray-100);
   --color-text-amount: var(--gray-200);
@@ -42,7 +41,11 @@
 
   --color-accent: var(--blue-pastel-100);
   --color-accent-dark: var(--blue-pastel-700);
-  --color-donate: var(--pink-500);
+  --background-image-gradient-donate: linear-gradient(
+    135deg,
+    #1a57e5 0%,
+    #1396ec 100%
+  );
 }
 
 html {
@@ -89,7 +92,7 @@ h3 {
   border-radius: 2px;
 }
 
-label:has(+input[aria-invalid="true"]) {
+label:has(+ input[aria-invalid="true"]) {
   color: var(--color-red-500);
 }
 
