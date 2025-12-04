@@ -39,5 +39,5 @@ FairPlay is built by a community of developers who believe the internet should s
 ## Donate Us
 You can also support us by donating on Ko-Fi here: [Ko-Fi](https://ko-fi.com/fairplay_)
 
-### Why you should support us?
+### Why should you support us?
 FairPlay is 100% free and open-source, but if you appreciate our project you can support us. Even if it's a small donate, we will be happy for it. **Every donate counts big or small.**
