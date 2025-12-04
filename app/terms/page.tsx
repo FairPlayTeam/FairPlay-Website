@@ -27,7 +27,7 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            The part of the website is currently being written! Please check back later for the
+            This part is currently being written. Please check back later for the
             full Terms and Conditions.
           </p>
         </>
@@ -165,7 +165,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    }, */
+    },
     {
       id: "faq",
       title: "Frequently Asked Questions",
@@ -244,7 +244,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    }, /*
+    },
     {
       id: "intellectualProperty",
       title: "Intellectual Property",
@@ -319,7 +319,7 @@ export default function TermsPage() {
           </p>
         </>
       ),
-    }, */
+    },*/
   ];
 
   const [activeSection, setActiveSection] = useState<string>("introduction");

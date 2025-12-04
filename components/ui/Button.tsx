@@ -34,16 +34,16 @@ const variantConfig = {
   donatePrimary: {
     classes: [
       "text-[15px] text-text",
-      "rounded-full bg-donate",
-      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+      "rounded-full bg-gradient-donate",
+      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(80,80,250,0.4)]",
       "px-[15px] py-[5px]",
     ],
   },
   donateSecondary: {
     classes: [
       "text-[15px] text-text",
-      "rounded-full bg-donate",
-      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(255,105,180,0.4)]",
+      "rounded-full bg-gradient-donate",
+      "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(80,80,250,0.4)]",
       "px-[35px] py-2.5",
     ],
   },
