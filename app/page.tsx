@@ -108,7 +108,7 @@ export default function HomePage() {
                     Block custom domains.
                   </li>
                 </ul>
-                <div className="flex justify-center lg:justify-start">
+                <div className="flex justify-center lg:justify-start gap-4">
                   <Button
                     onClick={() =>
                       (window.location.href =
@@ -116,7 +116,16 @@ export default function HomePage() {
                     }
                     variant="secondary"
                   >
-                    Install (Edge)
+                    Install (Edge/Chrome...)
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      (window.location.href =
+                        "https://addons.mozilla.org/fr/firefox/addon/fairplay-anti-vertical-content/")
+                    }
+                    variant="secondary"
+                  >
+                    Install (Firefox)
                   </Button>
                 </div>
               </div>
