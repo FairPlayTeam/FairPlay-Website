@@ -3,63 +3,93 @@
 export default function ExtensionPreview() {
   return (
     <div
-      className="p-5 w-[300px] 
-                bg-linear-to-b from-(--gray-700-transparent) to-(--gray-700)/80
-                backdrop-blur-md 
-                text-text 
-                rounded-2xl 
-                shadow-lg ring-1 ring-accent-dark"
+      className="w-[320px] rounded-2xl 
+                 bg-(--gray-900)/95 
+                 border border-(--gray-700) 
+                 px-6 py-5 
+                 text-text shadow-xl"
     >
-      <div className="text-center mb-4">
-        <h1 className="py-3 text-3xl font-semibold text-accent">FairPlay</h1>
-      </div>
+      <h1 className="mb-5 text-center text-3xl font-semibold text-accent">
+        FairPlay
+      </h1>
 
-      <div className="space-y-3">
-        <label className="flex items-center">
+      <div className="space-y-3 text-sm">
+        <label className="flex items-center gap-3">
           <input
             type="checkbox"
             defaultChecked
-            id="ytShorts"
-            className="mr-3 accent-accent-dark"
+            className="h-4 w-4 cursor-pointer rounded border-(--gray-500) bg-transparent accent-accent-dark"
           />
           <span className="text-text-para">YouTube Shorts</span>
         </label>
 
-        <label className="flex items-center">
+        <label className="flex items-center gap-3">
           <input
             type="checkbox"
-            id="blockTikTok"
-            className="mr-3 accent-accent-dark"
-          />
-          <span className="text-text-para">TikTok</span>
-        </label>
-
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            id="snapVert"
-            className="mr-3 accent-accent-dark"
+            className="h-4 w-4 cursor-pointer rounded border-(--gray-500) bg-transparent accent-accent-dark"
           />
           <span className="text-text-para">Snapchat Spotlights</span>
         </label>
+
+        <label className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            className="h-4 w-4 cursor-pointer rounded border-(--gray-500) bg-transparent accent-accent-dark"
+          />
+          <span className="text-text-para">Instagram Reels (WIP)</span>
+        </label>
+
+        <label className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            className="h-4 w-4 cursor-pointer rounded border-(--gray-500) bg-transparent accent-accent-dark"
+          />
+          <span className="text-text-para">TikTok</span>
+        </label>
       </div>
 
-      <h4 className="mt-6 mb-2 text-text-bold font-medium">Custom website</h4>
-      <input
-        type="text"
-        id="customDomain"
-        placeholder="e.g. example.com"
-        className="w-full bg-gray-500 border border-border text-text rounded-md p-3 placeholder-text-amount focus:outline-none focus:ring-2 focus:ring-accent-dark"
-      />
+      <div className="mt-6">
+        <h4 className="mb-2 text-sm font-medium text-text-bold">
+          Block custom website
+        </h4>
 
-      <ul id="customDomainList" className="list-none p-0 mt-3 text-text-para" />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between rounded-md border border-(--gray-700) bg-(--gray-850) px-3 py-2 text-sm">
+            <span className="text-text">x.com</span>
+            <span className="cursor-default text-text-amount">×</span>
+          </div>
+
+          <div className="flex items-center justify-between rounded-md border border-(--gray-700) bg-(--gray-850) px-3 py-2 text-sm">
+            <span className="text-text">twitter.com</span>
+            <span className="cursor-default text-text-amount">×</span>
+          </div>
+
+          <input
+            type="text"
+            placeholder="e.g. example.com"
+            className="mt-1 w-full rounded-md border border-(--gray-700) 
+                       bg-(--gray-900) px-3 py-2 text-sm 
+                       text-text placeholder:text-text-amount 
+                       focus:outline-none focus:ring-2 focus:ring-accent-dark"
+          />
+        </div>
+      </div>
 
       <button
-        id="addDomain"
-        className="mt-4 w-full bg-accent-dark rounded-xl p-3 text-text font-medium transition duration-200 hover:shadow-lg"
+        className="cursor-pointer mt-5 w-full rounded-md bg-accent-dark 
+                   py-3 text-sm font-semibold text-white 
+                   transition-transform duration-150 
+                   hover:-translate-y-[1px] hover:shadow-lg"
       >
-        Add / Delete
+        Add
       </button>
+
+      <p className="mt-4 text-center text-xs text-text-amount">
+        by{" "}
+        <span className="font-medium text-accent">
+          fairplay.video
+        </span>
+      </p>
     </div>
   );
 }
