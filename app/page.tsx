@@ -164,7 +164,9 @@ export default function HomePage() {
               </Button>
               <Button
                 className="gap-2"
-                onClick={() => (window.location.href = "https://github.com/FairPlayTeam/FairPlay-Website/blob/main/CONTRIBUTING.md")}
+                onClick={() =>
+                  (window.location.href = "/docs/contribution-guidlines")
+                }
               >
                 {" "}
                 <PiBookOpenTextLight />
