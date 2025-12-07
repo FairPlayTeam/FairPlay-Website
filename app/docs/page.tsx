@@ -220,7 +220,7 @@ npm run dev`}
           <p>
             Contributions are welcome! Before submitting a pull request, please
             read the{" "}
-            <Link href="/docs/contribution-guidelines">
+            <Link href="/docs/contribution-guidlines">
               contribution guidelines
             </Link>
             .
