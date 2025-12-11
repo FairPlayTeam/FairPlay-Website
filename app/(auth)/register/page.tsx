@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import { z } from "zod";
+import { setToken } from "@/lib/token";
 
 const registerFormSchema = z
   .object({
@@ -69,7 +70,7 @@ export default function RegisterPage() {
 
       console.log(response);
 
-      localStorage.setItem("auth-session-key", response.data.sessionKey);
+      setToken(response.data.sessionKey);
       refetchUser();
       router.push(callbackUrl || "/home");
     } catch (error) {

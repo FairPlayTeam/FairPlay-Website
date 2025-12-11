@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import { z } from "zod";
+import { setToken } from "@/lib/token";
 
 const loginFormSchema = z.object({
   identifier: z.string("Email or username is required"),
@@ -55,7 +56,7 @@ export default function LoginPage() {
         { withCredentials: true }
       );
 
-      localStorage.setItem("auth-session-key", response.data.sessionKey);
+      setToken(response.data.sessionKey);
       refetchUser();
       router.push(callbackUrl || "/home");
     } catch (error) {

@@ -1,3 +1,4 @@
+import { getToken } from "@/lib/token";
 import axios from "axios";
 
 if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
@@ -9,7 +10,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const sessionKey = localStorage.getItem("auth-session-key");
+  const sessionKey = getToken();
 
   if (sessionKey) {
     config.headers["authorization"] = `Bearer ${sessionKey}`;
