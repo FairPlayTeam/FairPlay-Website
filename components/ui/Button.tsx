@@ -7,7 +7,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "secondary"
     | "donatePrimary"
     | "donateSecondary"
-    | "download";
+    | "download"
+    | "ghost";
+  size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
 }
 
 const baseButtonClasses =
@@ -50,23 +52,49 @@ const variantConfig = {
   download: {
     classes: [],
   },
+  ghost: {
+    classes: [
+      "bg-transparent text-accent",
+      "hover:bg-accent/10",
+      "transition-colors duration-300",
+      "rounded-lg",
+    ],
+  },
+} as const;
+
+const sizeConfig = {
+  default: "text-[15px] px-4 py-2",
+  sm: "text-sm px-3 py-1.5",
+  lg: "text-base px-8 py-3",
+  icon: "h-10 w-10 p-2 aspect-square grid place-items-center [&_svg:not([class*='size-'])]:size-4",
+  "icon-sm":
+    "h-8 w-8 p-1.5 aspect-square grid place-items-center [&_svg:not([class*='size-'])]:size-3.5",
+  "icon-lg":
+    "h-12 w-12 p-3 aspect-square grid place-items-center [&_svg:not([class*='size-'])]:size-4.5",
 } as const;
 
 export default function Button({
   children,
   className = "",
   variant = "primary",
+  size = "default",
   onClick,
   ...props
 }: ButtonProps) {
   const [loading, setLoading] = useState(false);
 
   const config = variantConfig[variant] || variantConfig.download;
+  const sizeClasses = sizeConfig[size];
 
   return (
     <button
       onClick={onClick}
-      className={cn(baseButtonClasses, ...config.classes, className)}
+      className={cn(
+        baseButtonClasses,
+        ...config.classes,
+        sizeClasses,
+        className
+      )}
       {...props}
     >
       {children}
