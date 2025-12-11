@@ -17,6 +17,9 @@ export default function Input({
         "focus:outline-none focus:border-accent",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         "aria-invalid:border-red-500 aria-invalid:text-red-500 aria-invalid:placeholder:text-red-500/50",
+        "file:mr-4 file:py-2 file:px-4 file:rounded-full file:cursor-pointer",
+        "file:bg-accent hover:file:bg-accent/90 file:text-background",
+        "file:text-sm file:font-semibold",
         className
       )}
     />
