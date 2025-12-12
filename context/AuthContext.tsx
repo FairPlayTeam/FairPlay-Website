@@ -23,11 +23,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryFn: () =>
       api.get("/auth/me", { withCredentials: true }).then((res) => res.data),
     refetchOnWindowFocus: false,
-    initialData: null,
   });
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, refetchUser: refetch }}>
+    <AuthContext.Provider
+      value={{ user: user ?? null, isLoading, refetchUser: refetch }}
+    >
       {children}
     </AuthContext.Provider>
   );
