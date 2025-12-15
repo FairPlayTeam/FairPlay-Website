@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import { z } from "zod";
+import { setToken } from "@/lib/token";
 
 const loginFormSchema = z.object({
   identifier: z.string("Email or username is required"),
@@ -20,6 +21,8 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const { user, isLoading, refetchUser } = useAuth();
 
   const [error, setError] = useState<string | null>(null);
@@ -27,9 +30,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace("/home");
+      router.replace(callbackUrl || "/home");
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, callbackUrl]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
@@ -53,9 +56,9 @@ export default function LoginPage() {
         { withCredentials: true }
       );
 
-      localStorage.setItem("auth-session-key", response.data.sessionKey);
+      setToken(response.data.sessionKey);
       refetchUser();
-      router.push("/home");
+      router.push(callbackUrl || "/home");
     } catch (error) {
       setError(
         (error as { response: { data: { error: string } } })?.response.data
