@@ -17,7 +17,6 @@ function SearchBar() {
         type="text"
         placeholder="Search"
         className="peer rounded-l-full px-4 py-1.5 border-r-0"
-        autoFocus
       />
       <Button
         size="icon"
@@ -55,7 +54,7 @@ export default function Topbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-4 transition-colors duration-300",
-        isScrolled ? "bg-black/25 backdrop-blur-md" : "bg-transparent"
+        isScrolled ? "bg-black/90 backdrop-blur-lg" : "bg-transparent"
       )}
     >
       {isSearchOpen ? (

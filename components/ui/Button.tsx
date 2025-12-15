@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?:
     | "primary"
     | "secondary"
+    | "videoDetails"
     | "donatePrimary"
     | "donateSecondary"
     | "download"
@@ -33,10 +34,17 @@ const variantConfig = {
       "px-[35px] py-2.5",
     ],
   },
+  videoDetails: {
+    classes: [
+      "text-[15px] text-text",
+      "rounded-full bg-(--gray-500)",
+      "px-[30px] py-2.5",
+    ],
+  },
   donatePrimary: {
     classes: [
       "text-[15px] text-text",
-      "rounded-full bg-gradient-donate",
+      "rounded-full bg-(--color-accent-dark)",
       "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(80,80,250,0.4)]",
       "px-[15px] py-[5px]",
     ],
@@ -44,7 +52,7 @@ const variantConfig = {
   donateSecondary: {
     classes: [
       "text-[15px] text-text",
-      "rounded-full bg-gradient-donate",
+      "rounded-full bg-(--color-accent-dark)",
       "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(80,80,250,0.4)]",
       "px-[35px] py-2.5",
     ],
