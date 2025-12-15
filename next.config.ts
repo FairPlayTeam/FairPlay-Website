@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         hostname: "tilbgoymzrpnhzlqsvgj.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "assets.fairplay.video",
+      },
       new URL(apiUrl),
     ],
   },
