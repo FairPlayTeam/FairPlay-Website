@@ -47,7 +47,7 @@ export function VideoInfo({ video }: VideoInfoProps) {
             <Link
               href={`/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`}
             >
-              <Button variant="secondary" className="ml-4 rounded-full px-6">
+              <Button variant="videoDetails" className="ml-4 rounded-full px-6">
                 Login to Subscribe
               </Button>
             </Link>
@@ -55,7 +55,7 @@ export function VideoInfo({ video }: VideoInfoProps) {
             <></>
           ) : (
             // TODO: Implement subscription logic
-            <Button variant="secondary" className="ml-4 rounded-full px-6">
+            <Button variant="videoDetails" className="ml-4 rounded-full px-6">
               Subscribe
             </Button>
           )}

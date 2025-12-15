@@ -78,7 +78,7 @@ export default function VideoPage() {
           url={video.hls.master || ""}
           thumbnailUrl={video.thumbnailUrl}
         />
-        <div className="px-4">
+        <div className="px-4 lg:px-0">
           <VideoInfo video={video} />
           <Comments videoId={video.id} initialComments={comments} />
         </div>

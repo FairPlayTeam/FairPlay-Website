@@ -9,6 +9,7 @@ import {
   FaGamepad,
   FaHistory,
   FaBookOpen,
+  FaUpload,
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ const mainLinks = [
   { icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
   { icon: FaHistory, label: "History", href: "/history" },
+  { icon: FaUpload, label: "Upload", href: "/upload" },
 ];
 
 const categories = [
