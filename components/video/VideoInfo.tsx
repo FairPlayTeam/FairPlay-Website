@@ -1,19 +1,36 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import VideoDescription from "@/components/video/VideoDescription";
 import Button from "@/components/ui/Button";
+import { FollowButton } from "@/components/ui/FollowButton";
+import { getUser } from "@/lib/users";
 import { VideoDetails } from "@/lib/video";
+import { PublicUser } from "@/lib/users";
 import { useAuth } from "@/context/AuthContext";
 
-interface VideoInfoProps {
-  video: VideoDetails;
-}
-
-export function VideoInfo({ video }: VideoInfoProps) {
+export function VideoInfo({ video }: { video: VideoDetails }) {
+  const [profile, setProfile] = useState<PublicUser | undefined>(undefined);
   const { user } = useAuth();
+
+  useEffect(() => {
+    const uname = video.user?.username;
+    if (!uname) {
+      console.log("No username.");
+      return;
+    }
+
+    getUser(uname)
+      .then((response) => {
+        setProfile(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [video.user?.username]);
 
   return (
     <div className="mt-4 space-y-6">
@@ -51,13 +68,15 @@ export function VideoInfo({ video }: VideoInfoProps) {
                 Login to Subscribe
               </Button>
             </Link>
-          ) : user.id === video.userId && false ? (
+          ) : user.id === video.userId ? (
             <></>
           ) : (
-            // TODO: Implement subscription logic
-            <Button variant="videoDetails" className="ml-4 rounded-full px-6">
-              Subscribe
-            </Button>
+            <div className="ml-4">
+              <FollowButton
+                username={video.user?.username ?? ""}
+                initialFollowing={!!profile?.isFollowing}
+              />
+            </div>
           )}
         </div>
 
