@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { VideoCard } from "@/components/video/VideoCard";
 import { getVideos, type VideoDetails } from "@/lib/video";
 import { useRouter } from "next/navigation";
