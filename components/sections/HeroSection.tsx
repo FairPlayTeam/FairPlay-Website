@@ -9,7 +9,7 @@ export default function HeroSection() {
       className="
         hero-vitrine
         flex flex-col-reverse lg:flex-row items-center justify-between
-        gap-[50px]
+        gap-12.5
         pt-10
         min-h-[calc(100vh-100px)]
         text-left

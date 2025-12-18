@@ -40,19 +40,19 @@ export default function HomePage() {
     <>
       <Topbar />
 
-      <main className="mx-auto max-w-[1400px] px-5 md:px-[70px]">
+      <main className="mx-auto max-w-350 px-5 md:px-17.5">
         <HeroSection />
 
         <FadeInSection>
-          <Section variant="secondary" className="mt-[100px]">
+          <Section variant="secondary" className="mt-25">
             <DisclaimerSection />
           </Section>
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="about" className="mt-[100px]">
-            <div className="intro-card mx-auto max-w-[800px] text-center">
-              <h2 className="text-[33px] mb-[25px] font-bold">
+          <Section id="about" className="mt-25">
+            <div className="intro-card mx-auto max-w-200 text-center">
+              <h2 className="text-[33px] mb-6.25 font-bold">
                 Our Mission: Redefining Streaming
               </h2>
               <p className="text-[18px] text-medium-gray">
@@ -71,8 +71,8 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="values" variant="secondary" className="mt-[100px]">
-            <h2 className="text-[33px] font-bold mb-[50px]">
+          <Section id="values" variant="secondary" className="mt-25">
+            <h2 className="text-[33px] font-bold mb-12.5">
               Why choose FairPlay?
             </h2>
             <FeatureGrid />
@@ -80,31 +80,31 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="extension" className="mt-[100px]">
-            <div className="flex flex-col lg:flex-row gap-[50px] text-left">
+          <Section id="extension" className="mt-25">
+            <div className="flex flex-col lg:flex-row gap-12.5 text-left">
               <div className="flex flex-1 justify-center items-center w-full lg:w-auto">
                 <ExtensionPreview />
               </div>
               <div className="flex-1 w-full">
-                <h2 className="text-[34px] font-bold mb-[25px] text-center lg:text-left">
+                <h2 className="text-[34px] font-bold mb-12.5 text-center lg:text-left">
                   Control Your Web experience with the FairPlay extension
                 </h2>
-                <p className="text-[16px] mb-[25px] text-center lg:text-left">
+                <p className="text-[16px] mb-12.5 text-center lg:text-left">
                   Tired of short, addictive, and useless content polluting your
                   feed? Our browser extension allows you to hide them and take
                   back control.
                 </p>
-                <ul className="mb-[35px] flex flex-col items-start gap-3">
+                <ul className="mb-12.5 flex flex-col items-start gap-3">
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-0.75" />
                     Remove YouTube Shorts from your feed.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-0.75" />
                     Remove TikTok and Snapchat videos.
                   </li>
                   <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-[3px]" />
+                    <FaCheckCircle className="shrink-0 text-accent text-[18px] mr-2.5 mt-0.75" />
                     Block custom domains.
                   </li>
                 </ul>
@@ -134,8 +134,8 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="development" variant="secondary" className="mt-[100px]">
-            <h2 className="text-[33px] mb-[25px] font-bold">
+          <Section id="development" variant="secondary" className="mt-25">
+            <h2 className="text-[33px] mb-6.25 font-bold">
               FairPlay: An open and evolving project
             </h2>
             <p className="text-[18px] text-medium-gray m-10">
@@ -177,13 +177,13 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="community" className="mt-[100px]">
-            <div className="flex flex-col lg:flex-row gap-[50px] text-left lg:items-center">
+          <Section id="community" className="mt-25">
+            <div className="flex flex-col lg:flex-row gap-12.5 text-left lg:items-center">
               <div className="flex flex-1 flex-col justify-center items-center lg:items-start text-center lg:text-left">
-                <h2 className="text-[33px] font-bold mb-[25px]">
+                <h2 className="text-[33px] font-bold mb-6.25">
                   Join our community
                 </h2>
-                <p className="text-[18px] mb-[25px] max-w-lg">
+                <p className="text-[18px] mb-6.25 max-w-lg">
                   FairPlay is more than a platform, it&apos;s a movement. By
                   joining our community, you contribute to shaping the future of
                   streaming and Internet. Share your passions, discover new
@@ -212,12 +212,12 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section variant="secondary" className="mt-[100px]">
-            <div className="intro-card mx-auto max-w-[800px] text-center">
-              <h2 className="text-[34px] mb-[25px] font-bold">
+          <Section variant="secondary" className="mt-25">
+            <div className="intro-card mx-auto max-w-200 text-center">
+              <h2 className="text-[34px] mb-6.25 font-bold">
                 Support FairPlay, Support Quality Content
               </h2>
-              <p className="text-[19px] text-medium-gray mb-[30px]">
+              <p className="text-[19px] text-medium-gray mb-7.5">
                 FairPlay is 100% free and ad-free, and that will always be our
                 commitment. If you appreciate our mission and our platform, your
                 donation directly helps us cover infrastructure costs, improve
