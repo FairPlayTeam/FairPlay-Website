@@ -56,7 +56,8 @@ export default function DisclaimerPopup({ isOpen, onClose }: DisclaimerPopupProp
             variant="primary"
             size="lg"
             onClick={() => {
-              onClose();
+                window.location.href = "https://fairplay.video/explore";
+                onClose();
             }}
             className="flex items-center justify-center gap-3"
           >
@@ -67,8 +68,8 @@ export default function DisclaimerPopup({ isOpen, onClose }: DisclaimerPopupProp
             variant="ghost"
             size="lg"
             onClick={() => {
-              window.location.href = "https://lab.fairplay.video";
-              onClose();
+                window.location.href = "https://lab.fairplay.video";
+                onClose();
             }}
             className="flex items-center justify-center gap-3"
           >
