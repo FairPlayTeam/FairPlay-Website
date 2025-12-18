@@ -21,11 +21,20 @@ export default function DisclaimerPage() {
           </p>
           <Button
             onClick={() =>
-              (window.location.href = "https://lab.fairplay.video")
+              (window.location.href = "https://fairplay.video/explore")
             }
             className="px-6 py-3 flex items-center gap-3"
           >
             Continue <FaArrowRight />
+          </Button>
+          <br />
+          <Button
+            onClick={() =>
+              (window.location.href = "https://lab.fairplay.video")
+            }
+            className="px-6 py-3 flex items-center gap-3"
+          >
+            Continue on the old version <FaArrowRight />
           </Button>
         </div>
       </Section>
