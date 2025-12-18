@@ -54,14 +54,13 @@ export default function VideosPage() {
   return (
     <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">Explore</h1>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
             {videos.map((video) => (
             <VideoCard
                 key={video.id}
                 thumbnailUrl={video.thumbnailUrl}
                 title={video.title}
                 displayName={video.user?.displayName || video.user?.username}
-                subtitle={video.user?.username}
                 meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
                 onPress={() => handleVideoPress(video.id)}
                 variant="grid"
