@@ -3,17 +3,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { getToken } from "@/lib/token";
+import { api } from "@/lib/api";
 
-const getCachedToken = () => {
-    try {
-        if (typeof window === "undefined") return null;
-        return localStorage.getItem("token");
-    } catch {
-        return null;
-    }
-};
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+
+
 
 type VideoCardProps = {
     thumbnailUrl: string | null;
@@ -37,8 +33,8 @@ export function VideoCard({
     variant = "grid",
 }: VideoCardProps) {
     const isGrid = variant === "grid";
-    const token = getCachedToken();
-    const isApiUrl = !!thumbnailUrl && thumbnailUrl.startsWith(API_BASE_URL);
+    const token = getToken();
+    const isApiUrl = !!thumbnailUrl && thumbnailUrl.startsWith(api.defaults.baseURL || "");
     const isSigned = !!thumbnailUrl && /[?&](X-Amz-|Signature=)/.test(thumbnailUrl);
 
     const [fetchedSrc, setFetchedSrc] = useState<string | null>(null);
