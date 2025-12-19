@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "assets.fairplay.video",
+        pathname: "/users/**",
+      },
+      {
+        protocol: "https",
+        hostname: "assets.fairplay.video",
+        pathname: "/videos/**",
       },
       new URL(apiUrl),
     ],

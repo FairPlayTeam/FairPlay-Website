@@ -53,12 +53,14 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
             )}
           </div>
           <div>
-            <h3 className="font-semibold text-text text-lg">
-              {video.user?.displayName || video.user?.username}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              @{video.user?.username}
-            </p>
+            <Link href={"/channel/" + video.user?.username}>
+              <h3 className="font-semibold text-text text-lg">
+                {video.user?.displayName || video.user?.username}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                @{video.user?.username}
+              </p>
+            </Link>
           </div>
           {!user ? (
             <Link

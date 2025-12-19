@@ -113,7 +113,7 @@ export default function Topbar() {
             <Button
               size="sm"
               variant="donatePrimary"
-              className="btn-donate"
+              className="btn-donate hidden md:inline-flex"
               onClick={() =>
                 (window.location.href = "http://ko-fi.com/fairplay_")
               }

@@ -140,16 +140,19 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
         )}
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-semibold text-sm text-text">
-            {localComment.user.displayName || localComment.user.username}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(localComment.createdAt), {
-              addSuffix: true,
-            })}
-          </span>
-        </div>
+        <Link href={"/channel/" + localComment.user.username}>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-semibold text-sm text-text">
+              {localComment.user.displayName || localComment.user.username}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {formatDistanceToNow(new Date(localComment.createdAt), {
+                addSuffix: true,
+              })}
+            </span>
+          </div>
+        </Link>
+
         <p className="text-sm text-text whitespace-pre-wrap">
           {localComment.content}
         </p>
