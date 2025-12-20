@@ -16,6 +16,7 @@ import {
   type UserVideoItem,
 } from "@/lib/users";
 import { useAuth } from "@/context/AuthContext";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -81,7 +82,6 @@ export default function ChannelPage() {
   const canFollow = !!me && !!user && me.username !== user.username;
 
   const banner = user?.bannerUrl ?? null;
-  const avatar = user?.avatarUrl ?? null;
 
   const onFollowerDelta = (delta: number) => {
     setUser((prev) => {
@@ -126,22 +126,11 @@ export default function ChannelPage() {
       <div className="container mx-auto px-4 pt-6 pb-6">
         <div className="flex flex-col gap-4 md:flex-row md:gap-4 md:items-center">
           <div className="flex md:block justify-center md:justify-start">
-            <div className="h-22.5 w-22.5 rounded-full overflow-hidden border-[5px] border-background bg-background grid place-items-center">
-              {avatar ? (
-                <Image
-                  src={avatar}
-                  alt={`${user.username} avatar`}
-                  width={72}
-                  height={72}
-                  className="h-full w-full object-cover"
-                  priority
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-text font-bold text-3xl">
-                  {user.username?.[0]?.toUpperCase() ?? "?"}
-                </div>
-              )}
-            </div>
+            <UserAvatar
+              user={user}
+              size={90}
+              className="border-[5px] border-background"
+            />
           </div>
 
           <div className="flex-1 min-w-0 text-center md:text-left">

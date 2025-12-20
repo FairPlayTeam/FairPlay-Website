@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import VideoDescription from "@/components/video/VideoDescription";
 import Button from "@/components/ui/Button";
@@ -11,6 +10,7 @@ import { getUser } from "@/lib/users";
 import { VideoDetails } from "@/lib/video";
 import { PublicUser } from "@/lib/users";
 import { useAuth } from "@/context/AuthContext";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 export function VideoInfo({ video }: { video: VideoDetails }) {
   const [profile, setProfile] = useState<PublicUser | undefined>(undefined);
@@ -37,21 +37,8 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
       <h1 className="text-2xl font-bold text-text">{video.title}</h1>
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border">
-        <div className="flex items-center gap-2">
-          <div className="relative size-12 rounded-full overflow-hidden bg-secondary">
-            {video.user?.avatarUrl ? (
-              <Image
-                src={video.user.avatarUrl}
-                alt={video.user.username}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-text font-bold text-lg">
-                {video.user?.username[0].toUpperCase()}
-              </div>
-            )}
-          </div>
+        <div className="flex items-center gap-4">
+          <UserAvatar user={video.user} size={48} />
           <div>
             <Link href={"/channel/" + video.user?.username}>
               <h3 className="font-semibold text-text text-lg">

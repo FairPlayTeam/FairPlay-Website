@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaBars, FaUserCircle, FaArrowLeft, FaSearch } from "react-icons/fa";
+import { FaBars, FaArrowLeft, FaSearch } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import Input from "@/components/ui/Input";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 function SearchBar() {
   return (
@@ -128,7 +129,7 @@ export default function Topbar() {
                 className="text-text rounded-full p-0"
                 onClick={() => router.push("/profile")}
               >
-                <FaUserCircle className="size-9" />
+                <UserAvatar user={user} size={36} />
               </Button>
             )}
           </div>

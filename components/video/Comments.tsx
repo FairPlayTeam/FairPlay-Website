@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +12,7 @@ import { FaThumbsUp, FaRegThumbsUp, FaReply } from "react-icons/fa";
 import { CommentItem } from "@/lib/video";
 import { api } from "@/lib/api";
 import * as z from "zod";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 const commentSchema = z.object({
   content: z
@@ -125,20 +125,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
 
   return (
     <div className="flex gap-4">
-      <div className="relative w-10 h-10 rounded-full overflow-hidden bg-secondary flex-shrink-0">
-        {localComment.user.avatarUrl ? (
-          <Image
-            fill
-            src={localComment.user.avatarUrl}
-            alt={localComment.user.username}
-            className="object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-text font-bold">
-            {localComment.user.username[0].toUpperCase()}
-          </div>
-        )}
-      </div>
+      <UserAvatar user={localComment.user} size={40} />
       <div className="flex-1">
         <Link href={"/channel/" + localComment.user.username}>
           <div className="flex items-center gap-2 mb-1">
@@ -185,11 +172,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
         {isReplying && (
           <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 mb-4">
             <div className="flex gap-3">
-              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-secondary flex-shrink-0">
-                <div className="w-full h-full flex items-center justify-center text-text font-bold text-xs">
-                  {user?.username?.[0]?.toUpperCase() || "U"}
-                </div>
-              </div>
+              <UserAvatar user={user} size={32} />
               <div className="flex-1">
                 <Textarea
                   {...form.register("content")}
@@ -292,12 +275,7 @@ export function Comments({ videoId, initialComments }: CommentsProps) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="mb-8 flex gap-4"
         >
-          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-secondary flex-shrink-0">
-            <div className="w-full h-full flex items-center justify-center text-text font-bold">
-              {user?.username?.[0]?.toUpperCase() || "U"}
-            </div>
-          </div>
-
+          <UserAvatar user={user} size={40} />
           <div className="flex-1">
             <Textarea
               {...form.register("content")}

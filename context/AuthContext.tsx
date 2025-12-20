@@ -4,6 +4,7 @@ import React, { createContext, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "@/types/schema";
 import { api } from "@/lib/api";
+import { getToken } from "@/lib/token";
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +24,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryFn: () =>
       api.get("/auth/me", { withCredentials: true }).then((res) => res.data),
     refetchOnWindowFocus: false,
+    enabled: !!getToken(),
+    retry: false,
   });
 
   return (
