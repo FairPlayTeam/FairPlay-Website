@@ -13,12 +13,12 @@ import {
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
-
+//Some lines of code are in comment because we won't need it for V1 but we will implement the features in the future versions
 const mainLinks = [
   { icon: FaCompass, label: "Explore", href: "/explore" },
-  { icon: FaGlobe, label: "Offline", href: "/offline" },
+  //{ icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
-  { icon: FaHistory, label: "History", href: "/history" },
+  //{ icon: FaHistory, label: "History", href: "/history" },
   { icon: FaUpload, label: "Upload", href: "/upload" },
 ];
 
@@ -86,7 +86,7 @@ export default function Sidebar() {
             );
           })}
         </div>
-
+{/*
         <div className="my-4 h-px bg-white/10" />
 
         <div>
@@ -111,6 +111,7 @@ export default function Sidebar() {
             );
           })}
         </div>
+        */}
       </aside>
     </>
   );
