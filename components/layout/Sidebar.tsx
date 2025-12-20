@@ -10,6 +10,8 @@ import {
   FaHistory,
   FaBookOpen,
   FaUpload,
+  FaShieldAlt,
+  FaTools
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
@@ -20,6 +22,8 @@ const mainLinks = [
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
   //{ icon: FaHistory, label: "History", href: "/history" },
   { icon: FaUpload, label: "Upload", href: "/upload" },
+  { icon: FaShieldAlt, label: "Moderator", href: "/moderator" },
+  { icon: FaTools, label: "Admin", href: "/admin" },
 ];
 
 const categories = [
