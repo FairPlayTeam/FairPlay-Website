@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +9,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "donatePrimary"
     | "donateSecondary"
     | "download"
-    | "ghost";
+    | "ghost"
+    | "links"
   size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
 }
 
@@ -68,6 +69,13 @@ const variantConfig = {
       "rounded-lg",
     ],
   },
+  links: {
+    classes: [
+      "text-[15px] text-text-bold",
+      "rounded-lg",
+      "px-[30px] py-2.5",
+    ],
+  },
 } as const;
 
 const sizeConfig = {
@@ -89,8 +97,7 @@ export default function Button({
   onClick,
   ...props
 }: ButtonProps) {
-  const [loading, setLoading] = useState(false);
-
+  
   const config = variantConfig[variant] || variantConfig.download;
   const sizeClasses = sizeConfig[size];
 

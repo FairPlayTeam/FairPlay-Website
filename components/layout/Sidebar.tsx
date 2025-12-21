@@ -10,9 +10,14 @@ import {
   FaHistory,
   FaBookOpen,
   FaUpload,
+  FaDiscord,
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
+import { SiMatrix, SiKofi } from "react-icons/si";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "@/context/SidebarContext";
+import Button from "@/components/ui/Button";
+import { FaBars } from "react-icons/fa";
 
 const mainLinks = [
   { icon: FaCompass, label: "Explore", href: "/explore" },
@@ -27,10 +32,6 @@ const categories = [
   { icon: FaBookOpen, label: "Learning", href: "/learning" },
   { icon: FaGamepad, label: "Gaming", href: "/gaming" },
 ];
-
-import { useSidebar } from "@/context/SidebarContext";
-import Button from "@/components/ui/Button";
-import { FaBars } from "react-icons/fa";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -47,7 +48,7 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "fixed left-0 top-0 lg:top-16 bottom-0 z-50 w-60 flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-3 py-4 transition-transform duration-300 lg:translate-x-0 lg:bg-transparent lg:backdrop-blur-none",
+          "fixed left-0 top-0 lg:top-16 bottom-0 z-50 w-60 flex flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-3 py-4 transition-transform duration-300 lg:translate-x-0 lg:bg-transparent lg:backdrop-blur-none",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -110,6 +111,26 @@ export default function Sidebar() {
               </Link>
             );
           })}
+        </div>
+
+        <div className="mt-auto pt-4 flex gap-2">
+          <Link href="https://discord.gg/K68Z9HbsA5" target="_blank" className="flex-1">
+            <Button variant="links" className="w-full">
+              <FaDiscord className="size-5" />
+            </Button>
+          </Link>
+
+          <Link href="https://matrix.to/#/#fairplay-video:matrix.org" target="_blank" className="flex-1">
+            <Button variant="links" className="w-full">
+              <SiMatrix className="size-5" />
+            </Button>
+          </Link>
+
+          <Link href="https://ko-fi.com/fairplay_" target="_blank" className="flex-1">
+            <Button variant="links" className="w-full">
+              <SiKofi className="size-5" />
+            </Button>
+          </Link>
         </div>
       </aside>
     </>
