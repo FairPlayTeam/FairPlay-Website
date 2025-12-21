@@ -39,7 +39,7 @@ export default function RegisterClient() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(callbackUrl || "/home");
+      router.replace(callbackUrl || "/explore");
     }
   }, [user, isLoading, router, callbackUrl]);
 

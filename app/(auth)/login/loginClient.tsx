@@ -51,7 +51,7 @@ export default function LoginClient() {
 
       setToken(response.data.sessionKey);
       refetchUser();
-      router.push(callbackUrl || "/home");
+      router.push(callbackUrl || "/explore");
     } catch (error) {
       setError(
         (error as { response: { data: { error: string } } })?.response?.data

@@ -1,43 +1,46 @@
 'use client'
 
-import { usePathname, useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
-import Link from "next/link";
-import Topbar from "@/components/layout/Topbar";
-import Sidebar from "@/components/layout/Sidebar";
-import { SidebarProvider } from "@/context/SidebarContext";
+import Topbar from '@/components/layout/Topbar'
+import Sidebar from '@/components/layout/Sidebar'
+import { SidebarProvider } from '@/context/SidebarContext'
+import Button from '@/components/ui/Button'
 
-export default function NotFound() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <NotFoundContent />
-    </Suspense>
-  )
-}
-
-function NotFoundContent() {
-  const pathname = usePathname() || '/'
-  const searchParams = useSearchParams()
-  const search = searchParams ? `?${searchParams.toString()}` : ''
-  const path = `${pathname}${search}`
-
+export default function NotFoundContent() {
   return (
     <SidebarProvider>
-          <div className="min-h-screen bg-background text-text">
-            <Topbar />
-            <div className="flex pt-16">
-              <Sidebar />
-              <main className="flex-1 lg:ml-60">{
-                <div className="min-h-screen flex flex-col items-center justify-center">
-                  <h1 className="text-5xl font-bold">404 — Page not found</h1>
-                  <p className="mt-4 text-gray-600">The page you’re looking for doesn’t exist.</p>
-                  <Link href="/" className="mt-6 text-blue-600">Back to home</Link>
-                  <Link href={`https://lab.fairplay.video/${path}`} className="mt-6 text-blue-600">Try on the old version of the site</Link>
-                </div>
-            }</main>
+      <div className="min-h-screen bg-background text-text">
+        <Topbar />
+        <Sidebar />
+
+        <main className="flex-1 lg:ml-60">
+          <div className="min-h-[calc(100vh-4rem)] px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+            <div className="w-full max-w-xl">
+              <p className="text-sm font-medium text-gray-400">
+                Error
+              </p>
+
+              <h1 className="mt-2 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+                404 Page not found
+              </h1>
+
+              <p className="mt-3 text-base sm:text-lg text-gray-300">
+                The page you’re looking for doesn’t exist or haven’t been implemented yet.
+              </p>
+
+              <div className="mt-6 flex gap-3">
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    window.location.href = '/explore'
+                  }}
+                >
+                  Back to home
+                </Button>
+              </div>
             </div>
           </div>
-        </SidebarProvider>
-    
+        </main>
+      </div>
+    </SidebarProvider>
   )
 }
