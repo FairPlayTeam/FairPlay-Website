@@ -30,7 +30,7 @@ export default function LoginClient() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(callbackUrl || "/home");
+      router.replace(callbackUrl || "/register");
     }
   }, [user, isLoading, router, callbackUrl]);
 
@@ -113,6 +113,17 @@ export default function LoginClient() {
           >
             {loading ? "Signing in..." : "Sign In"}
           </Button>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Want to create an account?{" "}
+            <a
+              href="/register"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Register
+            </a>
+          </p>
+
         </form>
       </Card>
     </div>

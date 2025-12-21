@@ -70,7 +70,7 @@ export default function RegisterClient() {
 
       setToken(response.data.sessionKey);
       refetchUser();
-      router.push(callbackUrl || "/home");
+      router.push(callbackUrl || "/explore");
     } catch (error) {
       setError(
         (error as { response?: { data?: { error?: string } } })?.response?.data
@@ -170,6 +170,17 @@ export default function RegisterClient() {
           >
             {loading ? "Creating..." : "Register"}
           </Button>
+
+          <p className="text-center text-sm text-muted-foreground">
+            You already have an account ?{" "}
+            <a
+              href="/login"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Login
+            </a>
+          </p>
+
         </form>
       </Card>
     </div>
