@@ -49,13 +49,13 @@ export default function HeroImage() {
                 4.5 / 5
               </p>
               <div className="video-tags flex gap-2">
-                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-border rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   math
                 </span>
-                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-border rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   theorem
                 </span>
-                <span className="tag bg-gray-700 rounded-full text-text text-sm px-2.5 py-1 lowercase">
+                <span className="tag bg-border rounded-full text-text text-sm px-2.5 py-1 lowercase">
                   puzzle
                 </span>
               </div>

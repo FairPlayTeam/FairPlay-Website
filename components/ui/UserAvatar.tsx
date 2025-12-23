@@ -58,7 +58,7 @@ export default function UserAvatar({
   return (
     <div
       className={cn("rounded-full grid place-items-center", className)}
-      style={{ background, width: size, height: size, fontSize: size / 2 }}
+      style={{ background, width: size, height: size, minWidth: size, minHeight: size, fontSize: size / 2 }}
     >
       <span className="text-white font-medium">
         {user?.displayName?.[0].toUpperCase() ??

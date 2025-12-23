@@ -39,7 +39,7 @@ const variantConfig = {
     classes: [
       "text-[15px] text-text",
       "rounded-full bg-(--gray-500)",
-      "px-[30px] py-2.5",
+      "px-[25px] py-2",
     ],
   },
   donatePrimary: {
@@ -55,7 +55,7 @@ const variantConfig = {
       "text-[15px] text-text",
       "rounded-full bg-(--color-accent-dark)",
       "transition-shadow duration-500 ease-in-out hover:shadow-[0_0_25px_rgba(80,80,250,0.4)]",
-      "px-[35px] py-2.5",
+      "px-[40px] py-3",
     ],
   },
   download: {
@@ -71,15 +71,15 @@ const variantConfig = {
   },
   links: {
     classes: [
-      "text-[15px] text-text-bold",
+      "text-text-bold",
       "rounded-lg",
-      "px-[30px] py-2.5",
+      "px-4 py-2",
     ],
   },
 } as const;
 
 const sizeConfig = {
-  default: "text-[15px] px-4 py-2",
+  default: "text-[15px]",
   sm: "text-sm px-3 py-1.5",
   lg: "text-base px-8 py-3",
   icon: "h-10 w-10 p-2 aspect-square grid place-items-center [&_svg:not([class*='size-'])]:size-4",

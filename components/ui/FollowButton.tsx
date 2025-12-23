@@ -47,16 +47,22 @@ export function FollowButton({
   }
 
   return (
-    <button 
-      type="button" 
-      onClick={onClick} 
+    <button
+      type="button"
+      onClick={onClick}
       disabled={acting}
-      className={cn(acting ? "not-allowed" : "cursor-pointer",
-                "text-[15px] rounded-full px-7.5 py-2.5",
-                following ? "bg-(--gray-500)" : "bg-white")}
+      className={cn(
+        acting ? "cursor-not-allowed" : "cursor-pointer",
+        "text-[15px] px-4 py-2 sm:px-6 sm:py-2.5",
+        "rounded-full",
+        following ? "bg-(--gray-500)" : "bg-white"
+      )}
     >
-      <span className={cn(following ? "text-text" : "text-black", "font-semibold")}>
-        {following ? 'Following' : 'Follow'}
+      <span className={cn(
+        following ? "text-text" : "text-black",
+        "font-semibold"
+      )}>
+        {following ? "Following" : "Follow"}
       </span>
     </button>
   );

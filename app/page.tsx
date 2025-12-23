@@ -44,13 +44,13 @@ export default function HomePage() {
         <HeroSection />
 
         <FadeInSection>
-          <Section variant="secondary" className="mt-25">
+          <Section variant="secondary" className="mt-10 md:mt-25">
             <DisclaimerSection />
           </Section>
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="about" className="mt-25">
+          <Section id="about" className="mt-10 md:mt-25">
             <div className="intro-card mx-auto max-w-200 text-center">
               <h2 className="text-[33px] mb-6.25 font-bold">
                 Our Mission: Redefining Streaming
@@ -71,7 +71,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="values" variant="secondary" className="mt-25">
+          <Section id="values" variant="secondary" className="mt-10 md:mt-25">
             <h2 className="text-[33px] font-bold mb-12.5">
               Why choose FairPlay?
             </h2>
@@ -80,7 +80,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="extension" className="mt-25">
+          <Section id="extension" className="mt-10 md:mt-25">
             <div className="flex flex-col lg:flex-row gap-12.5 text-left">
               <div className="flex flex-1 justify-center items-center w-full lg:w-auto">
                 <ExtensionPreview />
@@ -108,7 +108,7 @@ export default function HomePage() {
                     Block custom domains.
                   </li>
                 </ul>
-                <div className="flex justify-center lg:justify-start gap-4">
+                <div className="flex flex-col lg:flex-row justify-center lg:justify-start gap-4">
                   <Button
                     onClick={() =>
                       (window.location.href =
@@ -134,7 +134,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="development" variant="secondary" className="mt-25">
+          <Section id="development" variant="secondary" className="mt-10 md:mt-25">
             <h2 className="text-[33px] mb-6.25 font-bold">
               FairPlay: An open and evolving project
             </h2>
@@ -177,7 +177,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="community" className="mt-25">
+          <Section id="community" className="mt-10 md:mt-25">
             <div className="flex flex-col lg:flex-row gap-12.5 text-left lg:items-center">
               <div className="flex flex-1 flex-col justify-center items-center lg:items-start text-center lg:text-left">
                 <h2 className="text-[33px] font-bold mb-6.25">
@@ -212,7 +212,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section variant="secondary" className="mt-25">
+          <Section variant="secondary" className="mt-10 md:mt-25">
             <div className="intro-card mx-auto max-w-200 text-center">
               <h2 className="text-[34px] mb-6.25 font-bold">
                 Support FairPlay, Support Quality Content

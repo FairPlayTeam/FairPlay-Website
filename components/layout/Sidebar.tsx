@@ -21,9 +21,9 @@ import { FaBars } from "react-icons/fa";
 
 const mainLinks = [
   { icon: FaCompass, label: "Explore", href: "/explore" },
-  { icon: FaGlobe, label: "Offline", href: "/offline" },
+  // { icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
-  { icon: FaHistory, label: "History", href: "/history" },
+  // { icon: FaHistory, label: "History", href: "/history" },
   { icon: FaUpload, label: "Upload", href: "/upload" },
 ];
 

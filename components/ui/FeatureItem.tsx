@@ -21,7 +21,7 @@ export default function FeatureItem({
         "rounded-xl",
         "transition-transform duration-300 ease-in-out",
         "hover:-translate-y-1",
-        "h-[300px]",
+        "min-h-[300px]",
         className
       )}
     >
