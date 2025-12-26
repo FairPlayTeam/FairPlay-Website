@@ -21,6 +21,28 @@ export type VideoDetails = {
   user?: { username: string; displayName: string | null; avatarUrl?: string | null; id?: string };
 };
 
+export type SearchVideosResponse = {
+  videos: VideoDetails[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
+  query: { q: string };
+};
+
+export async function searchVideos(query: string, page = 1, limit = 20) {
+  const qs = new URLSearchParams({
+    q: query,
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+
+  return api.get<SearchVideosResponse>(`/videos/search?${qs}`);
+}
+
 export async function getVideo(id: string) {
   return api.get<VideoDetails>(`/videos/${encodeURIComponent(id)}`);
 }

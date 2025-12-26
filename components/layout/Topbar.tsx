@@ -11,18 +11,30 @@ import { useSidebar } from "@/context/SidebarContext";
 import Input from "@/components/ui/Input";
 import UserAvatar from "@/components/ui/UserAvatar";
 
-function SearchBar() {
+function SearchBar({
+  value,
+  onChange,
+  onSearch,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  onSearch: () => void;
+}) {
   return (
     <div className="flex flex-1 items-center overflow-hidden rounded-full">
       <Input
         type="text"
         placeholder="Search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && onSearch()}
         className="peer rounded-l-full px-4 py-1.5 border-r-0"
       />
       <Button
         size="icon"
         variant="ghost"
         className="bg-white/10 hover:bg-white/15 rounded-r-full border border-border border-l-0 duration-200 peer-focus:border-accent md:size-8.5"
+        onClick={onSearch}
       >
         <FaSearch className="md:size-3.5 text-text-amount" />
       </Button>
@@ -33,23 +45,23 @@ function SearchBar() {
 export default function Topbar() {
   const router = useRouter();
   const { toggle } = useSidebar();
-
   const { user } = useAuth();
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
+    setIsSearchOpen(false);
+  };
 
   return (
     <header
@@ -68,7 +80,11 @@ export default function Topbar() {
           >
             <FaArrowLeft />
           </Button>
-          <SearchBar />
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            onSearch={handleSearch}
+          />
         </div>
       ) : (
         <>
@@ -87,7 +103,11 @@ export default function Topbar() {
           </div>
 
           <div className="hidden max-w-sm flex-1 items-center sm:flex mx-8">
-            <SearchBar />
+            <SearchBar
+              value={searchTerm}
+              onChange={setSearchTerm}
+              onSearch={handleSearch}
+            />
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
