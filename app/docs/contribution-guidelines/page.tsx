@@ -25,7 +25,7 @@ export default function DocsPage() {
       content: (
         <>
           <p>
-            Welcome to the contribution guide, here you'll learn how to setup
+            Welcome to the contribution guide, here you&apos;ll learn how to setup
             your own copy of this website, a couple rules and stardands we
             follow, and prepare yourself to make some amazing contributions!
           </p>
@@ -89,7 +89,7 @@ npm install`}
       content: (
         <>
           <p>
-            As you can probably tell from the rest of this website, we're not
+            As you can probably tell from the rest of this website, we&apos;re not
             big fans of AI. So, heres all the ways you should be using AI when
             working on this.
           </p>

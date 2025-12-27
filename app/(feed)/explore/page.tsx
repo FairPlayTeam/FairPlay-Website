@@ -6,7 +6,7 @@ import { getVideos, type VideoDetails } from "@/lib/video";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import DisclaimerPopup from "@/components/layout/DisclaimerPopup";
-import Toast from "@/components/ui/Toast/Toast"
+import { toast } from "@/components/ui/Toast/toast";
 
 export default function VideosPage() {
   const router = useRouter();
@@ -14,7 +14,6 @@ export default function VideosPage() {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-  const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "warning" | "info" } | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -33,7 +32,7 @@ export default function VideosPage() {
         setError(null);
       } catch {
         setError("Unable to load videos. Please try later.");
-        setToast({ message: "Error while fetching videos.", type: "error" });
+        toast.error("Error while fetching videos.")
       } finally {
         setLoading(false);
       }
@@ -85,15 +84,6 @@ export default function VideosPage() {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
       />
-      
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-          duration={3000}
-        />
-      )}
     </>
   );
 }

@@ -14,13 +14,12 @@ import { VideoInfo } from "@/components/video/VideoInfo";
 import { RelatedVideos } from "@/components/video/RelatedVideos";
 import { Comments } from "@/components/video/Comments";
 import Spinner from "@/components/ui/Spinner";
-import Toast from "@/components/ui/Toast/Toast"
+import { toast } from "@/components/ui/Toast/toast";
 
 export default function VideoPage() {
   const params = useParams();
   const id = params?.id as string;
 
-  const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "warning" | "info" } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [video, setVideo] = useState<VideoDetails | null>(null);
 
@@ -45,9 +44,8 @@ export default function VideoPage() {
         setVideo(videoRes.data);
         setRelatedVideos(relatedRes.data.videos);
         setComments(commentsRes.data.comments);
-      } catch (err) {
-        console.error("Failed to fetch video data:", err);
-        setToast({ message: "Failed to load video. Please try again later.", type: "error" });
+      } catch {
+        toast.error("Failed to load video. Please try again later.");
         setError("Failed to load video. Please try again later.");
       } finally {
         setIsLoading(false);
@@ -89,15 +87,6 @@ export default function VideoPage() {
       <div className="lg:col-span-1">
         <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
       </div>
-
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-          duration={3000}
-        />
-      )}
     </div>
   );
 }

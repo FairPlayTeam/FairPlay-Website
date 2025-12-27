@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { searchVideos, VideoDetails } from "@/lib/video";
 import { VideoCard } from "@/components/video/VideoCard";
 import Spinner from "@/components/ui/Spinner";
+import { toast } from "@/components/ui/Toast/toast";
 
 export default function SearchClient() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function SearchClient() {
           setResults(res.data.videos);
         }
       } catch (err: unknown) {
-        console.error(err);
+        toast.error("Error while searching.");
         const errorMessage = err instanceof Error ? err.message : "Error while searching.";
         setError(
           (err as { response?: { data?: { error?: string } } })?.response?.data?.error || errorMessage
