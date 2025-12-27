@@ -1,25 +1,49 @@
 import { useEffect, useState } from "react";
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaExclamationTriangle,
+  FaInfoCircle,
+} from "react-icons/fa";
 
 type ToastType = "success" | "error" | "warning" | "info";
 
 interface ToastProps {
   message: string;
   type?: ToastType;
-  duration?: number; // in ms
+  duration?: number;
   onClose?: () => void;
 }
 
-const typeStyles: Record<ToastType, string> = {
-  success: "bg-green-500 text-white",
-  error: "bg-red-500 text-white",
-  warning: "bg-yellow-500 text-black",
-  info: "bg-blue-500 text-white",
+const typeConfig: Record<
+  ToastType,
+  {
+    icon: React.ReactNode;
+    accent: string;
+  }
+> = {
+  success: {
+    icon: <FaCheckCircle className="size-5 text-green-400" />,
+    accent: "border-green-400/40",
+  },
+  error: {
+    icon: <FaTimesCircle className="size-5 text-red-400" />,
+    accent: "border-red-400/40",
+  },
+  warning: {
+    icon: <FaExclamationTriangle className="size-5 text-yellow-400" />,
+    accent: "border-yellow-400/40",
+  },
+  info: {
+    icon: <FaInfoCircle className="size-5 text-blue-400" />,
+    accent: "border-blue-400/40",
+  },
 };
 
 export default function Toast({
   message,
   type = "info",
-  duration = 3000,
+  duration = 5000,
   onClose,
 }: ToastProps) {
   const [visible, setVisible] = useState(true);
@@ -27,7 +51,7 @@ export default function Toast({
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    const enterTimer = setTimeout(() => setFadeIn(true), 10)
+    const enterTimer = setTimeout(() => setFadeIn(true), 10);
     return () => clearTimeout(enterTimer);
   }, []);
 
@@ -36,7 +60,7 @@ export default function Toast({
       setFadeOut(true);
       const removeTimer = setTimeout(() => {
         setVisible(false);
-        if (onClose) onClose();
+        onClose?.();
       }, 300);
       return () => clearTimeout(removeTimer);
     }, duration);
@@ -46,18 +70,25 @@ export default function Toast({
 
   if (!visible) return null;
 
+  const { icon, accent } = typeConfig[type];
+
   return (
     <div
-      className={`
-        fixed bottom-4 right-4 max-w-xs w-full p-4 rounded shadow-lg
-        ${typeStyles[type]}
-        transition-all duration-300 transform
-        ${fadeIn && !fadeOut ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}
-        ${fadeOut ? "opacity-0 translate-x-4" : ""}
-      `}
       role="alert"
+      className={`
+        flex items-start gap-3
+        w-90 max-w-[calc(100vw-2rem)]
+        p-4 rounded-xl
+        border ${accent}
+        bg-background/80 backdrop-blur-md
+        shadow-lg shadow-black/20
+        text-sm text-foreground
+        transition-all duration-300
+        ${fadeIn && !fadeOut ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}
+      `}
     >
-      {message}
+      <div className="mt-0.5">{icon}</div>
+      <div className="flex-1 leading-snug">{message}</div>
     </div>
   );
 }
