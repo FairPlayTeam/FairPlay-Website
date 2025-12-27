@@ -6,7 +6,7 @@ import { getVideos, type VideoDetails } from "@/lib/video";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import DisclaimerPopup from "@/components/layout/DisclaimerPopup";
-import Toast from "@/components/ui/Toast"
+import Toast from "@/components/ui/Toast/Toast"
 
 export default function VideosPage() {
   const router = useRouter();

@@ -8,7 +8,7 @@ import {
   FaPencilAlt,
 } from "react-icons/fa";
 
-import Toast from "@/components/ui/Toast"
+import { toast } from "@/components/ui/Toast/toast";
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/video/VideoCard";
 import { FollowButton } from "@/components/ui/FollowButton";
@@ -38,7 +38,6 @@ export default function ChannelPage() {
   const [videos, setVideos] = useState<UserVideoItem[]>([]);
   const [state, setState] = useState<LoadState>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "warning" | "info" } | null>(null);
 
   const requestSeq = useRef(0);
 
@@ -53,9 +52,9 @@ export default function ChannelPage() {
       const res = await uploadUserAvatar(file);
       setUser((u) => (u ? { ...u, avatarUrl: res.storagePath } : u));
 
-      setToast({ message: "Avatar uploaded successfully!", type: "success" });
+      toast.success("Avatar uploaded successfully!");
     } catch (err) {
-      setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
+      toast.error(err instanceof Error ? err.message : "Upload failed");
     } finally {
       e.target.value = "";
     }
@@ -69,9 +68,9 @@ export default function ChannelPage() {
       const res = await uploadUserBanner(file);
       setUser((u) => (u ? { ...u, bannerUrl: res.storagePath } : u));
 
-      setToast({ message: "Banner uploaded successfully!", type: "success" });
+      toast.success("Banner uploaded successfully!");
     } catch (err) {
-      setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
+      toast.error(err instanceof Error ? err.message : "Upload failed");
     } finally {
       e.target.value = "";
     }
@@ -300,15 +299,6 @@ export default function ChannelPage() {
           </div>
         )}
       </div>
-      
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-          duration={3000}
-        />
-      )}
     </div>
   );
 }

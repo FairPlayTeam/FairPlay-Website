@@ -10,7 +10,7 @@ import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
-import Toast from "@/components/ui/Toast"
+import Toast from "@/components/ui/Toast/Toast"
 
 const uploadSchema = z.object({
   title: z

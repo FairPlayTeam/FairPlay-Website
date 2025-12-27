@@ -14,7 +14,7 @@ import { VideoInfo } from "@/components/video/VideoInfo";
 import { RelatedVideos } from "@/components/video/RelatedVideos";
 import { Comments } from "@/components/video/Comments";
 import Spinner from "@/components/ui/Spinner";
-import Toast from "@/components/ui/Toast"
+import Toast from "@/components/ui/Toast/Toast"
 
 export default function VideoPage() {
   const params = useParams();
