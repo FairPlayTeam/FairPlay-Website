@@ -105,3 +105,9 @@ export async function getCommentReplies(commentId: string, page = 1, limit = 20)
     `/comments/${encodeURIComponent(commentId)}/replies?${qs}`
   );
 }
+
+export async function deleteVideo(videoId: string) {
+  return api.delete<{ message: string }>(
+    `/videos/${encodeURIComponent(videoId)}`,
+  );
+}
