@@ -13,8 +13,10 @@ import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/video/VideoCard";
 import UserAvatar from "@/components/ui/UserAvatar";
 import { useImagesUpload } from "@/hooks/useImagesUpload";
+import { FaTrash } from "react-icons/fa";
 
 import { getMyVideos, type MyVideoItem } from "@/lib/users";
+import { deleteVideo } from "@/lib/video";
 import { useAuth } from "@/context/AuthContext";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
@@ -32,6 +34,20 @@ export default function MyVideosPage() {
     const requestSeq = useRef(0);
     const avatarInputRef = useRef<HTMLInputElement>(null);
     const bannerInputRef = useRef<HTMLInputElement>(null);
+
+    const handleDeleteVideo = async (videoId: string) => {
+        if (!confirm("Are you sure you want to delete this video? This action cannot be undone.")) {
+            return;
+        }
+
+        try {
+            await deleteVideo(videoId);
+            setVideos((prev) => prev.filter((v) => v.id !== videoId));
+            toast.success("Video deleted successfully!");
+        } catch {
+            toast.error("Failed to delete video");
+        }
+    };
 
     const handleImageChange = (type: "avatar" | "banner") => async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -264,6 +280,17 @@ export default function MyVideosPage() {
                                         }
                                     />
 
+                                    {!isProcessing && (
+                                        <button
+                                            type="button"
+                                            className="absolute top-2 right-2 z-20 p-2 cursor-pointer bg-background/80 hover:bg-red-600 text-white rounded-full shadow"
+                                            aria-label="Delete video"
+                                            onClick={() => handleDeleteVideo(v.id)}
+                                        >
+                                            <FaTrash className="size-4" />
+                                        </button>
+                                    )}
+                                    
                                     <StatusBadges
                                         visibility={v.visibility}
                                         moderationStatus={v.moderationStatus}
