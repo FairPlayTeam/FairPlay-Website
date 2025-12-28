@@ -7,6 +7,7 @@ import { FaPencilAlt } from "react-icons/fa";
 
 import Link from "next/link";
 import { toast } from "@/components/ui/Toast/toast";
+import { StatusBadges } from "@/components/video/StatusBadge";
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/video/VideoCard";
 import UserAvatar from "@/components/ui/UserAvatar";
@@ -233,37 +234,10 @@ export default function MyVideosPage() {
                                     variant="grid"
                                 />
 
-                                <div className="absolute top-2 left-2 flex gap-1 text-xs">
-                                    <span
-                                        className="flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium text-text bg-background/80 backdrop-blur-md"
-                                    >
-                                        <span
-                                            className={`size-2 rounded-full ${
-                                                v.visibility === "private"
-                                                    ? "bg-red-500"
-                                                    : v.visibility === "unlisted"
-                                                    ? "bg-yellow-500"
-                                                    : "bg-green-500"
-                                            }`}
-                                        />
-                                        {v.visibility}
-                                    </span>
-
-                                    <span
-                                        className="flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium text-text bg-background/80 backdrop-blur-md"
-                                    >
-                                        <span
-                                            className={`size-2 rounded-full ${
-                                                v.moderationStatus === "rejected"
-                                                    ? "bg-red-500"
-                                                    : v.moderationStatus === "pending"
-                                                    ? "bg-yellow-500"
-                                                    : "bg-green-500"
-                                            }`}
-                                        />
-                                        {v.moderationStatus}
-                                    </span>
-                                </div>
+                                <StatusBadges
+                                    visibility={v.visibility}
+                                    moderationStatus={v.moderationStatus}
+                                />
                             </div>
                         );
                     })}
