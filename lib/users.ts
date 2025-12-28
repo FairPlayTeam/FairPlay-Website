@@ -37,6 +37,29 @@ export async function getUserVideos(idOrUsername: string, page = 1, limit = 20) 
   return api.get<UserVideosResponse>(`/user/${encodeURIComponent(idOrUsername)}/videos?${qs}`);
 }
 
+export type MyVideoItem = {
+  id: string;
+  title: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  viewCount: string;
+  avgRating: number;
+  ratingsCount: number;
+  visibility: 'public' | 'unlisted' | 'private';
+  processingStatus: 'uploading' | 'processing' | 'done' | 'failed';
+  moderationStatus: 'pending' | 'approved' | 'rejected';
+};
+
+export type MyVideosResponse = {
+  videos: MyVideoItem[];
+  pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number };
+};
+
+export async function getMyVideos(page = 1, limit = 20) {
+  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
+  return api.get<MyVideosResponse>(`/videos/my?${qs}`);
+}
+
 export type SimpleUser = { id: string; username: string; displayName: string | null; avatarUrl: string | null };
 export type PagedUsers = { users?: SimpleUser[]; followers?: SimpleUser[]; following?: SimpleUser[]; pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number } };
 

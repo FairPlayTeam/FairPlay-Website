@@ -84,7 +84,8 @@ export default function UploadPage() {
         },
       });
       toast.success("Video uploaded successfully! Your video is going to be reviewed by us before being public.");
-
+      
+      router.push(`/me`);
     } catch (error) {
       toast.error("Upload failed.");
       setUploadError(
