@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaPencilAlt } from "react-icons/fa";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { toast } from "@/components/ui/Toast/toast";
 import { StatusBadges } from "@/components/video/StatusBadge";
@@ -20,7 +21,7 @@ type LoadState = "idle" | "loading" | "ready" | "error";
 
 export default function MyVideosPage() {
     const router = useRouter();
-    const { user: me } = useAuth();
+    const { user: me, isLoading } = useAuth();
     const { uploadUserAvatar, uploadUserBanner } = useImagesUpload();
 
     const [videos, setVideos] = useState<MyVideoItem[]>([]);
@@ -60,6 +61,12 @@ export default function MyVideosPage() {
             e.target.value = "";
         }
     };
+
+    useEffect(() => {
+        if (!isLoading && !me) {
+            router.replace(`/login?callbackUrl=/me`);
+        }
+    }, [me, isLoading, router]);
 
     useEffect(() => {
         const seq = ++requestSeq.current;
@@ -216,28 +223,52 @@ export default function MyVideosPage() {
 
                     {videos.map((v) => {
                         const createdAtLabel =
-                        "createdAt" in v
-                        ? new Date(v.createdAt as string | number).toLocaleDateString()
-                        : "";
+                            "createdAt" in v
+                            ? new Date(v.createdAt as string | number).toLocaleDateString()
+                            : "";
 
                         const meta = `${createdAtLabel} • ${v.viewCount} views`;
 
-                        return (
-                            <div key={v.id} className="relative">
-                                <VideoCard
-                                    key={v.id}
-                                    thumbnailUrl={v.thumbnailUrl}
-                                    title={v.title}
-                                    displayName={user.displayName || user.username}
-                                    meta={meta}
-                                    onPress={() => router.push(`/video/${v.id}`)}
-                                    variant="grid"
-                                />
+                        const isProcessing = v.processingStatus !== "done";
 
-                                <StatusBadges
-                                    visibility={v.visibility}
-                                    moderationStatus={v.moderationStatus}
-                                />
+                        return (
+                            <div
+                                key={v.id}
+                                className={cn(
+                                "relative",
+                                isProcessing
+                                    ? "cursor-not-allowed"
+                                    : "cursor-pointer"
+                                )}
+                            >
+                                {isProcessing && (
+                                <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg backdrop-blur-[2px]">
+                                    <span className="text-base font-semibold text-white">
+                                        Processing…
+                                    </span>
+                                </div>
+                                )}
+
+                                <div className={cn(isProcessing && "pointer-events-none")}>
+                                    <VideoCard
+                                        key={v.id}
+                                        thumbnailUrl={v.thumbnailUrl}
+                                        title={v.title}
+                                        displayName={user.displayName || user.username}
+                                        meta={meta}
+                                        variant="grid"
+                                        onPress={
+                                        isProcessing
+                                            ? undefined
+                                            : () => router.push(`/video/${v.id}`)
+                                        }
+                                    />
+
+                                    <StatusBadges
+                                        visibility={v.visibility}
+                                        moderationStatus={v.moderationStatus}
+                                    />
+                                </div>
                             </div>
                         );
                     })}
