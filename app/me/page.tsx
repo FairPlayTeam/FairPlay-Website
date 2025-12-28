@@ -5,15 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaPencilAlt } from "react-icons/fa";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { toast } from "@/components/ui/Toast/toast";
-import { StatusBadges } from "@/components/video/StatusBadge";
 import Spinner from "@/components/ui/Spinner";
-import { VideoCard } from "@/components/video/VideoCard";
+import { MyVideoCard } from "@/components/video/MyVideoCard";
 import UserAvatar from "@/components/ui/UserAvatar";
 import { useImagesUpload } from "@/hooks/useImagesUpload";
-import { FaTrash } from "react-icons/fa";
 
 import { getMyVideos, type MyVideoItem } from "@/lib/users";
 import { deleteVideo } from "@/lib/video";
@@ -30,6 +27,10 @@ export default function MyVideosPage() {
     const [state, setState] = useState<LoadState>("idle");
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState(me);
+
+    useEffect(() => {
+        setUser(me);
+    }, [me]);
 
     const requestSeq = useRef(0);
     const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -97,8 +98,7 @@ export default function MyVideosPage() {
                 const videosRes = await getMyVideos(1, 20);
                 if (requestSeq.current !== seq) return;
 
-                setVideos(videosRes.data?.videos ?? []);
-                setUser(me);
+                setVideos(videosRes.data?.videos ?? []);;
                 setState("ready");
             } catch (e) {
                 if (requestSeq.current !== seq) return;
@@ -238,64 +238,13 @@ export default function MyVideosPage() {
                     </div>
 
                     {videos.map((v) => {
-                        const createdAtLabel =
-                            "createdAt" in v
-                            ? new Date(v.createdAt as string | number).toLocaleDateString()
-                            : "";
-
-                        const meta = `${createdAtLabel} • ${v.viewCount} views`;
-
-                        const isProcessing = v.processingStatus !== "done";
-
                         return (
-                            <div
-                                key={v.id}
-                                className={cn(
-                                "relative",
-                                isProcessing
-                                    ? "cursor-not-allowed"
-                                    : "cursor-pointer"
-                                )}
-                            >
-                                {isProcessing && (
-                                <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg backdrop-blur-[2px]">
-                                    <span className="text-base font-semibold text-white">
-                                        Processing…
-                                    </span>
-                                </div>
-                                )}
-
-                                <div className={cn(isProcessing && "pointer-events-none")}>
-                                    <VideoCard
-                                        key={v.id}
-                                        thumbnailUrl={v.thumbnailUrl}
-                                        title={v.title}
-                                        displayName={user.displayName || user.username}
-                                        meta={meta}
-                                        variant="grid"
-                                        onPress={
-                                        isProcessing
-                                            ? undefined
-                                            : () => router.push(`/video/${v.id}`)
-                                        }
-                                    />
-
-                                    {!isProcessing && (
-                                        <button
-                                            type="button"
-                                            className="absolute top-2 right-2 z-20 p-2 cursor-pointer bg-background/80 hover:bg-red-600 text-white rounded-full shadow"
-                                            aria-label="Delete video"
-                                            onClick={() => handleDeleteVideo(v.id)}
-                                        >
-                                            <FaTrash className="size-4" />
-                                        </button>
-                                    )}
-                                    
-                                    <StatusBadges
-                                        visibility={v.visibility}
-                                        moderationStatus={v.moderationStatus}
-                                    />
-                                </div>
+                            <div key={v.id}>
+                                <MyVideoCard
+                                    video={v}
+                                    user={user}
+                                    onDelete={() => handleDeleteVideo(v.id)}
+                                />
                             </div>
                         );
                     })}

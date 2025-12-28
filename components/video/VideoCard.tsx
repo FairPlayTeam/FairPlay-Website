@@ -12,6 +12,9 @@ type VideoCardProps = {
   onPress?: () => void;
   className?: string;
   variant?: "grid" | "list" | "listLarge";
+  overlayTopRight?: React.ReactNode;
+  overlayTopLeft?: React.ReactNode;
+  overlayCenter?: React.ReactNode;
 };
 
 export function VideoCard({
@@ -22,6 +25,9 @@ export function VideoCard({
   onPress,
   className,
   variant = "grid",
+  overlayCenter,
+  overlayTopLeft,
+  overlayTopRight,
 }: VideoCardProps) {
   const isGrid = variant === "grid";
   const isLarge = variant === "listLarge";
@@ -51,6 +57,24 @@ export function VideoCard({
         )}
       >
         <div className="w-full aspect-video rounded-xl overflow-hidden relative">
+          {overlayCenter && (
+            <div className="absolute inset-0 z-10 h-full">
+              {overlayCenter}
+            </div>
+          )}
+
+          {overlayTopRight && (
+            <div className="absolute top-2 right-2 z-20">
+              {overlayTopRight}
+            </div>
+          )}
+
+          {overlayTopLeft && (
+            <div className="absolute top left z-20">
+              {overlayTopLeft}
+            </div>
+          )}
+
           {imgSrc ? (
             <Image
               src={imgSrc}

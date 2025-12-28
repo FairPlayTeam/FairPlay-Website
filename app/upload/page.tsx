@@ -19,7 +19,7 @@ const uploadSchema = z.object({
     .max(100, "Title cannot be longer than 100 characters."),
   description: z
     .string()
-    .max(500, "Description cannot be longer than 500 characters.")
+    .max(1000, "Description cannot be longer than 1000 characters.")
     .optional(),
   tags: z
     .string()
