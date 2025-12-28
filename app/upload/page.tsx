@@ -10,7 +10,7 @@ import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
-import Toast from "@/components/ui/Toast"
+import { toast } from "@/components/ui/Toast/toast";
 
 const uploadSchema = z.object({
   title: z
@@ -40,7 +40,6 @@ export default function UploadPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
 
-  const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "warning" | "info" } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -83,12 +82,12 @@ export default function UploadPage() {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }); 
-      setToast({ message: "Video uploaded successfully!", type: "success" });
-
+      });
+      toast.success("Video uploaded successfully! Your video is going to be reviewed by us before being public.");
+      
+      router.push(`/me`);
     } catch (error) {
-      console.error("Upload failed:", error);
-      setToast({ message: "Upload failed.", type: "error" });
+      toast.error("Upload failed.");
       setUploadError(
         (error as { response: { data: { error: string } } })?.response.data
           .error ?? "Something went wrong!"
@@ -174,15 +173,6 @@ export default function UploadPage() {
           {isUploading ? "Uploading..." : "Upload Video"}
         </Button>
       </form>
-
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-          duration={3000}
-        />
-      )}
     </div>
   );
 }

@@ -10,6 +10,8 @@ export type UserRole = "user" | "moderator" | "admin";
 
 export type TransactionType = "donation" | "subscription" | "ad_revenue";
 
+export type ToastType = "success" | "error" | "warning" | "info";
+
 export interface User {
   id: string;
   email: string;

@@ -4,14 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  FaPencilAlt,
-} from "react-icons/fa";
 
-import Toast from "@/components/ui/Toast"
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/video/VideoCard";
 import { FollowButton } from "@/components/ui/FollowButton";
+import Button from "@/components/ui/Button"
 
 import {
   getUser,
@@ -21,7 +18,6 @@ import {
 } from "@/lib/users";
 import { useAuth } from "@/context/AuthContext";
 import UserAvatar from "@/components/ui/UserAvatar";
-import { useImagesUpload } from "@/hooks/useImagesUpload";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -29,7 +25,6 @@ export default function ChannelPage() {
   const params = useParams();
   const router = useRouter();
   const { user: me } = useAuth();
-  const { uploadUserAvatar, uploadUserBanner } = useImagesUpload();
 
   const usernameParam = params?.username;
   const username = typeof usernameParam === "string" ? usernameParam : usernameParam?.[0] ?? "";
@@ -38,44 +33,8 @@ export default function ChannelPage() {
   const [videos, setVideos] = useState<UserVideoItem[]>([]);
   const [state, setState] = useState<LoadState>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "warning" | "info" } | null>(null);
 
   const requestSeq = useRef(0);
-
-  const bannerInputRef = useRef<HTMLInputElement>(null);
-  const avatarInputRef = useRef<HTMLInputElement>(null);
-
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const res = await uploadUserAvatar(file);
-      setUser((u) => (u ? { ...u, avatarUrl: res.storagePath } : u));
-
-      setToast({ message: "Avatar uploaded successfully!", type: "success" });
-    } catch (err) {
-      setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
-    } finally {
-      e.target.value = "";
-    }
-  };
-
-  const handleBannerChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const res = await uploadUserBanner(file);
-      setUser((u) => (u ? { ...u, bannerUrl: res.storagePath } : u));
-
-      setToast({ message: "Banner uploaded successfully!", type: "success" });
-    } catch (err) {
-      setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
-    } finally {
-      e.target.value = "";
-    }
-  };
 
   useEffect(() => {
     const seq = ++requestSeq.current;
@@ -153,7 +112,7 @@ export default function ChannelPage() {
   return (
     <div className="w-full">
       {banner ? (
-        <div className="relative w-full h-45 bg-muted hidden md:block group">
+        <div className="relative w-full h-45 bg-muted hidden md:block">
           <Image
             src={banner}
             alt={`${user.username} banner`}
@@ -162,64 +121,17 @@ export default function ChannelPage() {
             sizes="100vw"
             priority
           />
-
-          {isMe && (
-            <>
-              <button
-                type="button"
-                className="absolute top-3 right-3 z-10
-                          bg-background/80 hover:bg-background
-                          rounded-full p-2 shadow cursor-pointer
-                          opacity-0 group-hover:opacity-100 transition"
-                aria-label="Change banner"
-                onClick={() => bannerInputRef.current?.click()}
-              >
-                <FaPencilAlt className="size-4" />
-              </button>
-
-              <input
-                ref={bannerInputRef}
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={handleBannerChange}
-              />
-            </>
-          )}
-
         </div>
       ) : null}
 
       <div className="container mx-auto px-4 pt-6 pb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:gap-4 md:items-center">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
           <div className="flex md:block justify-center md:justify-start">
-            <div className="relative group">
-              <UserAvatar
-                user={user}
-                size={90}
-              />
-
-              {isMe && (
-                <button
-                  className="absolute inset-0 flex items-center justify-center
-                            bg-black/40 rounded-full cursor-pointer
-                            opacity-0 group-hover:opacity-100 transition"
-                  aria-label="Change profile picture"
-                  onClick={() => {
-                    avatarInputRef.current?.click()
-                  }}
-                >
-                  <input
-                    ref={avatarInputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handleAvatarChange}
-                  />
-                  <FaPencilAlt className="size-5 text-white" />
-                </button>
-              )}
-            </div>
+            <UserAvatar
+              user={user}
+              size={80}
+              className="border-background"
+            />
           </div>
 
           <div className="flex-1 min-w-0 text-center md:text-left">
@@ -233,6 +145,15 @@ export default function ChannelPage() {
               </p>
             ) : null}
           </div>
+          
+          {isMe ? (
+            <Button
+              variant="videoDetails"
+              onClick={() => router.push(`/me`)}
+            >
+              Edit Channel
+            </Button>
+          ) : null}
 
           <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:text-left">
             <Link
@@ -267,20 +188,6 @@ export default function ChannelPage() {
           <p className="text-sm text-muted-foreground">No videos yet.</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {isMe && (
-              <div className="p-1">
-                <div
-                  className="flex flex-col aspect-video items-center justify-center rounded-2xl cursor-pointer 
-                            border-2 border-dashed border-white/20
-                            text-white/50 hover:bg-white/2 transition-colors"
-                  onClick={() => router.push("/upload")}
-                >
-                  <span className="text-4xl font-bold">+</span>
-                  <span className="mt-2 text-sm font-medium">Upload</span>
-                </div>
-              </div>
-            )}
-
             {videos.map((v) => {
               const createdAtLabel = new Date(v.createdAt).toLocaleDateString();
               const meta = `${createdAtLabel} • ${v.viewCount} views`;
@@ -300,15 +207,6 @@ export default function ChannelPage() {
           </div>
         )}
       </div>
-      
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-          duration={3000}
-        />
-      )}
     </div>
   );
 }

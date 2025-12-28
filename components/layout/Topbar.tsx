@@ -147,7 +147,7 @@ export default function Topbar() {
                 size="icon"
                 variant="ghost"
                 className="text-text rounded-full p-0"
-                onClick={() => router.push(`/channel/${user.username}`)}
+                onClick={() => router.push(`/me`)}
               >
                 <UserAvatar user={user} size={36} />
               </Button>
