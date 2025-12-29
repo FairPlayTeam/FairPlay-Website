@@ -20,6 +20,7 @@ import Slider from "@/components/ui/Slider";
 import { getToken } from "@/lib/token";
 import { formatTime } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { usePreferenceStore } from "@/lib/stores/preference";
 
 interface VideoPlayerProps {
   url: string;
@@ -30,12 +31,15 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [isMuted, setIsMuted] = useState(false);
+  const isMuted = usePreferenceStore((state) => state.isMuted);
+  const setVolume = usePreferenceStore((state) => state.setVolume);
+
+  const volume = usePreferenceStore((state) => state.volume);
+  const toggleMute = usePreferenceStore((state) => state.toggleMute);
+
   const [isPlaying, setIsPlaying] = useState(true);
   const [isBuffering, setIsBuffering] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const [volume, setVolume] = useState(1);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [showControls, setShowControls] = useState(true);
@@ -158,13 +162,23 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }
   };
 
-  const handleVolumeChange = useCallback((val: number) => {
-    setVolume(val);
-    if (videoRef.current) {
-      videoRef.current.volume = val;
-      setIsMuted(val === 0);
-    }
-  }, []);
+  const handleVolumeChange = useCallback(
+    (volume: number) => {
+      if (volume === 0) {
+        toggleMute();
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+        }
+      } else {
+        setVolume(volume);
+        if (videoRef.current) {
+          videoRef.current.volume = volume;
+          videoRef.current.muted = false;
+        }
+      }
+    },
+    [setVolume, toggleMute]
+  );
 
   const triggerAnimation = (type: "play" | "pause" | "mute" | "unmute") => {
     setAnimation(type);
@@ -182,14 +196,16 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }
   }, []);
 
-  const toggleMute = useCallback(() => {
+  const handleToggleMute = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
-
+      toggleMute();
       triggerAnimation(isMuted ? "mute" : "unmute");
-      setIsMuted(!isMuted);
+      if (isMuted) {
+        videoRef.current.volume = volume;
+      }
     }
-  }, [isMuted]);
+  }, [isMuted, toggleMute, volume]);
 
   const toggleFullscreen = useCallback(() => {
     if (!containerRef.current) return;
@@ -213,7 +229,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   );
 
   useHotkeys("f", toggleFullscreen);
-  useHotkeys("m", toggleMute);
+  useHotkeys("m", handleToggleMute);
 
   useHotkeys("arrowleft", () => {
     if (videoRef.current) {
@@ -311,7 +327,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={toggleMute}
+                onClick={handleToggleMute}
                 className="text-white hover:bg-white/10 rounded-full"
               >
                 {isMuted || volume === 0 ? (
