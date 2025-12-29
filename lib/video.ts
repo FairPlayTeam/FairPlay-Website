@@ -18,7 +18,12 @@ export type VideoDetails = {
   description?: string | null;
   createdAt: string;
   userId: string;
-  user?: { username: string; displayName: string | null; avatarUrl?: string | null; id?: string };
+  user?: {
+    username: string;
+    displayName: string | null;
+    avatarUrl?: string | null;
+    id?: string;
+  };
 };
 
 export type SearchVideosResponse = {
@@ -70,21 +75,47 @@ export type CommentItem = {
 
 export type CommentsResponse = {
   comments: CommentItem[];
-  pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number };
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
 };
 
-export async function getVideoComments(videoId: string, params?: { page?: number; limit?: number; repliesLimit?: number; childRepliesLimit?: number }) {
+export async function getVideoComments(
+  videoId: string,
+  params?: {
+    page?: number;
+    limit?: number;
+    repliesLimit?: number;
+    childRepliesLimit?: number;
+  }
+) {
   const q = new URLSearchParams();
   if (params?.page) q.set('page', String(params.page));
   if (params?.limit) q.set('limit', String(params.limit));
   if (params?.repliesLimit) q.set('repliesLimit', String(params.repliesLimit));
-  if (params?.childRepliesLimit) q.set('childRepliesLimit', String(params.childRepliesLimit));
+  if (params?.childRepliesLimit)
+    q.set('childRepliesLimit', String(params.childRepliesLimit));
+
   const qs = q.toString();
-  return api.get<CommentsResponse>(`/videos/${encodeURIComponent(videoId)}/comments${qs ? `?${qs}` : ''}`);
+
+  return api.get<CommentsResponse>(
+    `/videos/${encodeURIComponent(videoId)}/comments${qs ? `?${qs}` : ''}`
+  );
 }
 
-export async function addComment(videoId: string, content: string, parentId?: string) {
-  return api.post<{ message: string; comment: CommentItem }>(`/videos/${encodeURIComponent(videoId)}/comments`, { content, parentId });
+export async function addComment(
+  videoId: string,
+  content: string,
+  parentId?: string
+) {
+  return api.post<{ message: string; comment: CommentItem }>(
+    `/videos/${encodeURIComponent(videoId)}/comments`,
+    { content, parentId }
+  );
 }
 
 export async function rateVideo(videoId: string, score: number) {
@@ -92,22 +123,48 @@ export async function rateVideo(videoId: string, score: number) {
 }
 
 export async function likeComment(commentId: string) {
-  return api.post<{ message: string; likeCount: number }>(`/comments/${encodeURIComponent(commentId)}/like`);
+  return api.post<{ message: string; likeCount: number }>(
+    `/comments/${encodeURIComponent(commentId)}/like`
+  );
 }
 
 export async function unlikeComment(commentId: string) {
-  return api.delete<{ message: string; likeCount: number }>(`/comments/${encodeURIComponent(commentId)}/like`);
+  return api.delete<{ message: string; likeCount: number }>(
+    `/comments/${encodeURIComponent(commentId)}/like`
+  );
 }
 
-export async function getCommentReplies(commentId: string, page = 1, limit = 20) {
-  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
-  return api.get<{ replies: CommentItem[]; pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number } }>(
-    `/comments/${encodeURIComponent(commentId)}/replies?${qs}`
-  );
+export async function getCommentReplies(
+  commentId: string,
+  page = 1,
+  limit = 20
+) {
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+
+  return api.get<{
+    replies: CommentItem[];
+    pagination: {
+      page: number;
+      limit: number;
+      totalItems: number;
+      totalPages: number;
+      itemsReturned: number;
+    };
+  }>(`/comments/${encodeURIComponent(commentId)}/replies?${qs}`);
 }
 
 export async function deleteVideo(videoId: string) {
   return api.delete<{ message: string }>(
-    `/videos/${encodeURIComponent(videoId)}`,
+    `/videos/${encodeURIComponent(videoId)}`
+  );
+}
+
+// comment delition thingy i think i guess
+export async function deleteComment(commentId: string) {
+  return api.delete<{ message: string }>(
+    `/comments/${encodeURIComponent(commentId)}`
   );
 }
