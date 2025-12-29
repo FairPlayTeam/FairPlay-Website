@@ -124,7 +124,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteComments = async () => {
     try {
       await api.delete(`/comments/${comment.id}`);
       setLocalComment((prev) => ({ ...prev, content: "[deleted]" }));
@@ -258,10 +258,10 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
         )}
       </div>
 
-      {showDeleteModal && (        // delete function. AS OF 29/12 needs BACKEND
+      {showDeleteModal && (        // delete comment function. AS OF 29/12 needs BACKEND
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-black rounded-lg p-6 w-80 text-center">
-            <h2 className="text-lg font-bold mb-4">Delete Comment?</h2>
+            <h2 className="text-lg font-bold mb-4">Delete Comment?</h2> 
             <p className="mb-6 text-sm text-gray-600">
               Are you sure you want to delete this comment? This action cannot
               be undone.
@@ -274,7 +274,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
               >
                 Cancel
               </Button>
-              <Button size="sm" variant="destructive" onClick={handleDelete}>
+              <Button size="sm" variant="destructive" onClick={handleDeleteComments}>
                 Delete
               </Button>
             </div>
