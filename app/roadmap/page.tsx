@@ -89,12 +89,6 @@ export default function RoadmapPage() {
     },
   ];
 
-  const statusColor: Record<RoadmapStatus, string> = {
-    done: "bg-[var(--blue-pastel-100)]",
-    progress: "bg-[var(--blue-pastel-700)]",
-    planned: "bg-[var(--gray-500)]",
-  };
-
   return (
     <>
       <Topbar animateOnLoad={false} />
