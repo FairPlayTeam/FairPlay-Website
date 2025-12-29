@@ -15,6 +15,7 @@ type VideoCardProps = {
   overlayTopRight?: React.ReactNode;
   overlayTopLeft?: React.ReactNode;
   overlayCenter?: React.ReactNode;
+  overlayBottomLeft?: React.ReactNode;
 };
 
 export function VideoCard({
@@ -28,6 +29,7 @@ export function VideoCard({
   overlayCenter,
   overlayTopLeft,
   overlayTopRight,
+  overlayBottomLeft
 }: VideoCardProps) {
   const isGrid = variant === "grid";
   const isLarge = variant === "listLarge";
@@ -64,14 +66,20 @@ export function VideoCard({
           )}
 
           {overlayTopRight && (
-            <div className="absolute top-2 right-2 z-20">
+            <div className="absolute top-1 right-1 z-20">
               {overlayTopRight}
             </div>
           )}
 
           {overlayTopLeft && (
-            <div className="absolute top left z-20">
+            <div className="absolute top-1 left-1 z-20">
               {overlayTopLeft}
+            </div>
+          )}
+
+          {overlayBottomLeft && (
+            <div className="absolute bottom-1 left-1 z-20">
+              {overlayBottomLeft}
             </div>
           )}
 

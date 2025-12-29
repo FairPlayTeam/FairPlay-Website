@@ -28,7 +28,7 @@ export function StatusBadges({
     }
 
     return (
-        <div className="absolute top-2 left-2 flex gap-1 text-xs">
+        <div className="absolute flex gap-1 text-xs">
             <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md font-medium text-text bg-background/80 backdrop-blur-md">
                 <span
                     className={cn(

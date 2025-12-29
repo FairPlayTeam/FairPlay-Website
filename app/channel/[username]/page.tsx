@@ -112,7 +112,7 @@ export default function ChannelPage() {
   return (
     <div className="w-full">
       {banner ? (
-        <div className="relative w-full h-45 bg-muted hidden md:block">
+        <div className="relative w-full h-30 md:h-45 block">
           <Image
             src={banner}
             alt={`${user.username} banner`}

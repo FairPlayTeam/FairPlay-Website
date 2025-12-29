@@ -89,17 +89,11 @@ export default function RoadmapPage() {
     },
   ];
 
-  const statusColor: Record<RoadmapStatus, string> = {
-    done: "bg-[var(--blue-pastel-100)]",
-    progress: "bg-[var(--blue-pastel-700)]",
-    planned: "bg-[var(--gray-500)]",
-  };
-
   return (
     <>
       <Topbar animateOnLoad={false} />
 
-      <main className="min-h-screen text-text px-6 py-20">
+      <main className="background-gradient min-h-screen text-text px-6 py-20">
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Project Roadmap</h1>
           <p className="text-text-para text-lg max-w-2xl mx-auto">

@@ -131,7 +131,7 @@ export default function MyVideosPage() {
 
   return (
     <div className="w-full">
-        <div className="relative w-full h-45 bg-muted hidden md:block group">
+        <div className="relative w-full h-30 md:h-45 block group">
             {user.bannerUrl ? (
                 <Image
                     src={user.bannerUrl}
@@ -156,8 +156,7 @@ export default function MyVideosPage() {
                 <button
                     type="button"
                     className="absolute top-3 right-3 z-10 bg-background/80 hover:bg-background
-                            rounded-full p-2 shadow cursor-pointer
-                            opacity-0 group-hover:opacity-100 transition"
+                            rounded-full p-2 shadow cursor-pointer"
                     aria-label="Change banner"
                     onClick={() => bannerInputRef.current?.click()}
                 >

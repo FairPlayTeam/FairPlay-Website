@@ -10,6 +10,7 @@ import {
   FaHistory,
   FaBookOpen,
   FaUpload,
+  FaShieldAlt,
   FaDiscord,
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -18,12 +19,15 @@ import { cn } from "@/lib/utils";
 import { useSidebar } from "@/context/SidebarContext";
 import Button from "@/components/ui/Button";
 import { FaBars } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext";
 
 const mainLinks = [
   { icon: FaCompass, label: "Explore", href: "/explore" },
   // { icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
   // { icon: FaHistory, label: "History", href: "/history" },
+
+  { icon: FaShieldAlt, label: "Mods", href: "/moderator" }, // faire en sorte que ce lien soit uniquement affiché lorsque l'utilisateur connecté est modo ou admin
   { icon: FaUpload, label: "Upload", href: "/upload" },
 ];
 
@@ -36,6 +40,15 @@ const categories = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { isOpen, close, toggle } = useSidebar();
+
+  const { user } = useAuth();
+
+  const mainLinksFiltered = mainLinks.filter(link => {
+    if (link.label === "Mods") {
+      return user?.role === "admin" || user?.role === "moderator";
+    }
+    return true;
+  });
 
   return (
     <>
@@ -66,7 +79,7 @@ export default function Sidebar() {
           </Link>
         </div>
         <div className="flex flex-col gap-1">
-          {mainLinks.map((link) => {
+          {mainLinksFiltered.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
             return (
