@@ -40,7 +40,7 @@ export default function HomePage() {
     <>
       <Topbar />
 
-      <main className="mx-auto max-w-350 px-5 md:px-17.5">
+      <main className="background-gradient mx-auto max-w-350 px-5 md:px-17.5">
         <HeroSection />
 
         <FadeInSection>

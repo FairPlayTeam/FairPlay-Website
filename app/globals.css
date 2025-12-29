@@ -51,6 +51,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  overflow-y: scroll;
 }
 
 body {
@@ -62,7 +63,7 @@ body {
   position: relative;
 }
 
-body:before {
+.background-gradient:before {
   background:
     radial-gradient(circle at 70% 7%, #3b508de0, #0000 10%),
     radial-gradient(circle at 5% 30%, #3b508de0, #0000 15%),
