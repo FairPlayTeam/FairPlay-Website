@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/video/VideoCard";
 import { FollowButton } from "@/components/ui/FollowButton";
-import Button from "@/components/ui/Button"
+import Button from "@/components/ui/Button";
 
 import {
   getUser,
@@ -27,7 +27,10 @@ export default function ChannelPage() {
   const { user: me } = useAuth();
 
   const usernameParam = params?.username;
-  const username = typeof usernameParam === "string" ? usernameParam : usernameParam?.[0] ?? "";
+  const username =
+    typeof usernameParam === "string"
+      ? usernameParam
+      : (usernameParam?.[0] ?? "");
 
   const [user, setUser] = useState<PublicUser | null>(null);
   const [videos, setVideos] = useState<UserVideoItem[]>([]);
@@ -69,7 +72,8 @@ export default function ChannelPage() {
       } catch (e: unknown) {
         if (requestSeq.current !== seq) return;
 
-        const message = e instanceof Error ? e.message : "Failed to load profile";
+        const message =
+          e instanceof Error ? e.message : "Failed to load profile";
         setUser(null);
         setVideos([]);
         setError(message);
@@ -127,11 +131,7 @@ export default function ChannelPage() {
       <div className="container mx-auto px-4 pt-6 pb-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center">
           <div className="flex md:block justify-center md:justify-start">
-            <UserAvatar
-              user={user}
-              size={80}
-              className="border-background"
-            />
+            <UserAvatar user={user} size={80} className="border-background" />
           </div>
 
           <div className="flex-1 min-w-0 text-center md:text-left">
@@ -145,11 +145,11 @@ export default function ChannelPage() {
               </p>
             ) : null}
           </div>
-          
+
           {isMe ? (
             <Button
               variant="videoDetails"
-              onClick={() => router.push(`/me`)}
+              onClick={() => router.push(`/profile`)}
             >
               Edit Channel
             </Button>

@@ -147,7 +147,7 @@ export default function Topbar() {
                 size="icon"
                 variant="ghost"
                 className="text-text rounded-full p-0"
-                onClick={() => router.push(`/me`)}
+                onClick={() => router.push(`/profile`)}
               >
                 <UserAvatar user={user} size={36} />
               </Button>

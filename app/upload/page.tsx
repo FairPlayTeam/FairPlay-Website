@@ -83,9 +83,11 @@ export default function UploadPage() {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Video uploaded successfully! Your video is going to be reviewed by us before being public.");
-      
-      router.push(`/me`);
+      toast.success(
+        "Video uploaded successfully! Your video is going to be reviewed by us before being public."
+      );
+
+      router.push(`/profile`);
     } catch (error) {
       toast.error("Upload failed.");
       setUploadError(

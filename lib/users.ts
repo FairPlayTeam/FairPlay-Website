@@ -1,4 +1,4 @@
-import { api } from '@/lib/api';
+import { api } from "@/lib/api";
 
 export type PublicUser = {
   id: string;
@@ -29,12 +29,27 @@ export type UserVideoItem = {
 
 export type UserVideosResponse = {
   videos: UserVideoItem[];
-  pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number };
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
 };
 
-export async function getUserVideos(idOrUsername: string, page = 1, limit = 20) {
-  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
-  return api.get<UserVideosResponse>(`/user/${encodeURIComponent(idOrUsername)}/videos?${qs}`);
+export async function getUserVideos(
+  idOrUsername: string,
+  page = 1,
+  limit = 20
+) {
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+  return api.get<UserVideosResponse>(
+    `/user/${encodeURIComponent(idOrUsername)}/videos?${qs}`
+  );
 }
 
 export type MyVideoItem = {
@@ -45,33 +60,70 @@ export type MyVideoItem = {
   viewCount: string;
   avgRating: number;
   ratingsCount: number;
-  visibility: 'public' | 'unlisted' | 'private';
-  processingStatus: 'uploading' | 'processing' | 'done' | 'failed';
-  moderationStatus: 'pending' | 'approved' | 'rejected';
+  visibility: "public" | "unlisted" | "private";
+  processingStatus: "uploading" | "processing" | "done" | "failed";
+  moderationStatus: "pending" | "approved" | "rejected";
 };
 
 export type MyVideosResponse = {
   videos: MyVideoItem[];
-  pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number };
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
 };
 
 export async function getMyVideos(page = 1, limit = 20) {
-  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
   return api.get<MyVideosResponse>(`/videos/my?${qs}`);
 }
 
-export type SimpleUser = { id: string; username: string; displayName: string | null; avatarUrl: string | null };
-export type PagedUsers = { users?: SimpleUser[]; followers?: SimpleUser[]; following?: SimpleUser[]; pagination: { page: number; limit: number; totalItems: number; totalPages: number; itemsReturned: number } };
+export type SimpleUser = {
+  id: string;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+};
+export type PagedUsers = {
+  users?: SimpleUser[];
+  followers?: SimpleUser[];
+  following?: SimpleUser[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
+};
 
 export async function getFollowers(idOrUsername: string, page = 1, limit = 20) {
-  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
-  const res = await api.get<{ followers: SimpleUser[]; pagination: PagedUsers['pagination'] }>(`/user/${encodeURIComponent(idOrUsername)}/followers?${qs}`);
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+  const res = await api.get<{
+    followers: SimpleUser[];
+    pagination: PagedUsers["pagination"];
+  }>(`/user/${encodeURIComponent(idOrUsername)}/followers?${qs}`);
   return res;
 }
 
 export async function getFollowing(idOrUsername: string, page = 1, limit = 20) {
-  const qs = new URLSearchParams({ page: String(page), limit: String(limit) }).toString();
-  const res = await api.get<{ following: SimpleUser[]; pagination: PagedUsers['pagination'] }>(`/user/${encodeURIComponent(idOrUsername)}/following?${qs}`);
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+  const res = await api.get<{
+    following: SimpleUser[];
+    pagination: PagedUsers["pagination"];
+  }>(`/user/${encodeURIComponent(idOrUsername)}/following?${qs}`);
   return res;
 }
 
@@ -81,4 +133,34 @@ export async function followUser(idOrUsername: string) {
 
 export async function unfollowUser(idOrUsername: string) {
   return api.delete<void>(`/user/${encodeURIComponent(idOrUsername)}/follow`);
+}
+
+export type UpdateProfileData = {
+  username?: string;
+  displayName?: string;
+  bio?: string;
+};
+
+export async function updateProfile(data: UpdateProfileData) {
+  return api.patch<PublicUser>("/auth/me", data);
+}
+
+export type Session = {
+  id: string;
+  ipAddress: string | null;
+  userAgent: string | null;
+  deviceInfo: string | null;
+  isActive: boolean;
+  lastUsedAt: string;
+  createdAt: string;
+  expiresAt: string;
+  isCurrent?: boolean;
+};
+
+export async function getSessions() {
+  return api.get<{ sessions: Session[] }>("/auth/sessions");
+}
+
+export async function revokeSession(sessionId: string) {
+  return api.delete<void>(`/auth/sessions/${sessionId}`);
 }
