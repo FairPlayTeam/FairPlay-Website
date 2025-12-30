@@ -10,23 +10,33 @@ Start by creating a fork of this repo.
 
 ### Clone the repo
 
-Clone your GitHub forked repo:
+1. Clone your GitHub forked repo:
 
 ```sh
 git clone https://github.com/<github_username>/FairPlay-Website.git
 ```
 
+2. Navigate to the project directory:
+
+```sh
+cd FairPlay-Website
+```
+
 ### Install dependencies
 
-Install all the necessary dependencies:
+1. Install all the necessary dependencies:
 
 ```sh
 npm install # or pnpm install
 ```
 
-### Start dev server
+2. Copy the example `.env.example` file to `.env.local`:
 
-Start the development server:
+```sh
+cp .env.example .env.local
+```
+
+3. Start the development server:
 
 ```sh
 npm run dev # or pnpm dev
