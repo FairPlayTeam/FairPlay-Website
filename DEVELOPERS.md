@@ -24,19 +24,23 @@ cd FairPlay-Website
 
 ### Install dependencies
 
-1. Install all the necessary dependencies:
+1. Install NodeJS and NPM:
+
+Follow the instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to install NodeJS and NPM on your machine.
+
+2. Install all the necessary dependencies:
 
 ```sh
 npm install # or pnpm install
 ```
 
-2. Copy the example `.env.example` file to `.env.local`:
+3. Copy the example `.env.example` file to `.env.local`:
 
 ```sh
-cp .env.example .env.local
+cp .env.example .env.local # on Windows, will not work when using cmd.exe as your terminal: replace it with copy
 ```
 
-3. Start the development server:
+4. Start the development server:
 
 ```sh
 npm run dev # or pnpm dev
@@ -115,7 +119,7 @@ eg. ``useFetch.ts``, ``authService.ts``
 Folders should be in **kebab-case**.
 
 ### Linting & Formatting
- 
+
 Ensure your code passes linting and formatting checks before submitting a PR:
 
 ```sh
