@@ -1,92 +1,70 @@
-"use client";
+import type { Metadata } from "next";
+import { VideoDetails } from "@/lib/video";
+import VideoPageClient from "./video-page-client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import {
-  getVideo,
-  getVideos,
-  getVideoComments,
-  VideoDetails,
-  CommentItem,
-} from "@/lib/video";
-import { VideoPlayer } from "@/components/video/VideoPlayer";
-import { VideoInfo } from "@/components/video/VideoInfo";
-import { RelatedVideos } from "@/components/video/RelatedVideos";
-import { Comments } from "@/components/video/Comments";
-import Spinner from "@/components/ui/Spinner";
-import { toast } from "@/components/ui/Toast/toast";
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
 
-export default function VideoPage() {
-  const params = useParams();
-  const id = params?.id as string;
+const FALLBACK_TITLE = "FairPlay";
+const FALLBACK_DESCRIPTION = "Watch on FairPlay.";
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [video, setVideo] = useState<VideoDetails | null>(null);
+async function fetchVideo(id: string): Promise<VideoDetails | null> {
+  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!apiBase) return null;
 
-  const [comments, setComments] = useState<CommentItem[]>([]);
-  const [relatedVideos, setRelatedVideos] = useState<VideoDetails[]>([]);
-
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const [videoRes, relatedRes, commentsRes] = await Promise.all([
-          getVideo(id),
-          getVideos(),
-          getVideoComments(id),
-        ]);
-
-        setVideo(videoRes.data);
-        setRelatedVideos(relatedRes.data.videos);
-        setComments(commentsRes.data.comments);
-      } catch {
-        toast.error("Failed to load video. Please try again later.");
-        setError("Failed to load video. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  if (isLoading) {
-    return (
-      <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
-      </div>
+  try {
+    const res = await fetch(
+      `${apiBase}/videos/${encodeURIComponent(id)}`,
+      { next: { revalidate: 60 } }
     );
+    if (!res.ok) return null;
+    return (await res.json()) as VideoDetails;
+  } catch {
+    return null;
   }
+}
 
-  if (error || !video) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl mb-4">Error</h2>
-        <p className="text-text">{error || "Video not found"}</p>
-      </div>
-    );
+function getAbsoluteUrl(url: string | null, base?: URL) {
+  if (!url) return undefined;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
   }
+  return base ? new URL(url, base).toString() : undefined;
+}
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:pt-4">
-      <div className="lg:col-span-2 space-y-6 lg:px-2">
-        <VideoPlayer
-          url={video.hls.master || ""}
-          thumbnailUrl={video.thumbnailUrl}
-        />
-        <div className="px-4 lg:px-0">
-          <VideoInfo video={video} />
-          <Comments videoId={video.id} initialComments={comments} />
-        </div>
-      </div>
-      <div className="lg:col-span-1">
-        <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
-      </div>
-    </div>
-  );
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const video = await fetchVideo(id);
+  const title = video?.title?.trim() || FALLBACK_TITLE;
+  const description = video?.description?.trim() || FALLBACK_DESCRIPTION;
+  const metadataBase = process.env.NEXT_PUBLIC_SITE_URL
+    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
+    : undefined;
+  const imageUrl = getAbsoluteUrl(video?.thumbnailUrl ?? null, metadataBase);
+
+  return {
+    title,
+    description,
+    metadataBase,
+    openGraph: {
+      title,
+      description,
+      type: "video.other",
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
+
+export default async function VideoPage({ params }: PageProps) {
+  const { id } = await params;
+  return <VideoPageClient videoId={id} />;
 }

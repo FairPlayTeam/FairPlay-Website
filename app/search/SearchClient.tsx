@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { searchVideos, VideoDetails } from "@/lib/video";
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/app/video/VideoCard";
 import Spinner from "@/components/ui/Spinner";
 import { toast } from "@/components/ui/Toast/toast";
 
@@ -31,9 +31,11 @@ export default function SearchClient() {
         }
       } catch (err: unknown) {
         toast.error("Error while searching.");
-        const errorMessage = err instanceof Error ? err.message : "Error while searching.";
+        const errorMessage =
+          err instanceof Error ? err.message : "Error while searching.";
         setError(
-          (err as { response?: { data?: { error?: string } } })?.response?.data?.error || errorMessage
+          (err as { response?: { data?: { error?: string } } })?.response?.data
+            ?.error || errorMessage
         );
         setResults([]);
       } finally {
@@ -54,7 +56,9 @@ export default function SearchClient() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Results for &quot;{query}&quot;</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Results for &quot;{query}&quot;
+      </h1>
 
       {error && <p className="text-red-500">{error}</p>}
 

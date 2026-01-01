@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { FaArrowRight, FaCheck, FaTimes, FaCircleNotch } from "react-icons/fa";
-import Topbar from "@/components/sections/Topbar";
-import Footer from "@/components/sections/Footer";
+import MarketingTopbar from "@/components/marketing/MarketingTopbar";
+import MarketingFooter from "@/components/marketing/MarketingFooter";
 import Link from "@/components/ui/Link";
 import Button from "@/components/ui/Button";
 
@@ -91,7 +91,7 @@ export default function RoadmapPage() {
 
   return (
     <>
-      <Topbar animateOnLoad={false} />
+      <MarketingTopbar animateOnLoad={false} />
 
       <main className="background-gradient min-h-screen text-text px-6 py-20">
         <section className="text-center mb-16">
@@ -152,7 +152,7 @@ export default function RoadmapPage() {
           </Button>
         </div>
       </main>
-      <Footer variant="secondary" />
+      <MarketingFooter variant="secondary" />
     </>
   );
 }

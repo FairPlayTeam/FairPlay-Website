@@ -5,114 +5,167 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "@/components/ui/Toast/toast";
 import Spinner from "@/components/ui/Spinner";
-import { ModVideoCard } from "@/components/video/ModVideoCard";
+import { ModVideoCard } from "@/components/app/video/ModVideoCard";
 
-import { listModeratorVideos, type ModVideoItem } from "@/lib/moderation";
+import { listModeratorVideos, type ModVideoItem, updateModeration } from "@/lib/moderation";
 import { deleteVideo } from "@/lib/video";
 import { useAuth } from "@/context/AuthContext";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
 export default function ModerationPage() {
-    const router = useRouter();
-    const { user: me, isLoading } = useAuth();
+  const router = useRouter();
+  const { user: me, isLoading } = useAuth();
 
-    const [videos, setVideos] = useState<ModVideoItem[]>([]);
-    const [state, setState] = useState<LoadState>("idle");
-    const [error, setError] = useState<string | null>(null);
-    const [user, setUser] = useState(me);
+  const [videos, setVideos] = useState<ModVideoItem[]>([]);
+  const [state, setState] = useState<LoadState>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState(me);
+  const [moderatingIds, setModeratingIds] = useState<Set<string>>(
+    () => new Set()
+  );
 
-    useEffect(() => {
-        setUser(me);
-    }, [me]);
+  useEffect(() => {
+    setUser(me);
+  }, [me]);
 
-    const requestSeq = useRef(0);
+  const requestSeq = useRef(0);
 
-    const handleDeleteVideo = async (videoId: string) => {
-        if (!confirm("Are you sure you want to delete this video? This action cannot be undone.")) {
-            return;
-        }
+  const handleDeleteVideo = async (videoId: string) => {
+    if (
+      !confirm(
+        "Are you sure you want to delete this video? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
 
-        try {
-            await deleteVideo(videoId);
-            setVideos((prev) => prev.filter((v) => v.id !== videoId));
-            toast.success("Video deleted successfully!");
-        } catch {
-            toast.error("Failed to delete video");
-        }
+    try {
+      await deleteVideo(videoId);
+      setVideos((prev) => prev.filter((v) => v.id !== videoId));
+      toast.success("Video deleted successfully!");
+    } catch {
+      toast.error("Failed to delete video");
+    }
+  };
+
+  const handleModerateVideo = async (
+    videoId: string,
+    action: "approve" | "reject"
+  ) => {
+    if (moderatingIds.has(videoId)) return;
+
+    let removedItem: ModVideoItem | null = null;
+    let removedIndex = -1;
+
+    setModeratingIds((prev) => new Set(prev).add(videoId));
+    setVideos((prev) => {
+      removedIndex = prev.findIndex((v) => v.id === videoId);
+      if (removedIndex === -1) return prev;
+      removedItem = prev[removedIndex];
+      return prev.filter((v) => v.id !== videoId);
+    });
+
+    try {
+      await updateModeration(videoId, action);
+      toast.success(
+        action === "approve" ? "Video approved." : "Video rejected."
+      );
+    } catch {
+      if (removedItem && removedIndex >= 0) {
+        setVideos((prev) => {
+          const next = [...prev];
+          next.splice(removedIndex, 0, removedItem as ModVideoItem);
+          return next;
+        });
+      }
+      toast.error("Failed to update moderation status.");
+    } finally {
+      setModeratingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(videoId);
+        return next;
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoading && !me) {
+      router.replace(`/login?callbackUrl=/moderator`);
+    }
+  }, [me, isLoading, router]);
+
+  useEffect(() => {
+    const seq = ++requestSeq.current;
+
+    if (!me) return;
+
+    const run = async () => {
+      setState("loading");
+      setError(null);
+
+      try {
+        const videosRes = await listModeratorVideos({
+          page: 1,
+          limit: 20,
+          moderationStatus: "pending",
+        });
+        if (requestSeq.current !== seq) return;
+
+        setVideos(videosRes.data?.videos ?? []);
+        setState("ready");
+      } catch (e) {
+        if (requestSeq.current !== seq) return;
+
+        setState("error");
+        setError(e instanceof Error ? e.message : "Failed to load videos");
+        setVideos([]);
+      }
     };
 
-    useEffect(() => {
-        if (!isLoading && !me) {
-            router.replace(`/login?callbackUrl=/moderator`);
-        }
-    }, [me, isLoading, router]);
+    run();
+  }, [me]);
 
-    useEffect(() => {
-        const seq = ++requestSeq.current;
-
-        if (!me) return;
-
-        const run = async () => {
-            setState("loading");
-            setError(null);
-
-            try {
-                const videosRes = await listModeratorVideos({ page: 1, limit: 20, moderationStatus: "pending" });
-                if (requestSeq.current !== seq) return;
-
-                setVideos(videosRes.data?.videos ?? []);;
-                setState("ready");
-            } catch (e) {
-                if (requestSeq.current !== seq) return;
-
-                setState("error");
-                setError(e instanceof Error ? e.message : "Failed to load videos");
-                setVideos([]);
-            }
-        };
-
-        run();
-    }, [me]);
-
-    if (!me || state === "idle" || state === "loading") {
-        return (
-            <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-                <Spinner className="size-12" />
-            </div>
-        );
-    }
-
-    if (state === "error" || !user) {
-        return (
-            <div className="container mx-auto px-4 py-8 text-center">
-                <h2 className="text-2xl mb-4">Error</h2>
-                <p className="text-text">{error || "User not found"}</p>
-            </div>
-        );
-    }
-    
+  if (!me || state === "idle" || state === "loading") {
     return (
-        <div className="w-full">
-            <div className="container mx-auto px-4 pb-10">
-                {videos.length === 0 ? (
-                    <h1 className="text-2xl font-bold mb-6">No videos.</h1>
-                ) : (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {videos.map((v) => {
-                            return (
-                                <div key={v.id}>
-                                    <ModVideoCard
-                                        video={v}
-                                        user={v.user}
-                                        onDelete={() => handleDeleteVideo(v.id)}
-                                    />
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
-        </div>
+      <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
+        <Spinner className="size-12" />
+      </div>
     );
+  }
+
+  if (state === "error" || !user) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-2xl mb-4">Error</h2>
+        <p className="text-text">{error || "User not found"}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <div className="container mx-auto px-4 pb-10">
+        {videos.length === 0 ? (
+          <h1 className="text-2xl font-bold mb-6">No videos.</h1>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {videos.map((v) => {
+              return (
+                <div key={v.id}>
+                      <ModVideoCard
+                        video={v}
+                        user={v.user}
+                        onDelete={() => handleDeleteVideo(v.id)}
+                        onModerate={handleModerateVideo}
+                        isModerating={moderatingIds.has(v.id)}
+                      />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

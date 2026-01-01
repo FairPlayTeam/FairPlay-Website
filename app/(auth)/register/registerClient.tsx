@@ -84,7 +84,9 @@ export default function RegisterClient() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-background">
       <Card>
-        <h1 className="text-3xl font-semibold text-text mb-4">Create Account</h1>
+        <h1 className="text-3xl font-semibold text-text mb-4">
+          Create Account
+        </h1>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex flex-col gap-1">
@@ -180,7 +182,6 @@ export default function RegisterClient() {
               Login
             </a>
           </p>
-
         </form>
       </Card>
     </div>

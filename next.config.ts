@@ -6,7 +6,7 @@ const isDev = process.env.NODE_ENV === "development";
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
   images: {
-    dangerouslyAllowLocalIP:isDev,
+    dangerouslyAllowLocalIP: isDev,
     remotePatterns: [
       {
         protocol: "https",

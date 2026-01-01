@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import Spinner from "@/components/ui/Spinner";
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/app/video/VideoCard";
 import { FollowButton } from "@/components/ui/FollowButton";
 import Button from "@/components/ui/Button"
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/app/video/VideoCard";
 import { getVideos, type VideoDetails } from "@/lib/video";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
-import DisclaimerPopup from "@/components/layout/DisclaimerPopup";
+import DisclaimerPopup from "@/components/app/layout/DisclaimerPopup";
 import { toast } from "@/components/ui/Toast/toast";
 
 export default function VideosPage() {
@@ -32,7 +32,7 @@ export default function VideosPage() {
         setError(null);
       } catch {
         setError("Unable to load videos. Please try later.");
-        toast.error("Error while fetching videos.")
+        toast.error("Error while fetching videos.");
       } finally {
         setLoading(false);
       }
