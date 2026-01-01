@@ -16,7 +16,7 @@ export default function HeroImage() {
       className={`hero-image flex justify-center items-center py-12 transition-all duration-1000 ${
         animate
           ? "animate-heroImageEntrance"
-          : "opacity-0 translate-y-[70px] scale-90"
+          : "opacity-0 translate-y-17.5 scale-90"
       }`}
     >
       <div className="video-card-container perspective-[1000px]">
@@ -30,8 +30,8 @@ export default function HeroImage() {
             transition-transform duration-300 ease-in-out
           "
         >
-          <div className="video-card relative bg-background rounded-2xl w-[380px] z-1">
-            <div className="video-player-placeholder bg-background h-[220px] w-full rounded-2xl">
+          <div className="video-card relative bg-background rounded-2xl w-95 z-1">
+            <div className="video-player-placeholder bg-background h-55 w-full rounded-2xl">
               <Image
                 src="/images/hero-video-thumbnail.png"
                 alt="Video thumbnail"

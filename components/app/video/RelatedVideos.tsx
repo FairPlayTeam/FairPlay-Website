@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { VideoDetails } from "@/lib/video";
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/app/video/VideoCard";
 
 interface RelatedVideosProps {
   videos: VideoDetails[];

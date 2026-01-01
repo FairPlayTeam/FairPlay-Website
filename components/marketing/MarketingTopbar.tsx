@@ -10,7 +10,7 @@ interface TopbarProps {
   animateOnLoad?: boolean;
 }
 
-export default function Topbar({ animateOnLoad = true }: TopbarProps) {
+export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // make opacity and blur change depending on scroll rate
@@ -41,10 +41,10 @@ export default function Topbar({ animateOnLoad = true }: TopbarProps) {
           ease: [0.43, 0.13, 0.23, 0.96],
         }}
       >
-        <div className="flex items-center justify-between mx-auto max-w-[1400px]">
+        <div className="flex items-center justify-between mx-auto max-w-350">
           <Logo />
           <nav className="hidden md:block">
-            <ul className="flex items-center gap-[30px]">
+            <ul className="flex items-center gap-7.5">
               <li>
                 <TopbarButton href=".#about">About Us</TopbarButton>
               </li>

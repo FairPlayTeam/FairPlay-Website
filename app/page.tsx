@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import Topbar from "@/components/sections/Topbar";
-import HeroSection from "@/components/sections/HeroSection";
-import Section from "@/components/sections/Section";
-import DisclaimerSection from "@/components/sections/DisclaimerSection";
+import MarketingTopbar from "@/components/marketing/MarketingTopbar";
+import HeroSection from "@/components/marketing/HeroSection";
+import Section from "@/components/marketing/Section";
+import DisclaimerSection from "@/components/marketing/DisclaimerSection";
 import Button from "@/components/ui/Button";
-import FeatureGrid from "@/components/sections/FeatureGrid";
-import Footer from "@/components/sections/Footer";
-import MarqueeDonors from "@/components/sections/MarqueeDonators";
-import FadeInSection from "@/components/sections/FadeInSection";
-import ExtensionPreview from "@/components/sections/ExtensionPreview";
+import FeatureGrid from "@/components/marketing/FeatureGrid";
+import MarketingFooter from "@/components/marketing/MarketingFooter";
+import MarqueeDonors from "@/components/marketing/MarqueeDonators";
+import FadeInSection from "@/components/marketing/FadeInSection";
+import ExtensionPreview from "@/components/marketing/ExtensionPreview";
 import { PiGithubLogo, PiCodeLight, PiBookOpenTextLight } from "react-icons/pi";
 
 export default function HomePage() {
@@ -38,7 +38,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Topbar />
+      <MarketingTopbar />
 
       <main className="background-gradient mx-auto max-w-350 px-5 md:px-17.5">
         <HeroSection />
@@ -134,7 +134,11 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section id="development" variant="secondary" className="mt-10 md:mt-25">
+          <Section
+            id="development"
+            variant="secondary"
+            className="mt-10 md:mt-25"
+          >
             <h2 className="text-[33px] mb-6.25 font-bold">
               FairPlay: An open and evolving project
             </h2>
@@ -238,7 +242,7 @@ export default function HomePage() {
           </Section>
         </FadeInSection>
       </main>
-      <Footer variant="primary" />
+      <MarketingFooter variant="primary" />
     </>
   );
 }

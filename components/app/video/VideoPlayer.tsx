@@ -120,27 +120,41 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }, 3000);
   }, [isPlaying]);
 
+  const handleMouseLeave = useCallback(() => {
+    setShowControls(false);
+  }, []);
+
   useEffect(() => {
     const container = containerRef.current;
 
     if (container) {
       container.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("mouseleave", () => setShowControls(false));
+      container.addEventListener("mouseleave", handleMouseLeave);
     }
 
     return () => {
       if (container) {
         container.removeEventListener("mousemove", handleMouseMove);
-        container.removeEventListener("mouseleave", () =>
-          setShowControls(false)
-        );
+        container.removeEventListener("mouseleave", handleMouseLeave);
       }
 
       if (controlsTimeoutRef.current) {
         clearTimeout(controlsTimeoutRef.current);
       }
     };
-  }, [handleMouseMove]);
+  }, [handleMouseLeave, handleMouseMove]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
@@ -165,7 +179,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const handleVolumeChange = useCallback(
     (volume: number) => {
       if (volume === 0) {
-        toggleMute();
+        setVolume(0);
         if (videoRef.current) {
           videoRef.current.muted = true;
         }
@@ -294,7 +308,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
       <div
         className={cn(
-          "absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300",
+          "absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300",
           showControls ? "opacity-100" : "opacity-0"
         )}
       >

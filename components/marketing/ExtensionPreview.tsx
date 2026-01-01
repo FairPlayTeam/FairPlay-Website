@@ -56,12 +56,12 @@ export default function ExtensionPreview() {
         <div className="space-y-2">
           <div className="flex items-center justify-between rounded-md border border-(--gray-700) bg-(--gray-850) px-3 py-2 text-sm">
             <span className="text-text">x.com</span>
-            <span className="cursor-default text-text-amount">×</span>
+            <span className="cursor-default text-text-amount">x</span>
           </div>
 
           <div className="flex items-center justify-between rounded-md border border-(--gray-700) bg-(--gray-850) px-3 py-2 text-sm">
             <span className="text-text">twitter.com</span>
-            <span className="cursor-default text-text-amount">×</span>
+            <span className="cursor-default text-text-amount">x</span>
           </div>
 
           <input
@@ -79,16 +79,13 @@ export default function ExtensionPreview() {
         className="cursor-pointer mt-5 w-full rounded-md bg-accent-dark 
                    py-3 text-sm font-semibold text-white 
                    transition-transform duration-150 
-                   hover:-translate-y-[1px] hover:shadow-lg"
+                   hover:-translate-y-px hover:shadow-lg"
       >
         Add
       </button>
 
       <p className="mt-4 text-center text-xs text-text-amount">
-        by{" "}
-        <span className="font-medium text-accent">
-          fairplay.video
-        </span>
+        by <span className="font-medium text-accent">fairplay.video</span>
       </p>
     </div>
   );

@@ -6,7 +6,6 @@ type Donor = {
   amount: string;
 };
 
-/* TODO: fetch data directly from ko-fi API */
 const DONORS: Donor[] = [
   { name: "Spectra", amount: "25€" },
   { name: "Shuu", amount: "52€" },

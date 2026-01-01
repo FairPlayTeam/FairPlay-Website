@@ -4,17 +4,21 @@ import React, { createContext, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "@/types/schema";
 import { api } from "@/lib/api";
-import { getToken } from "@/lib/token";
+import { useAuthStore } from "@/lib/stores/auth";
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isReady: boolean;
   refetchUser: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+
   const {
     data: user,
     isLoading,
@@ -24,13 +28,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryFn: () =>
       api.get("/auth/me", { withCredentials: true }).then((res) => res.data),
     refetchOnWindowFocus: false,
-    enabled: !!getToken(),
+    enabled: hasHydrated && !!token,
     retry: false,
   });
 
+  const isReady = hasHydrated && !isLoading;
+
   return (
     <AuthContext.Provider
-      value={{ user: user ?? null, isLoading, refetchUser: refetch }}
+      value={{
+        user: user ?? null,
+        isLoading: !hasHydrated || isLoading,
+        isReady,
+        refetchUser: refetch,
+      }}
     >
       {children}
     </AuthContext.Provider>

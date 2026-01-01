@@ -10,7 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "donateSecondary"
     | "download"
     | "ghost"
-    | "links"
+    | "links";
   size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
 }
 
@@ -70,11 +70,7 @@ const variantConfig = {
     ],
   },
   links: {
-    classes: [
-      "text-text-bold",
-      "rounded-lg",
-      "px-4 py-2",
-    ],
+    classes: ["text-text-bold", "rounded-lg", "px-4 py-2"],
   },
 } as const;
 
@@ -97,7 +93,6 @@ export default function Button({
   onClick,
   ...props
 }: ButtonProps) {
-  
   const config = variantConfig[variant] || variantConfig.download;
   const sizeClasses = sizeConfig[size];
 

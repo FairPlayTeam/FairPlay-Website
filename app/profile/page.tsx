@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
-import Tabs from "@/components/ui/Tabs";
-import ChannelTab from "@/components/profile/ChannelTab";
-import VideosTab from "@/components/profile/VideosTab";
-import AccountTab from "@/components/profile/AccountTab";
+import Tabs from "@/components/ui/Tabs"
+import ChannelTab from "@/components/app/profile/ChannelTab";
+import VideosTab from "@/components/app/profile/VideosTab";
+import AccountTab from "@/components/app/profile/AccountTab";
 import { useAuth } from "@/context/AuthContext";
 
 export default function ProfilePage() {

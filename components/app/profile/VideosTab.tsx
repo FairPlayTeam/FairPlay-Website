@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
-import { toast } from "@/components/ui/Toast/toast";
-import { MyVideoCard } from "@/components/video/MyVideoCard";
+import { toast } from "@/components/ui/Toast/toast-utils";
+import { MyVideoCard } from "@/components/app/video/MyVideoCard";
 import { MyVideoItem, getMyVideos } from "@/lib/users";
 import { deleteVideo } from "@/lib/video";
 import { User } from "@/types/schema";

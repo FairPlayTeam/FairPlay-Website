@@ -7,11 +7,11 @@ interface FooterProps {
   variant?: "primary" | "secondary";
 }
 
-export default function Footer({ variant = "primary" }: FooterProps) {
+export default function MarketingFooter({ variant = "primary" }: FooterProps) {
   return (
     <footer className="bg-container border-t border-border text-text text-[15px] px-6 sm:px-10 py-10 text-center">
       {variant === "primary" && (
-        <section className="text-text-footer text-[0.95rem] leading-relaxed max-w-[1000px] mx-auto mb-10 px-2 sm:px-0">
+        <section className="text-text-footer text-[0.95rem] leading-relaxed max-w-250 mx-auto mb-10 px-2 sm:px-0">
           <p className="mb-5">
             Looking for a{" "}
             <strong className="text-text-bold">
@@ -49,7 +49,7 @@ export default function Footer({ variant = "primary" }: FooterProps) {
         </section>
       )}
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-[1400px] mx-auto mb-8 text-center md:text-left">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-350 mx-auto mb-8 text-center md:text-left">
         <div className="text-2xl font-bold font-heading text-text">
           FairPlay
         </div>

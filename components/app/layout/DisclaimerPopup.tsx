@@ -9,7 +9,10 @@ interface DisclaimerPopupProps {
   onClose: () => void;
 }
 
-export default function DisclaimerPopup({ isOpen, onClose }: DisclaimerPopupProps) {
+export default function DisclaimerPopup({
+  isOpen,
+  onClose,
+}: DisclaimerPopupProps) {
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       const popup = document.querySelector(".disclaimer-popup");
@@ -56,8 +59,8 @@ export default function DisclaimerPopup({ isOpen, onClose }: DisclaimerPopupProp
             variant="primary"
             size="lg"
             onClick={() => {
-                window.location.href = "https://fairplay.video/explore";
-                onClose();
+              window.location.href = "https://fairplay.video/explore";
+              onClose();
             }}
             className="flex items-center justify-center gap-3"
           >
@@ -68,8 +71,8 @@ export default function DisclaimerPopup({ isOpen, onClose }: DisclaimerPopupProp
             variant="ghost"
             size="lg"
             onClick={() => {
-                window.location.href = "https://lab.fairplay.video";
-                onClose();
+              window.location.href = "https://lab.fairplay.video";
+              onClose();
             }}
             className="flex items-center justify-center gap-3"
           >

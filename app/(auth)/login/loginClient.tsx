@@ -123,7 +123,6 @@ export default function LoginClient() {
               Register
             </a>
           </p>
-
         </form>
       </Card>
     </div>

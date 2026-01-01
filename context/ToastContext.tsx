@@ -1,9 +1,16 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import Toast from "@/components/ui/Toast/Toast";
 import { ToastType } from "@/types/schema";
-import { registerToast } from "@/components/ui/Toast/toast";
+import { registerToast } from "@/components/ui/Toast/toast-utils";
 
 interface ToastData {
   id: number;
@@ -22,12 +29,15 @@ let toastId = 0;
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
-  const show = (message: string, type: ToastType = "info") => {
+  const show = useCallback((message: string, type: ToastType = "info") => {
     const id = ++toastId;
     setToasts((prev) => [...prev, { id, message, type }]);
-  };
+  }, []);
 
-  registerToast(show);
+  useEffect(() => {
+    registerToast(show);
+    return () => registerToast(null);
+  }, [show]);
 
   const remove = (id: number) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
