@@ -52,6 +52,21 @@ export async function getVideo(id: string) {
   return api.get<VideoDetails>(`/videos/${encodeURIComponent(id)}`);
 }
 
+export async function getVideoServer(id: string, init?: RequestInit) {
+  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!apiBase) {
+    throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
+  }
+  const res = await fetch(
+    `${apiBase}/videos/${encodeURIComponent(id)}`,
+    init
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch video details");
+  }
+  return { data: (await res.json()) as VideoDetails };
+}
+
 export async function getVideos() {
   return api.get<{ videos: VideoDetails[] }>(`/videos`);
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getVideo, VideoDetails } from "@/lib/video";
+import { getVideoServer, VideoDetails } from "@/lib/video";
 import VideoPageClient from "./video-page-client";
 
 type PageProps = {
@@ -11,7 +11,7 @@ const FALLBACK_DESCRIPTION = "Watch on FairPlay.";
 
 async function fetchVideo(id: string): Promise<VideoDetails | null> {
   try {
-    const { data } = await getVideo(id);
+    const { data } = await getVideoServer(id, { next: { revalidate: 60 } });
     return data;
   } catch {
     return null;
