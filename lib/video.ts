@@ -38,6 +38,17 @@ export type SearchVideosResponse = {
   query: { q: string };
 };
 
+export type VideosResponse = {
+  videos: VideoDetails[];
+  pagination?: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
+};
+
 export async function searchVideos(query: string, page = 1, limit = 20) {
   const qs = new URLSearchParams({
     q: query,
@@ -67,8 +78,12 @@ export async function getVideoServer(id: string, init?: RequestInit) {
   return { data: (await res.json()) as VideoDetails };
 }
 
-export async function getVideos() {
-  return api.get<{ videos: VideoDetails[] }>(`/videos`);
+export async function getVideos(page = 1, limit = 20) {
+  const qs = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  }).toString();
+  return api.get<VideosResponse>(`/videos?${qs}`);
 }
 
 export type CommentItem = {

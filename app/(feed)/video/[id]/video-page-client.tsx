@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   getVideo,
   getVideos,
@@ -20,16 +20,23 @@ type VideoPageClientProps = {
 };
 
 export default function VideoPageClient({ videoId }: VideoPageClientProps) {
+  const relatedPageSize = 10;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [video, setVideo] = useState<VideoDetails | null>(null);
 
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [relatedVideos, setRelatedVideos] = useState<VideoDetails[]>([]);
+  const [relatedPage, setRelatedPage] = useState(1);
+  const [relatedHasMore, setRelatedHasMore] = useState(true);
+  const [relatedLoadingMore, setRelatedLoadingMore] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+  const relatedSeqRef = useRef(0);
 
   useEffect(() => {
     if (!videoId) return;
+
+    const seq = ++relatedSeqRef.current;
 
     const fetchData = async () => {
       setIsLoading(true);
@@ -37,23 +44,66 @@ export default function VideoPageClient({ videoId }: VideoPageClientProps) {
       try {
         const [videoRes, relatedRes, commentsRes] = await Promise.all([
           getVideo(videoId),
-          getVideos(),
+          getVideos(1, relatedPageSize),
           getVideoComments(videoId),
         ]);
 
+        if (relatedSeqRef.current !== seq) return;
+
         setVideo(videoRes.data);
-        setRelatedVideos(relatedRes.data.videos);
+        const initialRelated = relatedRes.data.videos ?? [];
+        const totalPages = relatedRes.data.pagination?.totalPages;
+        setRelatedVideos(initialRelated);
+        setRelatedPage(1);
+        setRelatedHasMore(
+          typeof totalPages === "number"
+            ? 1 < totalPages
+            : initialRelated.length === relatedPageSize
+        );
         setComments(commentsRes.data.comments);
       } catch {
+        if (relatedSeqRef.current !== seq) return;
         toast.error("Failed to load video. Please try again later.");
         setError("Failed to load video. Please try again later.");
+        setRelatedHasMore(false);
       } finally {
+        if (relatedSeqRef.current !== seq) return;
         setIsLoading(false);
       }
     };
 
     fetchData();
   }, [videoId]);
+
+  const loadMoreRelated = useCallback(async () => {
+    if (relatedLoadingMore || !relatedHasMore) return;
+
+    setRelatedLoadingMore(true);
+    const seq = relatedSeqRef.current;
+    const nextPage = relatedPage + 1;
+
+    try {
+      const relatedRes = await getVideos(nextPage, relatedPageSize);
+      if (relatedSeqRef.current !== seq) return;
+
+      const nextRelated = relatedRes.data.videos ?? [];
+      const totalPages = relatedRes.data.pagination?.totalPages;
+
+      setRelatedVideos((prev) => [...prev, ...nextRelated]);
+      setRelatedPage(nextPage);
+      setRelatedHasMore(
+        typeof totalPages === "number"
+          ? nextPage < totalPages
+          : nextRelated.length === relatedPageSize
+      );
+    } catch {
+      if (relatedSeqRef.current !== seq) return;
+      setRelatedHasMore(false);
+    } finally {
+      if (relatedSeqRef.current !== seq) return;
+      setRelatedLoadingMore(false);
+    }
+  }, [relatedHasMore, relatedLoadingMore, relatedPage, relatedPageSize]);
 
   if (isLoading) {
     return (
@@ -85,7 +135,13 @@ export default function VideoPageClient({ videoId }: VideoPageClientProps) {
         </div>
       </div>
       <div className="lg:col-span-1">
-        <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
+        <RelatedVideos
+          videos={relatedVideos}
+          currentVideoId={video.id}
+          hasMore={relatedHasMore}
+          isLoadingMore={relatedLoadingMore}
+          onLoadMore={loadMoreRelated}
+        />
       </div>
     </div>
   );
