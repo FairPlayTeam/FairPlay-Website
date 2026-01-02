@@ -29,7 +29,7 @@ export function VideoCard({
   overlayCenter,
   overlayTopLeft,
   overlayTopRight,
-  overlayBottomLeft
+  overlayBottomLeft,
 }: VideoCardProps) {
   const isGrid = variant === "grid";
   const isLarge = variant === "listLarge";
@@ -60,21 +60,15 @@ export function VideoCard({
       >
         <div className="w-full aspect-video rounded-xl overflow-hidden relative">
           {overlayCenter && (
-            <div className="absolute inset-0 z-10 h-full">
-              {overlayCenter}
-            </div>
+            <div className="absolute inset-0 z-10 h-full">{overlayCenter}</div>
           )}
 
           {overlayTopRight && (
-            <div className="absolute top-1 right-1 z-20">
-              {overlayTopRight}
-            </div>
+            <div className="absolute top-1 right-1 z-20">{overlayTopRight}</div>
           )}
 
           {overlayTopLeft && (
-            <div className="absolute top-1 left-1 z-20">
-              {overlayTopLeft}
-            </div>
+            <div className="absolute top-1 left-1 z-20">{overlayTopLeft}</div>
           )}
 
           {overlayBottomLeft && (
@@ -102,7 +96,9 @@ export function VideoCard({
               {displayName}
             </p>
           )}
-          {meta && <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>}
+          {meta && (
+            <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
+          )}
         </div>
       </div>
     );
@@ -136,9 +132,13 @@ export function VideoCard({
         <div className="flex flex-col gap-2 sm:gap-1 flex-1 justify-top p-3 sm:py-2">
           <h3 className="font-semibold text-xl line-clamp-2">{title}</h3>
           {displayName && (
-            <p className="text-sm text-(--gray-200) line-clamp-1">{displayName}</p>
+            <p className="text-sm text-(--gray-200) line-clamp-1">
+              {displayName}
+            </p>
           )}
-          {meta && <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>}
+          {meta && (
+            <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
+          )}
         </div>
       </div>
     );
@@ -169,12 +169,15 @@ export function VideoCard({
       </div>
 
       <div className="flex flex-col justify-center gap-2 sm:gap-1 flex-1 sm:p-0 p-3">
-        
         <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
         {displayName && (
-          <p className="text-sm text-(--gray-200) line-clamp-1">{displayName}</p>
+          <p className="text-sm text-(--gray-200) line-clamp-1">
+            {displayName}
+          </p>
         )}
-        {meta && <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>}
+        {meta && (
+          <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
+        )}
       </div>
     </div>
   );

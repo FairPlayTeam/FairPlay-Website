@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Topbar from "@/components/sections/Topbar";
-import Footer from "@/components/sections/Footer";
-import DocsSection from "@/components/docs/DocsSection";
-import DocsSidebar from "@/components/docs/DocsSidebar";
+import MarketingTopbar from "@/components/marketing/MarketingTopbar";
+import MarketingFooter from "@/components/marketing/MarketingFooter";
+import DocsSection from "@/components/marketing/docs/DocsSection";
+import DocsSidebar from "@/components/marketing/docs/DocsSidebar";
 import Link from "@/components/ui/Link";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -256,7 +256,7 @@ npm run dev`}
 
   return (
     <>
-      <Topbar animateOnLoad={false} />
+      <MarketingTopbar animateOnLoad={false} />
 
       <main className="background-gradient min-h-screen text-text px-6 py-20 scroll-smooth">
         <section className="text-center mb-16">
@@ -285,7 +285,7 @@ npm run dev`}
         </div>
       </main>
 
-      <Footer variant="secondary" />
+      <MarketingFooter variant="secondary" />
     </>
   );
 }

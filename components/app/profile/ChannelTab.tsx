@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useImagesUpload } from "@/hooks/useImagesUpload";
 import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "@/components/ui/Toast/toast";
+import { toast } from "@/components/ui/Toast/toast-utils";
 import UserAvatar from "@/components/ui/UserAvatar";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
@@ -21,9 +21,17 @@ interface ChannelTabProps {
 }
 
 const channelFormSchema = z.object({
-  username: z.string("Username is required").min(3, "Username is too short"),
-  displayName: z.optional(z.string().min(3, "Display name is too short")),
-  bio: z.string("Bio is required").min(3, "Bio is too short"),
+  username: z
+    .string({ required_error: "Username is required" })
+    .min(3, "Username is too short"),
+  displayName: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.string().min(3, "Display name is too short").optional()
+  ),
+  bio: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.string().min(3, "Bio is too short").optional()
+  ),
 });
 
 type ChannelFormValues = z.infer<typeof channelFormSchema>;

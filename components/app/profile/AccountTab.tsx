@@ -4,7 +4,7 @@ import Bowser from "bowser";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { FaDesktop, FaMobileAlt, FaTrash } from "react-icons/fa";
-import { toast } from "@/components/ui/Toast/toast";
+import { toast } from "@/components/ui/Toast/toast-utils";
 import Spinner from "@/components/ui/Spinner";
 import Card from "@/components/ui/Card";
 import { User } from "@/types/schema";
@@ -27,9 +27,7 @@ export default function AccountTab({ user }: AccountTabProps) {
     try {
       const res = await getSessions();
       setSessions(res.data.sessions);
-      console.log(res);
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to load sessions");
     } finally {
       setIsLoading(false);
@@ -43,8 +41,7 @@ export default function AccountTab({ user }: AccountTabProps) {
       await revokeSession(sessionId);
       setSessions((prev) => prev.filter((s) => s.id !== sessionId));
       toast.success("Session revoked");
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to revoke session");
     }
   };

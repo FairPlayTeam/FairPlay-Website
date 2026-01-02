@@ -56,7 +56,7 @@ html {
 
 body {
   background-color: var(--color-background);
-  color: var(--color-white);
+  color: var(--color-text);
   font-family: var(--font-body);
   line-height: 1.6;
   height: 100%;
@@ -79,7 +79,7 @@ body {
 h1,
 h2,
 h3 {
-  color: var(--color-white);
+  color: var(--color-text);
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;

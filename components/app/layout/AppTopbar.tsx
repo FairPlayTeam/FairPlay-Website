@@ -42,10 +42,10 @@ function SearchBar({
   );
 }
 
-export default function Topbar() {
+export default function AppTopbar() {
   const router = useRouter();
   const { toggle } = useSidebar();
-  const { user } = useAuth();
+  const { user, isReady } = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -110,7 +110,7 @@ export default function Topbar() {
             />
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-2 sm:gap-5">
             <Button
               size="icon"
               variant="ghost"
@@ -119,17 +119,6 @@ export default function Topbar() {
             >
               <FaSearch />
             </Button>
-
-            {!user && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => router.push("/login")}
-                className="bg-container-dark"
-              >
-                Login
-              </Button>
-            )}
 
             <Button
               size="sm"
@@ -142,16 +131,29 @@ export default function Topbar() {
               Donate
             </Button>
 
-            {!!user && (
-              <Button
-                size="icon"
-                variant="ghost"
-                className="text-text rounded-full p-0"
-                onClick={() => router.push(`/profile`)}
-              >
-                <UserAvatar user={user} size={36} />
-              </Button>
-            )}
+            <div className="flex items-center justify-end">
+              {isReady && !!user && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="text-text rounded-full p-0"
+                  onClick={() => router.push(`/profile`)}
+                >
+                  <UserAvatar user={user} size={36} />
+                </Button>
+              )}
+
+              {isReady && !user && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => router.push("/login")}
+                  className="bg-container-dark"
+                >
+                  Login
+                </Button>
+              )}
+            </div>
           </div>
         </>
       )}

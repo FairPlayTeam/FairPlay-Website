@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import VideoDescription from "@/components/video/VideoDescription";
+import VideoDescription from "@/components/app/video/VideoDescription";
 import Button from "@/components/ui/Button";
 import { FollowButton } from "@/components/ui/FollowButton";
 import { getUser, PublicUser } from "@/lib/users";
@@ -93,15 +93,10 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
             {!user ? (
               <Link
                 href={`/login?callbackUrl=${encodeURIComponent(
-                  typeof window !== "undefined"
-                    ? window.location.pathname
-                    : "/"
+                  typeof window !== "undefined" ? window.location.pathname : "/"
                 )}`}
               >
-                <Button
-                  variant="videoDetails"
-                  className="rounded-full px-6"
-                >
+                <Button variant="videoDetails" className="rounded-full px-6">
                   Login to Subscribe
                 </Button>
               </Link>
@@ -116,11 +111,10 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-text">
           <div className="hidden lg:block">
-            <span className="font-medium">
-              {avgRating.toFixed(1)}/5
-            </span>
+            <span className="font-medium">{avgRating.toFixed(1)}/5</span>
             <span className="text-muted-foreground">
-              {" "}• {ratingsCount} reviews
+              {" "}
+              • {ratingsCount} reviews
             </span>
           </div>
 

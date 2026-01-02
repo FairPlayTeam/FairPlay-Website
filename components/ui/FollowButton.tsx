@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react';
-import { followUser, unfollowUser } from '@/lib/users';
+import { useState, useEffect } from "react";
+import { followUser, unfollowUser } from "@/lib/users";
 import { cn } from "@/lib/utils";
 
 type FollowButtonProps = {
   username: string;
   initialFollowing?: boolean;
   onChangeCount?: (delta: number) => void;
-}
+};
 
-export function FollowButton({ 
-  username, 
-  initialFollowing = false, 
-  onChangeCount 
+export function FollowButton({
+  username,
+  initialFollowing = false,
+  onChangeCount,
 }: FollowButtonProps) {
   const [following, setFollowing] = useState(false);
   const [acting, setActing] = useState(false);
@@ -25,7 +25,7 @@ export function FollowButton({
   async function onClick() {
     if (acting) return;
     setActing(true);
-    
+
     const next = !following;
     setFollowing(next);
     onChangeCount?.(next ? 1 : -1);
@@ -36,9 +36,7 @@ export function FollowButton({
       } else {
         await unfollowUser(username);
       }
-    } catch (err) {
-      const error = err as { response?: { status: number } };
-      console.log(error);
+    } catch {
       setFollowing(!next);
       onChangeCount?.(next ? -1 : 1);
     } finally {
@@ -58,10 +56,9 @@ export function FollowButton({
         following ? "bg-(--gray-500)" : "bg-white"
       )}
     >
-      <span className={cn(
-        following ? "text-text" : "text-black",
-        "font-semibold"
-      )}>
+      <span
+        className={cn(following ? "text-text" : "text-black", "font-semibold")}
+      >
         {following ? "Following" : "Follow"}
       </span>
     </button>
