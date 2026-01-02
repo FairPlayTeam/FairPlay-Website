@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { VideoDetails } from "@/lib/video";
+import { getVideo, VideoDetails } from "@/lib/video";
 import VideoPageClient from "./video-page-client";
 
 type PageProps = {
@@ -10,16 +10,9 @@ const FALLBACK_TITLE = "FairPlay";
 const FALLBACK_DESCRIPTION = "Watch on FairPlay.";
 
 async function fetchVideo(id: string): Promise<VideoDetails | null> {
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (!apiBase) return null;
-
   try {
-    const res = await fetch(
-      `${apiBase}/videos/${encodeURIComponent(id)}`,
-      { next: { revalidate: 60 } }
-    );
-    if (!res.ok) return null;
-    return (await res.json()) as VideoDetails;
+    const { data } = await getVideo(id);
+    return data;
   } catch {
     return null;
   }
