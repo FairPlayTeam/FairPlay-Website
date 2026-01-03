@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { VideoCard } from "@/components/app/video/VideoCard";
 import { getVideos, type VideoDetails } from "@/lib/video";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import DisclaimerPopup from "@/components/app/layout/DisclaimerPopup";
 import { toast } from "@/components/ui/Toast/toast-utils";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function VideosPage() {
+  const pageSize = 10;
   const router = useRouter();
   const [videos, setVideos] = useState<VideoDetails[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [isLoadingMore, setLoadingMore] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -23,23 +28,67 @@ export default function VideosPage() {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        setLoading(true);
-        const { data } = await getVideos();
-        setVideos(data.videos);
-        setError(null);
-      } catch {
-        setError("Unable to load videos. Please try later.");
-        toast.error("Error while fetching videos.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const resolveHasMore = (
+    itemsCount: number,
+    pageToLoad: number,
+    totalPages?: number
+  ) => {
+    if (typeof totalPages === "number") {
+      return pageToLoad < totalPages;
+    }
+    return itemsCount === pageSize;
+  };
 
-    fetchVideos();
-  }, []);
+  const fetchVideos = useCallback(
+    async (pageToLoad: number, mode: "initial" | "more") => {
+      try {
+        if (mode === "initial") {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+
+        const { data } = await getVideos(pageToLoad, pageSize);
+        const nextVideos = data.videos ?? [];
+        const totalPages = data.pagination?.totalPages;
+
+        setVideos((prev) =>
+          pageToLoad === 1 ? nextVideos : [...prev, ...nextVideos]
+        );
+        setError(null);
+        setPage(pageToLoad);
+        setHasMore(resolveHasMore(nextVideos.length, pageToLoad, totalPages));
+      } catch {
+        if (mode === "initial") {
+          setError("Unable to load videos. Please try later.");
+        }
+        toast.error("Error while fetching videos.");
+        setHasMore(false);
+      } finally {
+        if (mode === "initial") {
+          setLoading(false);
+        } else {
+          setLoadingMore(false);
+        }
+      }
+    },
+    [pageSize]
+  );
+
+  useEffect(() => {
+    fetchVideos(1, "initial");
+  }, [fetchVideos]);
+
+  const loadMore = useCallback(() => {
+    if (isLoading || isLoadingMore || !hasMore) return;
+    fetchVideos(page + 1, "more");
+  }, [fetchVideos, hasMore, isLoading, isLoadingMore, page]);
+
+  const sentinelRef = useInfiniteScroll({
+    hasMore,
+    isLoading: isLoading || isLoadingMore,
+    onLoadMore: loadMore,
+  });
 
   if (isLoading) {
     return (
@@ -79,6 +128,12 @@ export default function VideosPage() {
             />
           ))}
         </div>
+        <div ref={sentinelRef} className="h-1" />
+        {isLoadingMore ? (
+          <div className="w-full grid place-items-center py-6">
+            <Spinner className="size-8" />
+          </div>
+        ) : null}
       </div>
       <DisclaimerPopup
         isOpen={isPopupOpen}

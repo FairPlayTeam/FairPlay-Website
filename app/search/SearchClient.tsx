@@ -1,35 +1,69 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { searchVideos, VideoDetails } from "@/lib/video";
 import { VideoCard } from "@/components/app/video/VideoCard";
 import Spinner from "@/components/ui/Spinner";
 import { toast } from "@/components/ui/Toast/toast-utils";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function SearchClient() {
+  const pageSize = 10;
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [results, setResults] = useState<VideoDetails[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const queryRef = useRef(query);
 
   useEffect(() => {
-    if (!query.trim()) return;
+    queryRef.current = query;
+  }, [query]);
 
-    const fetchResults = async () => {
-      setLoading(true);
-      setError(null);
+  const resolveHasMore = (
+    itemsCount: number,
+    pageToLoad: number,
+    totalPages?: number
+  ) => {
+    if (typeof totalPages === "number") {
+      return pageToLoad < totalPages && itemsCount > 0;
+    }
+    return itemsCount === pageSize;
+  };
+
+  const fetchResults = useCallback(
+    async (pageToLoad: number, mode: "initial" | "more") => {
+      if (!query.trim()) return;
+
       try {
-        const res = await searchVideos(query, 1, 20);
-        if (!res.data.videos) {
-          setResults([]);
-          setError("No results found.");
+        if (mode === "initial") {
+          setLoading(true);
         } else {
-          setResults(res.data.videos);
+          setLoadingMore(true);
         }
+        setError(null);
+
+        const res = await searchVideos(query, pageToLoad, pageSize);
+        if (queryRef.current !== query) return;
+
+        const nextResults = res.data.videos ?? [];
+        const totalPages = res.data.pagination?.totalPages;
+        const noResults = pageToLoad === 1 && nextResults.length === 0;
+
+        setResults((prev) =>
+          pageToLoad === 1 ? nextResults : [...prev, ...nextResults]
+        );
+        setPage(pageToLoad);
+        setHasMore(resolveHasMore(nextResults.length, pageToLoad, totalPages));
+        setError(noResults ? "No results found." : null);
       } catch (err: unknown) {
+        if (queryRef.current !== query) return;
+
         toast.error("Error while searching.");
         const errorMessage =
           err instanceof Error ? err.message : "Error while searching.";
@@ -38,13 +72,41 @@ export default function SearchClient() {
             ?.error || errorMessage
         );
         setResults([]);
+        setHasMore(false);
       } finally {
-        setLoading(false);
+        if (queryRef.current !== query) return;
+        if (mode === "initial") {
+          setLoading(false);
+        } else {
+          setLoadingMore(false);
+        }
       }
-    };
+    },
+    [pageSize, query]
+  );
 
-    fetchResults();
-  }, [query]);
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      setError(null);
+      setHasMore(false);
+      setPage(1);
+      return;
+    }
+
+    fetchResults(1, "initial");
+  }, [fetchResults, query]);
+
+  const loadMore = useCallback(() => {
+    if (loading || loadingMore || !hasMore) return;
+    fetchResults(page + 1, "more");
+  }, [fetchResults, hasMore, loading, loadingMore, page]);
+
+  const sentinelRef = useInfiniteScroll({
+    hasMore,
+    isLoading: loading || loadingMore,
+    onLoadMore: loadMore,
+  });
 
   if (loading) {
     return (
@@ -77,6 +139,12 @@ export default function SearchClient() {
           />
         ))}
       </ul>
+      <div ref={sentinelRef} className="h-1" />
+      {loadingMore ? (
+        <div className="w-full grid place-items-center py-6">
+          <Spinner className="size-8" />
+        </div>
+      ) : null}
     </div>
   );
 }

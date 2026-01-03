@@ -1,24 +1,15 @@
 import type { NextConfig } from "next";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const apiUrl = apiBaseUrl ? `${apiBaseUrl}/assets/**` : null;
 const isDev = process.env.NODE_ENV === "development";
-const remotePatterns: NextConfig["images"]["remotePatterns"] = [
-  {
-    protocol: "https",
-    hostname: "assets.fairplay.video",
-    pathname: "/users/**",
-  },
-  {
-    protocol: "https",
-    hostname: "assets.fairplay.video",
-    pathname: "/videos/**",
-  },
-];
+const remoteImageDomains = ["assets.fairplay.video"];
 
-if (apiUrl) {
+if (apiBaseUrl) {
   try {
-    remotePatterns.push(new URL(apiUrl));
+    const { hostname } = new URL(apiBaseUrl);
+    if (hostname && !remoteImageDomains.includes(hostname)) {
+      remoteImageDomains.push(hostname);
+    }
   } catch {
     // Ignore invalid env values to avoid crashing the config at build time.
   }
@@ -28,7 +19,7 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
   images: {
     dangerouslyAllowLocalIP: isDev,
-    remotePatterns,
+    domains: remoteImageDomains,
   },
 };
 

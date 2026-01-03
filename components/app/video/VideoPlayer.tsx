@@ -12,6 +12,8 @@ import {
   FaExpand,
   FaCompress,
   FaVolumeDown,
+  FaBackward,
+  FaForward,
 } from "react-icons/fa";
 import { FaArrowRotateRight } from "react-icons/fa6";
 import Spinner from "@/components/ui/Spinner";
@@ -19,13 +21,14 @@ import Button from "@/components/ui/Button";
 import Slider from "@/components/ui/Slider";
 import { getToken } from "@/lib/token";
 import { formatTime } from "@/lib/time";
-import { cn } from "@/lib/utils";
 import { usePreferenceStore } from "@/lib/stores/preference";
 
 interface VideoPlayerProps {
   url: string;
   thumbnailUrl: string | null;
 }
+
+const FPS = 30;
 
 export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -40,16 +43,19 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isBuffering, setIsBuffering] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [showControls, setShowControls] = useState(true);
+
+  const [seekDelta, setSeekDelta] = useState<number>(0);
 
   const [animation, setAnimation] = useState<
     "play" | "pause" | "mute" | "unmute" | null
   >(null);
 
-  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isPlayingRef = useRef(isPlaying);
+
+  const clamp = (value: number) => Math.max(0, Math.min(value, duration));
 
   useEffect(() => {
     isPlayingRef.current = isPlaying;
@@ -106,56 +112,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }
   }, [url]);
 
-  const handleMouseMove = useCallback(() => {
-    setShowControls(true);
-
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
-    }
-
-    controlsTimeoutRef.current = setTimeout(() => {
-      if (isPlaying) {
-        setShowControls(false);
-      }
-    }, 3000);
-  }, [isPlaying]);
-
-  const handleMouseLeave = useCallback(() => {
-    setShowControls(false);
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-
-    if (container) {
-      container.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("mouseleave", handleMouseLeave);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("mousemove", handleMouseMove);
-        container.removeEventListener("mouseleave", handleMouseLeave);
-      }
-
-      if (controlsTimeoutRef.current) {
-        clearTimeout(controlsTimeoutRef.current);
-      }
-    };
-  }, [handleMouseLeave, handleMouseMove]);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
-
   const handleTimeUpdate = () => {
     if (videoRef.current) {
       setCurrentTime(videoRef.current.currentTime);
@@ -169,11 +125,20 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }
   };
 
-  const handleSeek = (val: number) => {
+  const handleJump = (value: number) => {
     if (videoRef.current) {
-      videoRef.current.currentTime = val;
-      setCurrentTime(val);
+      videoRef.current.currentTime = clamp(value);
+      setCurrentTime(videoRef.current.currentTime);
     }
+  };
+
+  const handleSeek = (delta: number) => {
+    if (videoRef.current) {
+      handleJump(videoRef.current.currentTime + delta);
+      setSeekDelta((prev) => prev + delta);
+    }
+
+    setTimeout(() => setSeekDelta(0), 1000);
   };
 
   const handleVolumeChange = useCallback(
@@ -233,6 +198,20 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     }
   }, []);
 
+  const jumpToFrame = (delta: number) => {
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+    video.pause();
+
+    const frameDuration = delta / FPS;
+
+    const newTime = clamp(video.currentTime + frameDuration);
+
+    video.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
   useHotkeys(
     ["space", "k"],
     () => {
@@ -245,29 +224,25 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   useHotkeys("f", toggleFullscreen);
   useHotkeys("m", handleToggleMute);
 
-  useHotkeys("arrowleft", () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = Math.max(
-        0,
-        videoRef.current.currentTime - 5
-      );
-    }
-  });
+  useHotkeys("arrowleft", () => handleSeek(-5));
+  useHotkeys("arrowright", () => handleSeek(5));
 
-  useHotkeys("arrowright", () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = Math.min(
-        duration,
-        videoRef.current.currentTime + 5
-      );
-    }
-  });
+  useHotkeys("j", () => handleSeek(-10));
+  useHotkeys("l", () => handleSeek(10));
+
+  useHotkeys("comma", () => jumpToFrame(-1));
+  useHotkeys("period", () => jumpToFrame(1));
+
+  useHotkeys(
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    (e) => {
+      handleJump(duration * (parseInt(e.key) / 10));
+    },
+    { preventDefault: true }
+  );
 
   return (
-    <div
-      ref={containerRef}
-      className="relative aspect-video lg:rounded-lg bg-black overflow-hidden shadow-lg group"
-    >
+    <div className="group relative aspect-video lg:rounded-lg bg-black overflow-hidden shadow-lg group">
       <AnimatePresence>
         {animation && (
           <motion.div
@@ -281,6 +256,32 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
               {animation === "pause" && <FaPause />}
               {animation === "mute" && <FaVolumeUp />}
               {animation === "unmute" && <FaVolumeMute />}
+            </div>
+          </motion.div>
+        )}
+        {seekDelta < 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.75, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.85, x: 0 }}
+            className="absolute inset-0 w-1/3 grid place-items-center pointer-events-none"
+          >
+            <div className="text-white text-xl flex flex-row items-center gap-3">
+              <FaBackward className="size-6" />
+              <span>{seekDelta}</span>
+            </div>
+          </motion.div>
+        )}
+        {seekDelta > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.75, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.85, x: 0 }}
+            className="absolute top-0 bottom-0 right-0 w-1/3 grid place-items-center pointer-events-none"
+          >
+            <div className="text-white text-xl flex flex-row items-center gap-3">
+              <span>+{seekDelta}</span>
+              <FaForward className="size-6" />
             </div>
           </motion.div>
         )}
@@ -306,17 +307,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         </div>
       )}
 
-      <div
-        className={cn(
-          "absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300",
-          showControls ? "opacity-100" : "opacity-0"
-        )}
-      >
+      <div className="opacity-0 group-hover:opacity-100 absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300">
         <Slider
           step={0.25}
           value={currentTime}
           max={duration || 100}
-          onChange={handleSeek}
+          onChange={handleJump}
           className="mb-1"
         />
 

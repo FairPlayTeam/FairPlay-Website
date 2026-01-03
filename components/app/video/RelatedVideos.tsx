@@ -4,13 +4,24 @@ import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { VideoDetails } from "@/lib/video";
 import { VideoCard } from "@/components/app/video/VideoCard";
+import Spinner from "@/components/ui/Spinner";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 interface RelatedVideosProps {
   videos: VideoDetails[];
   currentVideoId: string;
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
 }
 
-export function RelatedVideos({ videos, currentVideoId }: RelatedVideosProps) {
+export function RelatedVideos({
+  videos,
+  currentVideoId,
+  hasMore = false,
+  isLoadingMore = false,
+  onLoadMore,
+}: RelatedVideosProps) {
   const router = useRouter();
 
   const filteredVideos = useMemo(
@@ -21,6 +32,12 @@ export function RelatedVideos({ videos, currentVideoId }: RelatedVideosProps) {
   const handleVideoPress = (id: string) => {
     router.push(`/video/${id}`);
   };
+
+  const sentinelRef = useInfiniteScroll({
+    hasMore: Boolean(onLoadMore) && hasMore,
+    isLoading: isLoadingMore,
+    onLoadMore: onLoadMore ?? (() => undefined),
+  });
 
   return (
     <div className="space-y-4 mx-4">
@@ -38,6 +55,12 @@ export function RelatedVideos({ videos, currentVideoId }: RelatedVideosProps) {
             variant="list"
           />
         ))}
+        {onLoadMore ? <div ref={sentinelRef} className="h-1" /> : null}
+        {isLoadingMore ? (
+          <div className="w-full grid place-items-center py-6">
+            <Spinner className="size-6" />
+          </div>
+        ) : null}
       </div>
     </div>
   );

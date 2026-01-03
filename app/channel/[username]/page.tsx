@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -18,10 +18,12 @@ import {
 } from "@/lib/users";
 import { useAuth } from "@/context/AuthContext";
 import UserAvatar from "@/components/ui/UserAvatar";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
 export default function ChannelPage() {
+  const pageSize = 10;
   const params = useParams();
   const router = useRouter();
   const { user: me } = useAuth();
@@ -36,6 +38,9 @@ export default function ChannelPage() {
   const [videos, setVideos] = useState<UserVideoItem[]>([]);
   const [state, setState] = useState<LoadState>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const requestSeq = useRef(0);
 
@@ -57,7 +62,7 @@ export default function ChannelPage() {
       try {
         const [uRes, vsRes] = await Promise.all([
           getUser(username),
-          getUserVideos(username, 1, 20),
+          getUserVideos(username, 1, pageSize),
         ]);
 
         // Ignore stale responses
@@ -67,7 +72,15 @@ export default function ChannelPage() {
         const vs = vsRes.data;
 
         setUser(u);
-        setVideos(vs?.videos ?? []);
+        const initialVideos = vs?.videos ?? [];
+        const totalPages = vs?.pagination?.totalPages;
+        setVideos(initialVideos);
+        setPage(1);
+        setHasMore(
+          typeof totalPages === "number"
+            ? 1 < totalPages
+            : initialVideos.length === pageSize
+        );
         setState("ready");
       } catch (e: unknown) {
         if (requestSeq.current !== seq) return;
@@ -83,6 +96,43 @@ export default function ChannelPage() {
 
     run();
   }, [username]);
+
+  const loadMore = useCallback(async () => {
+    if (!username || state !== "ready" || loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    const seq = requestSeq.current;
+    const nextPage = page + 1;
+
+    try {
+      const vsRes = await getUserVideos(username, nextPage, pageSize);
+      if (requestSeq.current !== seq) return;
+
+      const vs = vsRes.data;
+      const nextVideos = vs?.videos ?? [];
+      const totalPages = vs?.pagination?.totalPages;
+
+      setVideos((prev) => [...prev, ...nextVideos]);
+      setPage(nextPage);
+      setHasMore(
+        typeof totalPages === "number"
+          ? nextPage < totalPages
+          : nextVideos.length === pageSize
+      );
+    } catch {
+      if (requestSeq.current !== seq) return;
+      setHasMore(false);
+    } finally {
+      if (requestSeq.current !== seq) return;
+      setLoadingMore(false);
+    }
+  }, [hasMore, loadingMore, page, pageSize, state, username]);
+
+  const sentinelRef = useInfiniteScroll({
+    hasMore,
+    isLoading: state !== "ready" || loadingMore,
+    onLoadMore: loadMore,
+  });
 
   const isMe = !!me && !!user && me.username === user.username;
 
@@ -204,6 +254,12 @@ export default function ChannelPage() {
                 />
               );
             })}
+            <div ref={sentinelRef} className="h-1 col-span-full" />
+            {loadingMore ? (
+              <div className="w-full grid place-items-center py-6 col-span-full">
+                <Spinner className="size-8" />
+              </div>
+            ) : null}
           </div>
         )}
       </div>

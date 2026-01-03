@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ChangeEvent, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useImagesUpload } from "@/hooks/useImagesUpload";
 import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,19 +22,20 @@ interface ChannelTabProps {
 
 const channelFormSchema = z.object({
   username: z
-    .string({ required_error: "Username is required" })
+    .string()
+    .min(1, "Username is required")
     .min(3, "Username is too short"),
-  displayName: z.preprocess(
-    (value) => (value === "" ? undefined : value),
-    z.string().min(3, "Display name is too short").optional()
-  ),
-  bio: z.preprocess(
-    (value) => (value === "" ? undefined : value),
-    z.string().min(3, "Bio is too short").optional()
-  ),
+  displayName: z
+    .union([z.string().min(3, "Display name is too short"), z.literal("")])
+    .optional()
+    .transform((value) => (value ? value : undefined)),
+  bio: z
+    .union([z.string().min(3, "Bio is too short"), z.literal("")])
+    .optional()
+    .transform((value) => (value ? value : undefined)),
 });
 
-type ChannelFormValues = z.infer<typeof channelFormSchema>;
+type ChannelFormValues = z.input<typeof channelFormSchema>;
 
 export default function ChannelTab({ user }: ChannelTabProps) {
   const { uploadUserAvatar, uploadUserBanner } = useImagesUpload();
@@ -52,9 +53,10 @@ export default function ChannelTab({ user }: ChannelTabProps) {
     },
   });
 
-  const onSubmit = async (values: ChannelFormValues) => {
+  const onSubmit: SubmitHandler<ChannelFormValues> = async (values) => {
     try {
-      await updateProfile(values);
+      const parsedValues = channelFormSchema.parse(values);
+      await updateProfile(parsedValues);
       toast.success("Profile updated successfully!");
       refetchUser();
     } catch (err) {
