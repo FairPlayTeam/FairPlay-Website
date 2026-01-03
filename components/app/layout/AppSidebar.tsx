@@ -60,7 +60,7 @@ export default function AppSidebar() {
       >
         <div
           className={cn(
-            "flex flex-1 flex-col transition-opacity duration-300",
+            "flex flex-1 flex-col transition-opacity duration-200",
             isReady ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >

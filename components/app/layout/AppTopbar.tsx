@@ -125,7 +125,7 @@ export default function AppTopbar() {
               variant="donatePrimary"
               className="btn-donate hidden md:inline-flex"
               onClick={() =>
-                (window.location.href = "http://ko-fi.com/fairplay_")
+                (window.location.href = "https://ko-fi.com/fairplay_")
               }
             >
               Donate

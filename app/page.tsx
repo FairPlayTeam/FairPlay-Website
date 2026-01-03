@@ -169,7 +169,7 @@ export default function HomePage() {
               <Button
                 className="gap-2"
                 onClick={() =>
-                  (window.location.href = "/docs/contribution-guidlines")
+                  (window.location.href = "/docs/contribution-guidelines")
                 }
               >
                 {" "}
@@ -230,7 +230,7 @@ export default function HomePage() {
               </p>
               <Button
                 onClick={() =>
-                  (window.location.href = "http://ko-fi.com/fairplay_")
+                  (window.location.href = "https://ko-fi.com/fairplay_")
                 }
                 variant="donateSecondary"
               >

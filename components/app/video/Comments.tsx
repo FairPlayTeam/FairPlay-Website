@@ -9,8 +9,13 @@ import Button from "@/components/ui/Button";
 import Textarea from "@/components/ui/Textarea";
 import { useAuth } from "@/context/AuthContext";
 import { FaThumbsUp, FaRegThumbsUp, FaReply } from "react-icons/fa";
-import { CommentItem } from "@/lib/video";
-import { api } from "@/lib/api";
+import {
+  addComment,
+  getCommentReplies,
+  likeComment,
+  unlikeComment,
+  CommentItem,
+} from "@/lib/video";
 import * as z from "zod";
 import UserAvatar from "@/components/ui/UserAvatar";
 
@@ -56,10 +61,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
   const onSubmit = async ({ content }: CommentForm) => {
     setIsSubmittingReply(true);
     try {
-      const response = await api.post<{ comment: CommentItem }>(
-        `/videos/${videoId}/comments`,
-        { content, parentId: comment.id }
-      );
+      const response = await addComment(videoId, content, comment.id);
 
       setReplies([response.data.comment, ...replies]);
       setIsReplying(false);
@@ -80,7 +82,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
 
     try {
       if (localComment.likedByMe) {
-        await api.delete(`/comments/${comment.id}/like`);
+        await unlikeComment(comment.id);
 
         setLocalComment((prev) => ({
           ...prev,
@@ -88,7 +90,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
           likedByMe: false,
         }));
       } else {
-        await api.post(`/comments/${comment.id}/like`);
+        await likeComment(comment.id);
 
         setLocalComment((prev) => ({
           ...prev,
@@ -110,9 +112,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
     setIsLoadingReplies(true);
 
     try {
-      const response = await api.get<{ replies: CommentItem[] }>(
-        `/comments/${comment.id}/replies`
-      );
+      const response = await getCommentReplies(comment.id);
 
       setReplies(response.data.replies);
       setShowReplies(true);
@@ -252,10 +252,7 @@ export function Comments({ videoId, initialComments }: CommentsProps) {
 
   const onSubmit = async (values: CommentForm) => {
     try {
-      const response = await api.post<{ comment: CommentItem }>(
-        `/videos/${videoId}/comments`,
-        values
-      );
+      const response = await addComment(videoId, values.content);
 
       setComments([response.data.comment, ...comments]);
       form.reset();

@@ -68,7 +68,7 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
               <li>
                 <Button
                   onClick={() =>
-                    (window.location.href = "http://ko-fi.com/fairplay_")
+                    (window.location.href = "https://ko-fi.com/fairplay_")
                   }
                   variant="donatePrimary"
                   className="btn-donate"
@@ -180,7 +180,7 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
                   <li className="mt-8">
                     <Button
                       onClick={() =>
-                        (window.location.href = "http://ko-fi.com/fairplay_")
+                        (window.location.href = "https://ko-fi.com/fairplay_")
                       }
                       variant="donateSecondary"
                       className="w-full"

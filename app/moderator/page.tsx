@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "@/components/ui/Toast/toast-utils";
 import Spinner from "@/components/ui/Spinner";
+import Button from "@/components/ui/Button";
 import { ModVideoCard } from "@/components/app/video/ModVideoCard";
 
 import { listModeratorVideos, type ModVideoItem, updateModeration } from "@/lib/moderation";
@@ -16,6 +17,7 @@ type LoadState = "idle" | "loading" | "ready" | "error";
 export default function ModerationPage() {
   const router = useRouter();
   const { user: me, isLoading } = useAuth();
+  const isModerator = me?.role === "admin" || me?.role === "moderator";
 
   const [videos, setVideos] = useState<ModVideoItem[]>([]);
   const [state, setState] = useState<LoadState>("idle");
@@ -27,7 +29,7 @@ export default function ModerationPage() {
 
   useEffect(() => {
     setUser(me);
-  }, [me]);
+  }, [me, isModerator]);
 
   const requestSeq = useRef(0);
 
@@ -98,7 +100,7 @@ export default function ModerationPage() {
   useEffect(() => {
     const seq = ++requestSeq.current;
 
-    if (!me) return;
+    if (!me || !isModerator) return;
 
     const run = async () => {
       setState("loading");
@@ -124,7 +126,21 @@ export default function ModerationPage() {
     };
 
     run();
-  }, [me]);
+  }, [me, isModerator]);
+
+  if (!isLoading && me && !isModerator) {
+    return (
+      <div className="container mx-auto px-4 py-10 text-center">
+        <h1 className="text-2xl font-bold mb-4">Not allowed</h1>
+        <p className="text-text mb-6">
+          You don&apos;t have permission to access moderation tools.
+        </p>
+        <Button variant="secondary" onClick={() => router.push("/explore")}>
+          Back to Explore
+        </Button>
+      </div>
+    );
+  }
 
   if (!me || state === "idle" || state === "loading") {
     return (
