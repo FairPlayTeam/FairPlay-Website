@@ -275,7 +275,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
               >
                 Cancel
               </Button>
-              <Button size="sm" variant="destructive" onClick={handleDeleteComments}>
+              <Button size="sm" variant="ghost" onClick={handleDeleteComments}>
                 Delete
               </Button>
             </div>
