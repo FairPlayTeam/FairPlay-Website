@@ -67,7 +67,7 @@ export default function AppTopbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-4 transition-colors duration-300",
-        isScrolled ? "bg-black/90 backdrop-blur-lg" : "bg-transparent"
+        isScrolled ? "bg-background/90 backdrop-blur-lg" : "bg-transparent"
       )}
     >
       {isSearchOpen ? (

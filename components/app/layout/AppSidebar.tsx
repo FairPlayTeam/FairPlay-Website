@@ -11,6 +11,7 @@ import {
   FaBookOpen,
   FaUpload,
   FaShieldAlt,
+  FaUserShield,
   FaDiscord,
 } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -28,6 +29,7 @@ const mainLinks = [
   // { icon: FaHistory, label: "History", href: "/history" },
 
   { icon: FaShieldAlt, label: "Mods", href: "/moderator" },
+  { icon: FaUserShield, label: "Admin", href: "/admin" },
   { icon: FaUpload, label: "Upload", href: "/upload" },
 ];
 
@@ -82,11 +84,14 @@ export default function AppSidebar() {
               const Icon = link.icon;
               const isActive = pathname === link.href;
               const isModsLink = link.label === "Mods";
+              const isAdminLink = link.label === "Admin";
               const canShowMods =
                 user?.role === "admin" || user?.role === "moderator";
-              const shouldRender = !isModsLink || (isReady && canShowMods);
+              const canShowAdmin = user?.role === "admin";
+              const shouldRenderMods = !isModsLink || (isReady && canShowMods);
+              const shouldRenderAdmin = !isAdminLink || (isReady && canShowAdmin);
 
-              if (!shouldRender) {
+              if (!shouldRenderMods || !shouldRenderAdmin) {
                 return null;
               }
 
