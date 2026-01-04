@@ -24,12 +24,6 @@ export type VideoDetails = {
     avatarUrl?: string | null;
     id?: string;
   };
-  user?: {
-    username: string;
-    displayName: string | null;
-    avatarUrl?: string | null;
-    id?: string;
-  };
 };
 
 export type SearchVideosResponse = {
@@ -118,13 +112,6 @@ export type CommentsResponse = {
     totalPages: number;
     itemsReturned: number;
   };
-  pagination: {
-    page: number;
-    limit: number;
-    totalItems: number;
-    totalPages: number;
-    itemsReturned: number;
-  };
 };
 
 export async function getVideoComments(
@@ -205,12 +192,5 @@ export async function getCommentReplies(
 export async function deleteVideo(videoId: string) {
   return api.delete<{ message: string }>(
     `/videos/${encodeURIComponent(videoId)}`
-  );
-}
-
-// comment delition thingy i think i guess
-export async function deleteComment(commentId: string) {
-  return api.delete<{ message: string }>(
-    `/comments/${encodeURIComponent(commentId)}`
   );
 }
