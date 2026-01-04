@@ -18,6 +18,7 @@ import {
 } from "@/lib/video";
 import * as z from "zod";
 import UserAvatar from "@/components/ui/UserAvatar";
+import { api } from "@/lib/api";
 
 const commentSchema = z.object({
   content: z
