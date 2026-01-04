@@ -157,15 +157,6 @@ export async function addComment(
     `/videos/${encodeURIComponent(videoId)}/comments`,
     { content, parentId }
   );
-export async function addComment(
-  videoId: string,
-  content: string,
-  parentId?: string
-) {
-  return api.post<{ message: string; comment: CommentItem }>(
-    `/videos/${encodeURIComponent(videoId)}/comments`,
-    { content, parentId }
-  );
 }
 
 export async function rateVideo(videoId: string, score: number) {
