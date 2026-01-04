@@ -29,7 +29,7 @@ export default function ModerationPage() {
 
   useEffect(() => {
     setUser(me);
-  }, [me, isModerator]);
+  }, [me]);
 
   const requestSeq = useRef(0);
 
@@ -161,7 +161,7 @@ export default function ModerationPage() {
 
   return (
     <div className="w-full">
-      <div className="container mx-auto px-4 pb-10">
+      <div className="container mx-auto px-4 py-8">
         {videos.length === 0 ? (
           <h1 className="text-2xl font-bold mb-6">No videos.</h1>
         ) : (
