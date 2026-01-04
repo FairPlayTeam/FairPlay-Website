@@ -29,6 +29,7 @@ interface VideoPlayerProps {
 }
 
 const FPS = 30;
+const CONTROLS_HIDE_DELAY_MS = 2500;
 
 export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -43,6 +44,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isBuffering, setIsBuffering] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
 
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -54,12 +56,56 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   >(null);
 
   const isPlayingRef = useRef(isPlaying);
+  const isMutedRef = useRef(isMuted);
+  const volumeRef = useRef(volume);
+  const controlsHideTimeoutRef = useRef<number | null>(null);
 
   const clamp = (value: number) => Math.max(0, Math.min(value, duration));
+
+  const applyPreferences = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const nextVolume = Math.min(1, Math.max(0, volumeRef.current));
+    video.muted = isMutedRef.current;
+    video.defaultMuted = isMutedRef.current;
+    video.volume = nextVolume;
+  }, []);
 
   useEffect(() => {
     isPlayingRef.current = isPlaying;
   }, [isPlaying]);
+
+  const clearControlsHideTimeout = useCallback(() => {
+    if (controlsHideTimeoutRef.current !== null) {
+      window.clearTimeout(controlsHideTimeoutRef.current);
+      controlsHideTimeoutRef.current = null;
+    }
+  }, []);
+
+  const showControls = useCallback(
+    (autoHide = true) => {
+      setControlsVisible(true);
+      clearControlsHideTimeout();
+
+      if (autoHide && isPlayingRef.current) {
+        controlsHideTimeoutRef.current = window.setTimeout(() => {
+          setControlsVisible(false);
+        }, CONTROLS_HIDE_DELAY_MS);
+      }
+    },
+    [clearControlsHideTimeout]
+  );
+
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+    volumeRef.current = volume;
+    applyPreferences();
+  }, [applyPreferences, isMuted, volume]);
+
+  useEffect(() => {
+    return () => clearControlsHideTimeout();
+  }, [clearControlsHideTimeout]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -87,6 +133,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        applyPreferences();
         if (isPlayingRef.current) {
           handlePlayPromise(video.play());
         } else {
@@ -99,18 +146,24 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       };
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       // Native HLS support (Safari)
-      video.src = url;
-      video.addEventListener("loadedmetadata", () => {
+      const onLoadedMetadata = () => {
+        applyPreferences();
         if (isPlayingRef.current) {
           handlePlayPromise(video.play());
         } else {
           setIsBuffering(false);
         }
-      });
+      };
+
+      video.src = url;
+      video.addEventListener("loadedmetadata", onLoadedMetadata);
+      return () => {
+        video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      };
     } else {
       console.error("HLS is not supported in this browser.");
     }
-  }, [url]);
+  }, [applyPreferences, url]);
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
@@ -168,12 +221,13 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    showControls(true);
     if (video.paused || video.ended) {
       video.play().catch(() => {});
     } else {
       video.pause();
     }
-  }, []);
+  }, [showControls]);
 
   const handleToggleMute = useCallback(() => {
     if (videoRef.current) {
@@ -187,15 +241,25 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   }, [isMuted, toggleMute, volume]);
 
   const toggleFullscreen = useCallback(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+      return;
     }
+
+    container.requestFullscreen().catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement === containerRef.current);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   const jumpToFrame = (delta: number) => {
@@ -242,7 +306,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   );
 
   return (
-    <div className="group relative aspect-video lg:rounded-lg bg-black overflow-hidden shadow-lg group">
+    <div
+      ref={containerRef}
+      onPointerMove={() => showControls(true)}
+      onPointerDown={() => showControls(true)}
+      className="group relative aspect-video lg:rounded-lg bg-black overflow-hidden shadow-lg group"
+    >
       <AnimatePresence>
         {animation && (
           <motion.div
@@ -292,8 +361,16 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         onClick={togglePlay}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onPlay={() => {
+          isPlayingRef.current = true;
+          setIsPlaying(true);
+          showControls(true);
+        }}
+        onPause={() => {
+          isPlayingRef.current = false;
+          setIsPlaying(false);
+          showControls(false);
+        }}
         onWaiting={() => setIsBuffering(true)}
         onPlaying={() => setIsBuffering(false)}
         poster={thumbnailUrl ?? undefined}
@@ -307,7 +384,11 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         </div>
       )}
 
-      <div className="opacity-0 group-hover:opacity-100 absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300">
+      <div
+        className={`${
+          controlsVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        } absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300`}
+      >
         <Slider
           step={0.25}
           value={currentTime}

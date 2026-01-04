@@ -206,29 +206,36 @@ export default function ChannelPage() {
           ) : null}
 
           <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:text-left">
-            <Link
-              href={`/people?u=${encodeURIComponent(user.username)}&type=followers`}
+            <p
               className="text-sm text-text hover:underline"
             >
               {user.followerCount} Followers
-            </Link>
+            </p>
 
-            <Link
-              href={`/people?u=${encodeURIComponent(user.username)}&type=following`}
+            <p
               className="text-sm text-text hover:underline"
             >
               {user.followingCount} Following
-            </Link>
+            </p>
 
-            {!isMe ? (
-              <div className="w-full md:w-auto flex justify-center md:justify-start">
-                <FollowButton
-                  username={user.username}
-                  initialFollowing={Boolean(user.isFollowing)}
-                  onChangeCount={onFollowerDelta}
-                />
-              </div>
+            {!me ? (
+              <Link
+                href={`/login?callbackUrl=${encodeURIComponent(
+                  typeof window !== "undefined" ? window.location.pathname : "/"
+                )}`}
+              >
+                <Button variant="videoDetails" className="rounded-full px-6">
+                  Login to Subscribe
+                </Button>
+              </Link>
+            ) : !isMe ? (
+              <FollowButton
+                username={user.username ?? ""}
+                initialFollowing={Boolean(user.isFollowing)}
+                onChangeCount={onFollowerDelta}
+              />
             ) : null}
+            
           </div>
         </div>
       </div>

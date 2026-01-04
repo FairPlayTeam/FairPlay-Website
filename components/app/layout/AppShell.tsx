@@ -57,7 +57,7 @@ export function AppShell({
         )}
         <div
           className={cn(
-            "transition-opacity duration-300",
+            "transition-opacity duration-200",
             isReady ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
