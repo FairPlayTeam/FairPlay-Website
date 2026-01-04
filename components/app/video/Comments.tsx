@@ -44,6 +44,7 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
 
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [showReplies, setShowReplies] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
   const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
@@ -123,6 +124,17 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
     }
   };
 
+  const handleDeleteComments = async () => {
+    try {
+      await api.delete(`/comments/${comment.id}`);
+      setLocalComment((prev) => ({ ...prev, content: "[deleted]" }));
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+    } finally {
+      setShowDeleteModal(false);
+    }
+  };
+
   return (
     <div className="flex gap-4">
       <UserAvatar user={localComment.user} size={40} />
@@ -167,6 +179,17 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
           >
             <FaReply /> Reply
           </Button>
+
+          {user?.id === localComment.user.id && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowDeleteModal(true)}
+              className="text-red-500 hover:bg-white/5"
+            >
+              Delete
+            </Button>
+          )}
         </div>
 
         {isReplying && (
@@ -234,6 +257,30 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
           </div>
         )}
       </div>
+
+      {showDeleteModal && (        // delete comment function. AS OF 29/12 needs BACKEND
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-black rounded-lg p-6 w-80 text-center">
+            <h2 className="text-lg font-bold mb-4">Delete Comment?</h2> 
+            <p className="mb-6 text-sm text-gray-600">
+              Are you sure you want to delete this comment? This action cannot
+              be undone.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button                                                                                
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button size="sm" variant="destructive" onClick={handleDeleteComments}>
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

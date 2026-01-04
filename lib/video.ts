@@ -24,6 +24,12 @@ export type VideoDetails = {
     avatarUrl?: string | null;
     id?: string;
   };
+  user?: {
+    username: string;
+    displayName: string | null;
+    avatarUrl?: string | null;
+    id?: string;
+  };
 };
 
 export type SearchVideosResponse = {
@@ -112,6 +118,13 @@ export type CommentsResponse = {
     totalPages: number;
     itemsReturned: number;
   };
+  pagination: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+    itemsReturned: number;
+  };
 };
 
 export async function getVideoComments(
@@ -144,6 +157,15 @@ export async function addComment(
     `/videos/${encodeURIComponent(videoId)}/comments`,
     { content, parentId }
   );
+export async function addComment(
+  videoId: string,
+  content: string,
+  parentId?: string
+) {
+  return api.post<{ message: string; comment: CommentItem }>(
+    `/videos/${encodeURIComponent(videoId)}/comments`,
+    { content, parentId }
+  );
 }
 
 export async function rateVideo(videoId: string, score: number) {
@@ -154,9 +176,15 @@ export async function likeComment(commentId: string) {
   return api.post<{ message: string; likeCount: number }>(
     `/comments/${encodeURIComponent(commentId)}/like`
   );
+  return api.post<{ message: string; likeCount: number }>(
+    `/comments/${encodeURIComponent(commentId)}/like`
+  );
 }
 
 export async function unlikeComment(commentId: string) {
+  return api.delete<{ message: string; likeCount: number }>(
+    `/comments/${encodeURIComponent(commentId)}/like`
+  );
   return api.delete<{ message: string; likeCount: number }>(
     `/comments/${encodeURIComponent(commentId)}/like`
   );
@@ -186,5 +214,12 @@ export async function getCommentReplies(
 export async function deleteVideo(videoId: string) {
   return api.delete<{ message: string }>(
     `/videos/${encodeURIComponent(videoId)}`
+  );
+}
+
+// comment delition thingy i think i guess
+export async function deleteComment(commentId: string) {
+  return api.delete<{ message: string }>(
+    `/comments/${encodeURIComponent(commentId)}`
   );
 }
