@@ -47,11 +47,7 @@ export default function DisclaimerPopup({
           This part of the website is currently under development. By clicking
           <span className="font-medium text-text"> Continue</span>, you will be
           redirected to the live build version.
-        </p>
-
-        <p className="text-sm sm:text-base text-(--gray-300) mb-8">
-          Videos and accounts created on this preview version will be deleted.
-          This environment is for development purposes only.
+          <span className="font-medium text-text">This environment is for development purposes only.</span>
         </p>
 
         <div className="flex flex-col gap-3">
@@ -65,18 +61,6 @@ export default function DisclaimerPopup({
             className="flex items-center justify-center gap-3"
           >
             Continue <FaArrowRight />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={() => {
-              window.location.href = "https://lab.fairplay.video";
-              onClose();
-            }}
-            className="flex items-center justify-center gap-3"
-          >
-            Continue on the old version <FaArrowRight />
           </Button>
         </div>
       </div>

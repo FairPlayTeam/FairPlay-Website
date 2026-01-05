@@ -313,16 +313,12 @@ export default function AdminPage() {
                     router.push(`/channel/${user.username}`);
                   }
                 }}
-                className="rounded-xl border border-border bg-container p-4 cursor-pointer transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+                className="rounded-xl border border-border bg-container p-4 cursor-pointer hover:bg-container/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex items-center gap-4 min-w-0">
                     <UserAvatar
-                      user={{
-                        id: user.id,
-                        username: user.username,
-                        displayName: user.displayName,
-                      }}
+                      user={user}
                       size={48}
                     />
                     <div className="min-w-0 flex-1">
