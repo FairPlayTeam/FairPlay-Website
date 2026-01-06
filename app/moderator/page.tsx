@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/Toast/toast-utils";
 import Spinner from "@/components/ui/Spinner";
 import Button from "@/components/ui/Button";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import { ModVideoCard } from "@/components/app/video/ModVideoCard";
 
 import { listModeratorVideos, type ModVideoItem, updateModeration } from "@/lib/moderation";
@@ -26,6 +27,7 @@ export default function ModerationPage() {
   const [moderatingIds, setModeratingIds] = useState<Set<string>>(
     () => new Set()
   );
+  const [videoToDelete, setVideoToDelete] = useState<ModVideoItem | null>(null);
 
   useEffect(() => {
     setUser(me);
@@ -33,14 +35,10 @@ export default function ModerationPage() {
 
   const requestSeq = useRef(0);
 
-  const handleDeleteVideo = async (videoId: string) => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this video? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
+  const handleConfirmDelete = async () => {
+    if (!videoToDelete) return;
+    const videoId = videoToDelete.id;
+    setVideoToDelete(null);
 
     try {
       await deleteVideo(videoId);
@@ -49,6 +47,10 @@ export default function ModerationPage() {
     } catch {
       toast.error("Failed to delete video");
     }
+  };
+
+  const handleCancelDelete = () => {
+    setVideoToDelete(null);
   };
 
   const handleModerateVideo = async (
@@ -169,19 +171,35 @@ export default function ModerationPage() {
             {videos.map((v) => {
               return (
                 <div key={v.id}>
-                      <ModVideoCard
-                        video={v}
-                        user={v.user}
-                        onDelete={() => handleDeleteVideo(v.id)}
-                        onModerate={handleModerateVideo}
-                        isModerating={moderatingIds.has(v.id)}
-                      />
+                  <ModVideoCard
+                    video={v}
+                    user={v.user}
+                    onDelete={() => setVideoToDelete(v)}
+                    onModerate={handleModerateVideo}
+                    isModerating={moderatingIds.has(v.id)}
+                  />
                 </div>
               );
             })}
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={Boolean(videoToDelete)}
+        title="Delete video?"
+        description={
+          videoToDelete
+            ? `Are you sure you want to delete "${
+                videoToDelete.title || "this video"
+              }"? This action cannot be undone.`
+            : undefined
+        }
+        confirmLabel="Delete"
+        confirmTone="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 }

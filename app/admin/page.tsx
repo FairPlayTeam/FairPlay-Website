@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/Button";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import Input from "@/components/ui/Input";
 import Spinner from "@/components/ui/Spinner";
 import UserAvatar from "@/components/ui/UserAvatar";
@@ -48,6 +49,7 @@ export default function AdminPage() {
   const [banUpdatingIds, setBanUpdatingIds] = useState<Set<string>>(
     () => new Set()
   );
+  const [banTarget, setBanTarget] = useState<AdminUser | null>(null);
 
   const requestSeq = useRef(0);
   const pageSize = 20;
@@ -134,15 +136,6 @@ export default function AdminPage() {
     if (banUpdatingIds.has(targetUser.id)) return;
 
     const nextIsBanned = !targetUser.isBanned;
-    const actionLabel = nextIsBanned ? "ban" : "unban";
-
-    if (
-      !confirm(
-        `Are you sure you want to ${actionLabel} ${targetUser.username}?`
-      )
-    ) {
-      return;
-    }
 
     setBanUpdatingIds((prev) => new Set(prev).add(targetUser.id));
 
@@ -179,6 +172,22 @@ export default function AdminPage() {
     }
   };
 
+  const handleOpenBanModal = (targetUser: AdminUser) => {
+    if (banUpdatingIds.has(targetUser.id)) return;
+    setBanTarget(targetUser);
+  };
+
+  const handleConfirmBan = async () => {
+    if (!banTarget) return;
+    const targetUser = banTarget;
+    setBanTarget(null);
+    await handleToggleBan(targetUser);
+  };
+
+  const handleCancelBan = () => {
+    setBanTarget(null);
+  };
+
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPage(1);
@@ -194,6 +203,11 @@ export default function AdminPage() {
   const totalPages = pagination?.totalPages ?? 1;
   const currentPage = pagination?.page ?? page;
   const totalItems = pagination?.totalItems ?? users.length;
+  const banActionLabel = banTarget?.isBanned ? "unban" : "ban";
+  const banActionTitle = banTarget?.isBanned ? "Unban user?" : "Ban user?";
+  const banActionDescription = banTarget
+    ? `Are you sure you want to ${banActionLabel} ${banTarget.username}?`
+    : undefined;
 
   if (!isLoading && me && !isAdmin) {
     return (
@@ -318,7 +332,11 @@ export default function AdminPage() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex items-center gap-4 min-w-0">
                     <UserAvatar
-                      user={user}
+                      user={{
+                        id: user.id,
+                        username: user.username,
+                        displayName: user.displayName,
+                      }}
                       size={48}
                     />
                     <div className="min-w-0 flex-1">
@@ -396,7 +414,7 @@ export default function AdminPage() {
                       disabled={isBanUpdating}
                       onClick={(event) => {
                         event.stopPropagation();
-                        handleToggleBan(user);
+                        handleOpenBanModal(user);
                       }}
                       onKeyDown={(event) => event.stopPropagation()}
                       className={cn(
@@ -451,6 +469,16 @@ export default function AdminPage() {
           </Button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={Boolean(banTarget)}
+        title={banActionTitle}
+        description={banActionDescription}
+        confirmLabel={banTarget?.isBanned ? "Unban" : "Ban"}
+        confirmTone={banTarget?.isBanned ? "safe" : "danger"}
+        onConfirm={handleConfirmBan}
+        onCancel={handleCancelBan}
+      />
     </div>
   );
 }

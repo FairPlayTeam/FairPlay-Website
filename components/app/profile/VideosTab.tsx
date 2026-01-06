@@ -9,6 +9,7 @@ import { MyVideoItem, getMyVideos } from "@/lib/users";
 import { deleteVideo } from "@/lib/video";
 import { User } from "@/types/schema";
 import Button from "@/components/ui/Button";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import { FaUpload } from "react-icons/fa";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
@@ -29,6 +30,7 @@ export default function VideosTab({ user }: VideosTabProps) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [videoToDelete, setVideoToDelete] = useState<MyVideoItem | null>(null);
 
   const requestSeq = useRef(0);
 
@@ -102,14 +104,10 @@ export default function VideosTab({ user }: VideosTabProps) {
     onLoadMore: loadMore,
   });
 
-  const handleDeleteVideo = async (videoId: string) => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this video? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
+  const handleConfirmDelete = async () => {
+    if (!videoToDelete) return;
+    const videoId = videoToDelete.id;
+    setVideoToDelete(null);
 
     try {
       await deleteVideo(videoId);
@@ -118,6 +116,10 @@ export default function VideosTab({ user }: VideosTabProps) {
     } catch {
       toast.error("Failed to delete video");
     }
+  };
+
+  const handleCancelDelete = () => {
+    setVideoToDelete(null);
   };
 
   if (state === "loading" || state === "idle") {
@@ -137,7 +139,7 @@ export default function VideosTab({ user }: VideosTabProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 pb-10">
+    <div className="container mx-auto md:px-4 pb-10">
       {videos.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 h-40">
           <span className="text-text-amount">
@@ -168,7 +170,7 @@ export default function VideosTab({ user }: VideosTabProps) {
                 <MyVideoCard
                   video={v}
                   user={user}
-                  onDelete={() => handleDeleteVideo(v.id)}
+                  onDelete={() => setVideoToDelete(v)}
                 />
               </div>
             ))}
@@ -181,6 +183,22 @@ export default function VideosTab({ user }: VideosTabProps) {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={Boolean(videoToDelete)}
+        title="Delete video?"
+        description={
+          videoToDelete
+            ? `Are you sure you want to delete "${
+                videoToDelete.title || "this video"
+              }"? This action cannot be undone.`
+            : undefined
+        }
+        confirmLabel="Delete"
+        confirmTone="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 }
