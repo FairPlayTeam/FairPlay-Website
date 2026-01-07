@@ -142,7 +142,7 @@ export default function AppTopbar() {
 
             <div className="flex items-center justify-end">
               {isReady && !!user && (
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="ghost"
