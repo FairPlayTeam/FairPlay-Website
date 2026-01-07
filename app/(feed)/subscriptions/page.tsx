@@ -150,7 +150,7 @@ export default function SubscriptionsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container px-5 py-10 md:px-10">
       {following.length === 0 ? (
         <div className="mt-10 text-center">
           <p className="text-text-amount">No subscriptions yet.</p>
@@ -164,13 +164,13 @@ export default function SubscriptionsPage() {
         </div>
       ) : (
         <div>
-          <div className="max-w-3xl">
-              <h1 className="text-3xl font-bold">Subscriptions</h1>
-              <p className="text-text-amount mt-2">
-                Creators you follow, all in one place.
-              </p>
+          <div className="mb-8 flex flex-col gap-3">
+            <h1 className="text-3xl font-bold">Subscriptions</h1>
+            <p className="text-text-amount">
+              Creators you follow, all in one place.
+            </p>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {following.map((creator) => (
               <div
                 key={creator.id}

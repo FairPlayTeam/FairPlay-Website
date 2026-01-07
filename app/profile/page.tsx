@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import Tabs from "@/components/ui/Tabs"
 import ChannelTab from "@/components/app/profile/ChannelTab";
@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
@@ -49,10 +50,15 @@ export default function ProfilePage() {
     },
   ];
 
+  const requestedTab = searchParams.get("tab");
+  const defaultTab = tabs.some((tab) => tab.id === requestedTab)
+    ? requestedTab ?? "channel"
+    : "channel";
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
-      <Tabs tabs={tabs} defaultTab="channel" />
+      <Tabs tabs={tabs} defaultTab={defaultTab} />
     </div>
   );
 }

@@ -164,25 +164,27 @@ export default function ModerationPage() {
   return (
     <div className="w-full">
       <div className="container mx-auto px-4 py-8">
-        {videos.length === 0 ? (
-          <h1 className="text-2xl font-bold mb-6">No videos.</h1>
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {videos.map((v) => {
-              return (
-                <div key={v.id}>
-                  <ModVideoCard
-                    video={v}
-                    user={v.user}
-                    onDelete={() => setVideoToDelete(v)}
-                    onModerate={handleModerateVideo}
-                    isModerating={moderatingIds.has(v.id)}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <div className="mx-auto max-w-5xl">
+          {videos.length === 0 ? (
+            <h1 className="text-2xl font-bold mb-6">No videos.</h1>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {videos.map((v) => {
+                return (
+                  <div key={v.id}>
+                    <ModVideoCard
+                      video={v}
+                      user={v.user}
+                      onDelete={() => setVideoToDelete(v)}
+                      onModerate={handleModerateVideo}
+                      isModerating={moderatingIds.has(v.id)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       <ConfirmModal

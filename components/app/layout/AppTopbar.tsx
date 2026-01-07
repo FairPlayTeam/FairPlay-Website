@@ -10,6 +10,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import Input from "@/components/ui/Input";
 import UserAvatar from "@/components/ui/UserAvatar";
+import { clearToken } from "@/lib/token";
+import { useQueryClient } from "@tanstack/react-query";
 
 function SearchBar({
   value,
@@ -46,6 +48,7 @@ export default function AppTopbar() {
   const router = useRouter();
   const { toggle } = useSidebar();
   const { user, isReady } = useAuth();
+  const queryClient = useQueryClient();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -61,6 +64,12 @@ export default function AppTopbar() {
     if (!searchTerm.trim()) return;
     router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
     setIsSearchOpen(false);
+  };
+
+  const handleLogout = () => {
+    clearToken();
+    queryClient.setQueryData(["me"], null);
+    close();
   };
 
   return (
@@ -110,7 +119,7 @@ export default function AppTopbar() {
             />
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-5">
+          <div className="flex items-center gap-2">
             <Button
               size="icon"
               variant="ghost"
@@ -133,14 +142,24 @@ export default function AppTopbar() {
 
             <div className="flex items-center justify-end">
               {isReady && !!user && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-text rounded-full p-0"
-                  onClick={() => router.push(`/profile`)}
-                >
-                  <UserAvatar user={user} size={36} />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="hidden lg:inline-flex text-text hover:bg-white/5 rounded-full"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-text rounded-full p-0"
+                    onClick={() => router.push(`/profile`)}
+                  >
+                    <UserAvatar user={user} size={36} />
+                  </Button>
+                </div>
               )}
 
               {isReady && !user && (

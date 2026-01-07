@@ -50,7 +50,7 @@ export default function Modal({
   return (
     <div className="fixed inset-0 z-50">
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/10 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -73,7 +73,7 @@ export default function Modal({
                   {title ? (
                     <h2
                       id={titleId}
-                      className="text-lg font-semibold text-text"
+                      className="text-lg font-semibold text-text mb-3"
                     >
                       {title}
                     </h2>

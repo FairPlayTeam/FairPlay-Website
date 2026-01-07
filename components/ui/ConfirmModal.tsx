@@ -21,8 +21,8 @@ interface ConfirmModalProps {
 }
 
 const toneClasses: Record<ConfirmTone, string> = {
-  danger: "border-red-500/40 text-red-300 hover:bg-red-500/10",
-  safe: "border-green-500/40 text-green-300 hover:bg-green-500/10",
+  danger: "border-red-400/40 text-red-400 hover:bg-red-400/10",
+  safe: "border-green-400/40 text-green-400 hover:bg-green-400/10",
   accent: "border-accent/60 text-accent hover:bg-accent/10",
 };
 

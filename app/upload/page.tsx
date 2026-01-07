@@ -87,7 +87,7 @@ export default function UploadPage() {
         "Video uploaded successfully! Your video is going to be reviewed by us before being public."
       );
 
-      router.push(`/profile`);
+      router.push(`/profile?tab=videos`);
     } catch (error) {
       toast.error("Upload failed.");
       setUploadError(
@@ -100,81 +100,156 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="container mx-auto py-10 px-5">
-      <h1 className="text-3xl text-center mb-6">Upload Video</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="title">Title</label>
-          <Input
-            id="title"
-            placeholder="Video Title"
-            {...register("title")}
-            aria-invalid={!!errors.title}
-          />
-          {errors.title && (
-            <p className="text-red-500 text-sm">
-              {errors.title.message as string}
-            </p>
-          )}
+    <div className="container px-5 py-10 md:px-10">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-8 flex flex-col gap-2">
+          <h1 className="text-3xl font-bold">Upload Video</h1>
+          <p className="text-text-amount mt-2">
+            Share your latest work with the community.
+          </p>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="description">Description</label>
-          <Textarea
-            id="description"
-            placeholder="Video Description"
-            {...register("description")}
-            aria-invalid={!!errors.description}
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm">
-              {errors.description.message as string}
-            </p>
-          )}
-        </div>
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-6">
+            <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2 md:col-span-2">
+                    <label htmlFor="title" className="text-sm text-text-amount">
+                      Title
+                    </label>
+                    <Input
+                      id="title"
+                      placeholder="Video title"
+                      {...register("title")}
+                      aria-invalid={!!errors.title}
+                    />
+                    {errors.title && (
+                      <p className="text-red-500 text-sm">
+                        {errors.title.message as string}
+                      </p>
+                    )}
+                  </div>
 
-        <div className="space-y-2">
-          <label htmlFor="tags">Tags (comma separated)</label>
-          <Input
-            id="tags"
-            placeholder="gaming, programming, science"
-            {...register("tags")}
-            aria-invalid={!!errors.tags}
-          />
-          {errors.tags && (
-            <p className="text-red-500 text-sm">
-              {errors.tags.message as string}
-            </p>
-          )}
-        </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <label
+                      htmlFor="description"
+                      className="text-sm text-text-amount"
+                    >
+                      Description
+                    </label>
+                    <Textarea
+                      id="description"
+                      placeholder="Video description"
+                      {...register("description")}
+                      aria-invalid={!!errors.description}
+                    />
+                    {errors.description && (
+                      <p className="text-red-500 text-sm">
+                        {errors.description.message as string}
+                      </p>
+                    )}
+                  </div>
 
-        <div className="space-y-2">
-          <label htmlFor="video">Video File</label>
-          <Input
-            id="video"
-            type="file"
-            accept="video/*"
-            {...register("video")}
-            aria-invalid={!!errors.video}
-          />
-          {errors.video && (
-            <p className="text-red-500 text-sm">
-              {errors.video.message as string}
-            </p>
-          )}
-        </div>
+                  <div className="space-y-2">
+                    <label htmlFor="tags" className="text-sm text-text-amount">
+                      Tags (comma separated)
+                    </label>
+                    <Input
+                      id="tags"
+                      placeholder="gaming, programming, science"
+                      {...register("tags")}
+                      aria-invalid={!!errors.tags}
+                    />
+                    {errors.tags && (
+                      <p className="text-red-500 text-sm">
+                        {errors.tags.message as string}
+                      </p>
+                    )}
+                  </div>
 
-        {uploadError && (
-          <div className="p-4 bg-red-500/10 border border-red-500 rounded text-red-500">
-            {uploadError}
+                  <div className="space-y-2">
+                    <label htmlFor="video" className="text-sm text-text-amount">
+                      Video file
+                    </label>
+                    <Input
+                      id="video"
+                      type="file"
+                      accept="video/*"
+                      {...register("video")}
+                      aria-invalid={!!errors.video}
+                    />
+                    {errors.video && (
+                      <p className="text-red-500 text-sm">
+                        {errors.video.message as string}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {uploadError && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-sm">
+                    {uploadError}
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                  <Button
+                    type="submit"
+                    variant="donateSecondary"
+                    disabled={isUploading}
+                    className="w-full rounded-lg sm:min-w-50"
+                  >
+                    {isUploading ? "Uploading..." : "Upload Video"}
+                  </Button>
+                </div>
+
+              </form>
+              </div>
+              <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
+                <p className="text-sm text-text text-center">
+                  Videos are reviewed before they become public!
+                </p>
+              </div>
           </div>
-        )}
 
-        <Button type="submit" disabled={isUploading} className="w-full mt-4">
-          {isUploading ? "Uploading..." : "Upload Video"}
-        </Button>
-      </form>
+          <aside className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
+            <div className="flex items-start gap-4">
+              <h2 className="text-xl font-semibold">Guidelines</h2>
+            </div>
+
+            <div className="mt-6 space-y-4 text-sm text-text-amount">
+              <div className="rounded-lg border border-border/60 bg-container-dark/60 p-4">
+                <p className="font-semibold text-green-400">Allowed content</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>Documentaries, tutorials, educational videos</li>
+                  <li>Personal projects, podcasts, art, culture</li>
+                  <li>
+                    Lifestyle, development, music, creative content
+                  </li>
+                  <li>
+                    Fictional violence (movies, games) when contextualized and not glorified
+                  </li>
+                </ul>
+              </div>
+
+              <div className="rounded-lg border border-border/60 bg-container-dark/60 p-4">
+                <p className="font-semibold text-red-400">Not allowed</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>Real or excessively graphic violent content</li>
+                  <li>Political or religious propaganda</li>
+                  <li>NSFW content</li>
+                  <li>Automatically generated AI videos</li>
+                  <li>
+                    Misleading or false information (relative to the scientific consensus; fake news, conspiracies, etc.)
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
     </div>
   );
 }
