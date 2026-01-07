@@ -183,6 +183,12 @@ export async function getCommentReplies(
   }>(`/comments/${encodeURIComponent(commentId)}/replies?${qs}`);
 }
 
+export async function deleteComment(commentId: string) {
+  return api.delete<{ message: string }>(
+    `/comments/${encodeURIComponent(commentId)}`
+  );
+}
+
 export async function deleteVideo(videoId: string) {
   return api.delete<{ message: string }>(
     `/videos/${encodeURIComponent(videoId)}`

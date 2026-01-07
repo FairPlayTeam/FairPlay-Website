@@ -46,7 +46,7 @@ function SearchBar({
 
 export default function AppTopbar() {
   const router = useRouter();
-  const { toggle } = useSidebar();
+  const { toggle, close } = useSidebar();
   const { user, isReady } = useAuth();
   const queryClient = useQueryClient();
 
