@@ -82,7 +82,7 @@ export default function RegisterClient() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-background">
+    <div className="w-full min-h-screen flex items-center justify-center bg-background px-4">
       <Card>
         <h1 className="text-3xl font-semibold text-text mb-4">
           Create Account

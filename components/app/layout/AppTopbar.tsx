@@ -142,7 +142,7 @@ export default function AppTopbar() {
 
             <div className="flex items-center justify-end">
               {isReady && !!user && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center">
                   <Button
                     size="sm"
                     variant="ghost"
@@ -163,14 +163,24 @@ export default function AppTopbar() {
               )}
 
               {isReady && !user && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => router.push("/login")}
-                  className="bg-container-dark"
-                >
-                  Login
-                </Button>
+                <div className="flex md:gap-2 justify-end">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => router.push("/login")}
+                    className="bg-container-dark text-text"
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => router.push("/register")}
+                    className="bg-container-dark text-text"
+                  >
+                    Register
+                  </Button>
+                </div>
               )}
             </div>
           </div>
