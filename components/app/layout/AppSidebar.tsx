@@ -21,16 +21,18 @@ import { useSidebar } from "@/context/SidebarContext";
 import Button from "@/components/ui/Button";
 import { FaBars } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { clearToken } from "@/lib/token";
 
 const mainLinks = [
   { icon: FaCompass, label: "Explore", href: "/explore" },
   // { icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
   // { icon: FaHistory, label: "History", href: "/history" },
-
+  { icon: FaUpload, label: "Upload", href: "/upload" },
   { icon: FaShieldAlt, label: "Mods", href: "/moderator" },
   { icon: FaUserShield, label: "Admin", href: "/admin" },
-  { icon: FaUpload, label: "Upload", href: "/upload" },
+  
 ];
 
 const categories = [
@@ -42,8 +44,15 @@ const categories = [
 export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen, close, toggle } = useSidebar();
+  const queryClient = useQueryClient();
 
   const { user, isReady } = useAuth();
+
+  const handleLogout = () => {
+    clearToken();
+    queryClient.setQueryData(["me"], null);
+    close();
+  };
 
   return (
     <>
@@ -139,36 +148,48 @@ export default function AppSidebar() {
             })}
           </div>
 
-          <div className="mt-auto pt-4 flex gap-2">
-            <Link
-              href="https://discord.gg/K68Z9HbsA5"
-              target="_blank"
-              className="flex-1"
-            >
-              <Button variant="links" className="w-full">
-                <FaDiscord className="size-5" />
+          <div className="flex flex-col gap-4 mt-auto pt-4">
+            {isReady && !!user && (
+              <Button
+                type="button"
+                variant="videoDetails"
+                onClick={handleLogout}
+                className="lg:hidden flex w-full items-center gap-4 rounded-lg px-3 py-2 text-[15px] font-medium text-text-amount transition-colors duration-300"
+              >
+                Logout
               </Button>
-            </Link>
+            )}
+            <div className="flex gap-2">
+              <Link
+                href="https://discord.gg/K68Z9HbsA5"
+                target="_blank"
+                className="flex-1"
+              >
+                <Button variant="links" className="w-full">
+                  <FaDiscord className="size-5" />
+                </Button>
+              </Link>
 
-            <Link
-              href="https://matrix.to/#/#fairplay-video:matrix.org"
-              target="_blank"
-              className="flex-1"
-            >
-              <Button variant="links" className="w-full">
-                <SiMatrix className="size-5" />
-              </Button>
-            </Link>
+              <Link
+                href="https://matrix.to/#/#fairplay-video:matrix.org"
+                target="_blank"
+                className="flex-1"
+              >
+                <Button variant="links" className="w-full">
+                  <SiMatrix className="size-5" />
+                </Button>
+              </Link>
 
-            <Link
-              href="https://ko-fi.com/fairplay_"
-              target="_blank"
-              className="flex-1"
-            >
-              <Button variant="links" className="w-full">
-                <SiKofi className="size-5" />
-              </Button>
-            </Link>
+              <Link
+                href="https://ko-fi.com/fairplay_"
+                target="_blank"
+                className="flex-1"
+              >
+                <Button variant="links" className="w-full">
+                  <SiKofi className="size-5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </aside>

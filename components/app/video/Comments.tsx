@@ -8,9 +8,10 @@ import { formatDistanceToNow } from "date-fns";
 import Button from "@/components/ui/Button";
 import Textarea from "@/components/ui/Textarea";
 import { useAuth } from "@/context/AuthContext";
-import { FaThumbsUp, FaRegThumbsUp, FaReply } from "react-icons/fa";
+import { FaThumbsUp, FaRegThumbsUp, FaReply, FaTrash } from "react-icons/fa";
 import {
   addComment,
+  deleteComment,
   getCommentReplies,
   likeComment,
   unlikeComment,
@@ -38,9 +39,10 @@ interface CommentProps {
   comment: CommentItem;
   videoId: string;
   onReplySuccess?: () => void;
+  onDelete?: (commentId: string) => void;
 }
 
-function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
+function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
   const { user } = useAuth();
 
   const [isReplying, setIsReplying] = useState<boolean>(false);
@@ -48,9 +50,15 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
 
   const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
   const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const [replies, setReplies] = useState<CommentItem[]>([]);
   const [localComment, setLocalComment] = useState<CommentItem>(comment);
+
+  const isStaff = user?.role === "moderator" || user?.role === "admin";
+  const canDelete =
+    !!user && (user.id === localComment.user.id || isStaff);
+  const isDeleted = localComment.content === "[deleted]";
 
   const form = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
@@ -124,6 +132,42 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!canDelete || isDeleting) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await deleteComment(localComment.id);
+      const message = response.data?.message ?? "";
+      const wasSoftDeleted = message.toLowerCase().includes("soft");
+
+      if (wasSoftDeleted || (localComment._count?.replies ?? 0) > 0) {
+        setLocalComment((prev) => ({ ...prev, content: "[deleted]" }));
+        return;
+      }
+
+      onDelete?.(localComment.id);
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleReplyDelete = (commentId: string) => {
+    setReplies((prev) => prev.filter((reply) => reply.id !== commentId));
+    setLocalComment((prev) => {
+      if (typeof prev._count?.replies !== "number") return prev;
+      return {
+        ...prev,
+        _count: {
+          ...prev._count,
+          replies: Math.max(prev._count.replies - 1, 0),
+        },
+      };
+    });
+  };
+
   return (
     <div className="flex gap-4">
       <UserAvatar user={localComment.user} size={40} />
@@ -168,6 +212,19 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
           >
             <FaReply /> Reply
           </Button>
+          {canDelete && !isDeleted && (
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="rounded-full text-text-para hover:bg-white/5"
+              title="Delete comment"
+              aria-label="Delete comment"
+            >
+              <FaTrash />
+            </Button>
+          )}
         </div>
 
         {isReplying && (
@@ -230,7 +287,12 @@ function Comment({ comment, videoId, onReplySuccess }: CommentProps) {
               <div className="text-xs text-text-footer">Loading replies...</div>
             )}
             {replies.map((reply) => (
-              <Comment key={reply.id} comment={reply} videoId={videoId} />
+              <Comment
+                key={reply.id}
+                comment={reply}
+                videoId={videoId}
+                onDelete={handleReplyDelete}
+              />
             ))}
           </div>
         )}
@@ -262,13 +324,17 @@ export function Comments({ videoId, initialComments }: CommentsProps) {
     }
   };
 
+  const handleCommentDelete = (commentId: string) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+  };
+
   return (
     <div id="comments" className="mt-8 mb-6">
       <h3 className="text-xl font-bold mb-6 mx-2 text-text">
         {comments.length} Comments
       </h3>
 
-      {true ? (
+      {user ? (
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="mb-8 flex gap-4"
@@ -319,7 +385,12 @@ export function Comments({ videoId, initialComments }: CommentsProps) {
 
       <div className="space-y-6">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} videoId={videoId} />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            videoId={videoId}
+            onDelete={handleCommentDelete}
+          />
         ))}
       </div>
     </div>

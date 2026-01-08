@@ -10,6 +10,7 @@ import Card from "@/components/ui/Card";
 import { User } from "@/types/schema";
 import { getSessions, revokeSession, Session } from "@/lib/users";
 import Button from "@/components/ui/Button";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface AccountTabProps {
   user: User;
@@ -18,6 +19,7 @@ interface AccountTabProps {
 export default function AccountTab({ user }: AccountTabProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [sessionToRevoke, setSessionToRevoke] = useState<Session | null>(null);
 
   useEffect(() => {
     loadSessions();
@@ -34,8 +36,10 @@ export default function AccountTab({ user }: AccountTabProps) {
     }
   };
 
-  const handleRevoke = async (sessionId: string) => {
-    if (!confirm("Are you sure you want to revoke this session?")) return;
+  const handleConfirmRevoke = async () => {
+    if (!sessionToRevoke) return;
+    const sessionId = sessionToRevoke.id;
+    setSessionToRevoke(null);
 
     try {
       await revokeSession(sessionId);
@@ -46,8 +50,12 @@ export default function AccountTab({ user }: AccountTabProps) {
     }
   };
 
+  const handleCancelRevoke = () => {
+    setSessionToRevoke(null);
+  };
+
   return (
-    <div className="px-4">
+    <div className="md:px-4">
       <h3 className="text-xl font-semibold mb-4">Account Information</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -96,7 +104,7 @@ export default function AccountTab({ user }: AccountTabProps) {
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-col text-sm text-text-amount">
+                    <div className="flex flex-col text-sm text-text-amount break-all">
                       <span>{session.ipAddress || "Unknown IP"}</span>
                       <span>
                         {browser.name} {browser.version}
@@ -113,7 +121,7 @@ export default function AccountTab({ user }: AccountTabProps) {
                     size="icon"
                     variant="ghost"
                     title="Revoke Session"
-                    onClick={() => handleRevoke(session.id)}
+                    onClick={() => setSessionToRevoke(session)}
                     className="text-red-500 hover:bg-red-500/10 rounded-full"
                   >
                     <FaTrash />
@@ -125,6 +133,22 @@ export default function AccountTab({ user }: AccountTabProps) {
           })}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={Boolean(sessionToRevoke)}
+        title="Revoke session?"
+        description={
+          sessionToRevoke
+            ? `Are you sure you want to revoke ${
+                sessionToRevoke.deviceInfo || "this session"
+              }?`
+            : undefined
+        }
+        confirmLabel="Revoke"
+        confirmTone="danger"
+        onConfirm={handleConfirmRevoke}
+        onCancel={handleCancelRevoke}
+      />
     </div>
   );
 }

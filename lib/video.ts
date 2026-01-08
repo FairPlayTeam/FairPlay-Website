@@ -154,15 +154,9 @@ export async function likeComment(commentId: string) {
   return api.post<{ message: string; likeCount: number }>(
     `/comments/${encodeURIComponent(commentId)}/like`
   );
-  return api.post<{ message: string; likeCount: number }>(
-    `/comments/${encodeURIComponent(commentId)}/like`
-  );
 }
 
 export async function unlikeComment(commentId: string) {
-  return api.delete<{ message: string; likeCount: number }>(
-    `/comments/${encodeURIComponent(commentId)}/like`
-  );
   return api.delete<{ message: string; likeCount: number }>(
     `/comments/${encodeURIComponent(commentId)}/like`
   );
@@ -187,6 +181,12 @@ export async function getCommentReplies(
       itemsReturned: number;
     };
   }>(`/comments/${encodeURIComponent(commentId)}/replies?${qs}`);
+}
+
+export async function deleteComment(commentId: string) {
+  return api.delete<{ message: string }>(
+    `/comments/${encodeURIComponent(commentId)}`
+  );
 }
 
 export async function deleteVideo(videoId: string) {

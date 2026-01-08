@@ -85,7 +85,7 @@ export function VideoCard({
               className="object-cover group-hover:scale-102 transition-transform duration-200"
             />
           ) : (
-            <div className="w-full h-full bg-gray-300" />
+            <div className="w-full h-full bg-container" />
           )}
         </div>
 
@@ -125,7 +125,7 @@ export function VideoCard({
               className="object-cover group-hover:scale-102 transition-transform duration-200"
             />
           ) : (
-            <div className="w-full h-full bg-gray-300" />
+            <div className="w-full h-full bg-container" />
           )}
         </div>
 
@@ -164,7 +164,7 @@ export function VideoCard({
             className="object-cover group-hover:scale-102 transition-transform duration-200"
           />
         ) : (
-          <div className="w-full h-full bg-gray-300" />
+          <div className="w-full h-full bg-container" />
         )}
       </div>
 

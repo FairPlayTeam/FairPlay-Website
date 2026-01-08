@@ -218,31 +218,32 @@ export default function ChannelPage() {
               {user.followingCount} Following
             </p>
 
-            {!me ? (
-              <Link
-                href={`/login?callbackUrl=${encodeURIComponent(
-                  typeof window !== "undefined" ? window.location.pathname : "/"
-                )}`}
-              >
-                <Button variant="videoDetails" className="rounded-full px-6">
-                  Login to Subscribe
-                </Button>
-              </Link>
-            ) : !isMe ? (
-              <FollowButton
-                username={user.username ?? ""}
-                initialFollowing={Boolean(user.isFollowing)}
-                onChangeCount={onFollowerDelta}
-              />
-            ) : null}
-            
+            <div className="w-full md:w-auto flex justify-center md:justify-start">
+              {!me ? (
+                <Link
+                  href={`/login?callbackUrl=${encodeURIComponent(
+                    typeof window !== "undefined" ? window.location.pathname : "/"
+                  )}`}
+                >
+                  <Button variant="videoDetails" className="rounded-full px-6">
+                    Login to Subscribe
+                  </Button>
+                </Link>
+              ) : !isMe ? (
+                <FollowButton
+                  username={user.username ?? ""}
+                  initialFollowing={Boolean(user.isFollowing)}
+                  onChangeCount={onFollowerDelta}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 pb-10">
         {videos.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No videos yet.</p>
+          <p className="flex text-sm text-muted-foreground pt-10 justify-center">No videos yet.</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {videos.map((v) => {
