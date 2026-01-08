@@ -1,7 +1,9 @@
+import { Suspense } from "react";
+
 export default function FeedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <main>{children}</main>;
+  return <Suspense fallback={null}>{children}</Suspense>;
 }

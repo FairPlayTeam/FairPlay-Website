@@ -10,7 +10,7 @@ import { toast } from "@/components/ui/Toast/toast-utils";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function VideosPage() {
-  const pageSize = 10;
+  const pageSize = 12;
   const router = useRouter();
   const [videos, setVideos] = useState<VideoDetails[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -135,6 +135,7 @@ export default function VideosPage() {
           </div>
         ) : null}
       </div>
+      
       <DisclaimerPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}

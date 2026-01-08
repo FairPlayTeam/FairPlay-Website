@@ -124,15 +124,7 @@ export default function SubscriptionsPage() {
     }
   };
 
-  if (isAuthLoading || !user) {
-    return (
-      <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
-      </div>
-    );
-  }
-
-  if (isLoading) {
+  if (isAuthLoading || !user || isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-12" />
