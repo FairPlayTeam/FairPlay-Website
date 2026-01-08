@@ -29,10 +29,10 @@ const mainLinks = [
   // { icon: FaGlobe, label: "Offline", href: "/offline" },
   { icon: FaBell, label: "Subscriptions", href: "/subscriptions" },
   // { icon: FaHistory, label: "History", href: "/history" },
-
+  { icon: FaUpload, label: "Upload", href: "/upload" },
   { icon: FaShieldAlt, label: "Mods", href: "/moderator" },
   { icon: FaUserShield, label: "Admin", href: "/admin" },
-  { icon: FaUpload, label: "Upload", href: "/upload" },
+  
 ];
 
 const categories = [
