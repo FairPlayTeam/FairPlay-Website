@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import HomePageClient from "@/components/marketing/HomePageClient";
 import {
   DEFAULT_OG_IMAGE,
   DEFAULT_OPEN_GRAPH_IMAGE,
@@ -7,21 +6,21 @@ import {
   TWITTER_HANDLE,
 } from "@/lib/seo";
 
-const title = SITE_NAME;
+const title = "Contribution Guidelines";
 const description =
-  "FairPlay is a human-first streaming platform where creativity stays human.";
+  "Set up FairPlay locally and follow the contribution guidelines.";
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: {
-    canonical: "/",
+    canonical: "/docs/contribution-guidelines",
   },
   openGraph: {
     title,
     description,
-    url: "/",
-    type: "website",
+    url: "/docs/contribution-guidelines",
+    type: "article",
     siteName: SITE_NAME,
     images: [DEFAULT_OPEN_GRAPH_IMAGE],
   },
@@ -39,6 +38,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <HomePageClient />;
+export default function ContributionGuidelinesLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }

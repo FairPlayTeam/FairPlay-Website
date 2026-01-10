@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import HomePageClient from "@/components/marketing/HomePageClient";
 import {
   DEFAULT_OG_IMAGE,
   DEFAULT_OPEN_GRAPH_IMAGE,
@@ -7,20 +6,19 @@ import {
   TWITTER_HANDLE,
 } from "@/lib/seo";
 
-const title = SITE_NAME;
-const description =
-  "FairPlay is a human-first streaming platform where creativity stays human.";
+const title = "Explore";
+const description = "Discover the latest videos and creators on FairPlay.";
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: {
-    canonical: "/",
+    canonical: "/explore",
   },
   openGraph: {
     title,
     description,
-    url: "/",
+    url: "/explore",
     type: "website",
     siteName: SITE_NAME,
     images: [DEFAULT_OPEN_GRAPH_IMAGE],
@@ -39,6 +37,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <HomePageClient />;
+export default function ExploreLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
