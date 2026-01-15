@@ -174,12 +174,11 @@ export default function RegisterClient() {
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            You already have an account ?{" "}
             <a
               href="/login"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
-              Login
+              Already have an account?
             </a>
           </p>
         </form>
