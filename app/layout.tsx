@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import { Providers } from "@/components/providers";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OPEN_GRAPH_IMAGE,
+  METADATA_BASE,
+  SITE_NAME,
+  SITE_URL,
+  TWITTER_HANDLE,
+} from "@/lib/seo";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -16,8 +25,28 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "FairPlay",
-  description: "Your passions deserve more than an algorithm",
+  metadataBase: METADATA_BASE,
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  openGraph: {
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: "website",
+    images: [DEFAULT_OPEN_GRAPH_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+  },
 };
 
 export default function RootLayout({

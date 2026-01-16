@@ -38,7 +38,7 @@ export default function RoadmapPage() {
         <>
           Implementation of core functionalities, community contributions, code
           refactoring, and{" "}
-          <Link href="/contributors#api" variant="secondary">
+          <Link href="https://apiv2.fairplay.video/docs/" variant="secondary">
             public API
           </Link>
           . You can take a look at our live build version{" "}
@@ -54,7 +54,7 @@ export default function RoadmapPage() {
       description: (
         <>
           Redesign of the site, creation of docs and better{" "}
-          <Link href="/contributors" variant="secondary">
+          <Link href="/docs/contribution-guidelines" variant="secondary">
             guides for contributors
           </Link>
           .

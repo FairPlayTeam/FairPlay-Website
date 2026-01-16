@@ -1,276 +1,132 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-import Spinner from "@/components/ui/Spinner";
-import { VideoCard } from "@/components/app/video/VideoCard";
-import { FollowButton } from "@/components/ui/FollowButton";
-import Button from "@/components/ui/Button";
-
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { cache } from "react";
+import ChannelPageClient from "./ChannelPageClient";
+import type { PublicUser, UserVideoItem, UserVideosResponse } from "@/lib/users";
 import {
-  getUser,
-  getUserVideos,
-  type PublicUser,
-  type UserVideoItem,
-} from "@/lib/users";
-import { useAuth } from "@/context/AuthContext";
-import UserAvatar from "@/components/ui/UserAvatar";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OPEN_GRAPH_IMAGE,
+  SITE_NAME,
+  TWITTER_HANDLE,
+  getAbsoluteUrl,
+} from "@/lib/seo";
 
-type LoadState = "idle" | "loading" | "ready" | "error";
+const pageSize = 10;
 
-export default function ChannelPage() {
-  const pageSize = 10;
-  const params = useParams();
-  const router = useRouter();
-  const { user: me } = useAuth();
-
-  const usernameParam = params?.username;
-  const username =
-    typeof usernameParam === "string"
-      ? usernameParam
-      : (usernameParam?.[0] ?? "");
-
-  const [user, setUser] = useState<PublicUser | null>(null);
-  const [videos, setVideos] = useState<UserVideoItem[]>([]);
-  const [state, setState] = useState<LoadState>("idle");
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-
-  const requestSeq = useRef(0);
-
-  useEffect(() => {
-    const seq = ++requestSeq.current;
-
-    const run = async () => {
-      if (!username) {
-        setUser(null);
-        setVideos([]);
-        setError("User not found");
-        setState("error");
-        return;
-      }
-
-      setState("loading");
-      setError(null);
-
-      try {
-        const [uRes, vsRes] = await Promise.all([
-          getUser(username),
-          getUserVideos(username, 1, pageSize),
-        ]);
-
-        // Ignore stale responses
-        if (requestSeq.current !== seq) return;
-
-        const u = uRes.data;
-        const vs = vsRes.data;
-
-        setUser(u);
-        const initialVideos = vs?.videos ?? [];
-        const totalPages = vs?.pagination?.totalPages;
-        setVideos(initialVideos);
-        setPage(1);
-        setHasMore(
-          typeof totalPages === "number"
-            ? 1 < totalPages
-            : initialVideos.length === pageSize
-        );
-        setState("ready");
-      } catch (e: unknown) {
-        if (requestSeq.current !== seq) return;
-
-        const message =
-          e instanceof Error ? e.message : "Failed to load profile";
-        setUser(null);
-        setVideos([]);
-        setError(message);
-        setState("error");
-      }
-    };
-
-    run();
-  }, [username]);
-
-  const loadMore = useCallback(async () => {
-    if (!username || state !== "ready" || loadingMore || !hasMore) return;
-
-    setLoadingMore(true);
-    const seq = requestSeq.current;
-    const nextPage = page + 1;
-
-    try {
-      const vsRes = await getUserVideos(username, nextPage, pageSize);
-      if (requestSeq.current !== seq) return;
-
-      const vs = vsRes.data;
-      const nextVideos = vs?.videos ?? [];
-      const totalPages = vs?.pagination?.totalPages;
-
-      setVideos((prev) => [...prev, ...nextVideos]);
-      setPage(nextPage);
-      setHasMore(
-        typeof totalPages === "number"
-          ? nextPage < totalPages
-          : nextVideos.length === pageSize
-      );
-    } catch {
-      if (requestSeq.current !== seq) return;
-      setHasMore(false);
-    } finally {
-      if (requestSeq.current !== seq) return;
-      setLoadingMore(false);
-    }
-  }, [hasMore, loadingMore, page, pageSize, state, username]);
-
-  const sentinelRef = useInfiniteScroll({
-    hasMore,
-    isLoading: state !== "ready" || loadingMore,
-    onLoadMore: loadMore,
-  });
-
-  const isMe = !!me && !!user && me.username === user.username;
-
-  const banner = user?.bannerUrl ?? null;
-
-  const onFollowerDelta = (delta: number) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      const nextCount = Math.max(0, (prev.followerCount ?? 0) + delta);
-      return { ...prev, followerCount: nextCount };
-    });
-  };
-
-  if (state === "loading" || state === "idle") {
-    return (
-      <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
-      </div>
-    );
+const fetchChannelData = cache(async (username: string): Promise<{
+  user: PublicUser | null;
+  videos: UserVideoItem[];
+  totalPages?: number;
+}> => {
+  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!apiBase) {
+    throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
   }
 
-  if (state === "error" || !user) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl mb-4">Error</h2>
-        <p className="text-text">{error || "User not found"}</p>
-      </div>
-    );
+  const encodedUsername = encodeURIComponent(username);
+  const [userRes, videosRes] = await Promise.all([
+    fetch(`${apiBase}/user/${encodedUsername}`, {
+      next: { revalidate: 300 },
+    }),
+    fetch(`${apiBase}/user/${encodedUsername}/videos?page=1&limit=${pageSize}`, {
+      next: { revalidate: 60 },
+    }),
+  ]);
+
+  if (userRes.status === 404) {
+    return { user: null, videos: [] };
+  }
+
+  if (!userRes.ok) {
+    throw new Error("Failed to fetch channel details");
+  }
+
+  const user = (await userRes.json()) as PublicUser;
+
+  if (!videosRes.ok) {
+    throw new Error("Failed to fetch channel videos");
+  }
+
+  const videosData = (await videosRes.json()) as UserVideosResponse;
+  return {
+    user,
+    videos: videosData.videos ?? [],
+    totalPages: videosData.pagination?.totalPages,
+  };
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}): Promise<Metadata> {
+  const { user } = await fetchChannelData(params.username);
+
+  if (!user) {
+    return {
+      title: "Channel not found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const displayName = user.displayName || user.username;
+  const description =
+    user.bio?.trim() || `Watch videos from ${displayName} on FairPlay.`;
+  const canonical = `/channel/${encodeURIComponent(user.username)}`;
+  const imageUrl = getAbsoluteUrl(user.bannerUrl || user.avatarUrl || null);
+  const openGraphImages = imageUrl
+    ? [{ url: imageUrl }]
+    : [DEFAULT_OPEN_GRAPH_IMAGE];
+  const twitterImages = imageUrl ? [imageUrl] : [DEFAULT_OG_IMAGE];
+
+  return {
+    title: displayName,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title: displayName,
+      description,
+      url: canonical,
+      type: "website",
+      siteName: SITE_NAME,
+      images: openGraphImages,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title: displayName,
+      description,
+      images: twitterImages,
+      site: TWITTER_HANDLE,
+      creator: TWITTER_HANDLE,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+export default async function ChannelPage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const data = await fetchChannelData(params.username);
+  if (!data.user) {
+    notFound();
   }
 
   return (
-    <div className="w-full">
-      {banner ? (
-        <div className="relative w-full h-30 md:h-45 block">
-          <Image
-            src={banner}
-            alt={`${user.username} banner`}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-        </div>
-      ) : null}
-
-      <div className="container mx-auto px-4 pt-6 pb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="flex md:block justify-center md:justify-start">
-            <UserAvatar user={user} size={80} className="border-background" />
-          </div>
-
-          <div className="flex-1 min-w-0 text-center md:text-left">
-            <h1 className="text-2xl font-semibold truncate">
-              {user.displayName || user.username}
-            </h1>
-            <p className="text-sm text-muted-foreground">@{user.username}</p>
-            {user.bio ? (
-              <p className="mt-3 text-sm text-text/80 max-w-3xl md:text-left text-center">
-                {user.bio}
-              </p>
-            ) : null}
-          </div>
-
-          {isMe ? (
-            <Button
-              variant="videoDetails"
-              onClick={() => router.push(`/profile`)}
-            >
-              Edit Channel
-            </Button>
-          ) : null}
-
-          <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:text-left">
-            <p
-              className="text-sm text-text hover:underline"
-            >
-              {user.followerCount} Followers
-            </p>
-
-            <p
-              className="text-sm text-text hover:underline"
-            >
-              {user.followingCount} Following
-            </p>
-
-            <div className="w-full md:w-auto flex justify-center md:justify-start">
-              {!me ? (
-                <Link
-                  href={`/login?callbackUrl=${encodeURIComponent(
-                    typeof window !== "undefined" ? window.location.pathname : "/"
-                  )}`}
-                >
-                  <Button variant="videoDetails" className="rounded-full px-6">
-                    Login to Subscribe
-                  </Button>
-                </Link>
-              ) : !isMe ? (
-                <FollowButton
-                  username={user.username ?? ""}
-                  initialFollowing={Boolean(user.isFollowing)}
-                  onChangeCount={onFollowerDelta}
-                />
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 pb-10">
-        {videos.length === 0 ? (
-          <p className="flex text-sm text-muted-foreground pt-10 justify-center">No videos yet.</p>
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {videos.map((v) => {
-              const createdAtLabel = new Date(v.createdAt).toLocaleDateString();
-              const meta = `${createdAtLabel} • ${v.viewCount} views`;
-
-              return (
-                <VideoCard
-                  key={v.id}
-                  thumbnailUrl={v.thumbnailUrl}
-                  title={v.title}
-                  displayName={user.displayName || user.username}
-                  meta={meta}
-                  onPress={() => router.push(`/video/${v.id}`)}
-                  variant="grid"
-                />
-              );
-            })}
-            <div ref={sentinelRef} className="h-1 col-span-full" />
-            {loadingMore ? (
-              <div className="w-full grid place-items-center py-6 col-span-full">
-                <Spinner className="size-8" />
-              </div>
-            ) : null}
-          </div>
-        )}
-      </div>
-    </div>
+    <ChannelPageClient
+      username={params.username}
+      initialUser={data.user}
+      initialVideos={data.videos}
+      initialTotalPages={data.totalPages}
+    />
   );
 }
