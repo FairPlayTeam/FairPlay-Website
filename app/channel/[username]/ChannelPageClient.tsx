@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -40,6 +41,7 @@ export default function ChannelPageClient({
   const pageSize = 10;
   const router = useRouter();
   const { user: me } = useAuth();
+  const pathname = usePathname();
 
   const [user, setUser] = useState<PublicUser | null>(initialUser);
   const [videos, setVideos] = useState<UserVideoItem[]>(initialVideos);
@@ -233,11 +235,7 @@ export default function ChannelPageClient({
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               {!me ? (
                 <Link
-                  href={`/login?callbackUrl=${encodeURIComponent(
-                    typeof window !== "undefined"
-                      ? window.location.pathname
-                      : "/"
-                  )}`}
+                  href={`/login?callbackUrl=${encodeURIComponent(pathname || "/")}`}
                 >
                   <Button variant="videoDetails" className="rounded-full px-6">
                     Login to Subscribe
