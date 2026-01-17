@@ -3,8 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -31,6 +30,19 @@ type ChannelPageClientProps = {
   initialError?: string | null;
 };
 
+const PAGE_SIZE = 10;
+
+function computeHasMore(
+  currentPage: number,
+  totalPages: number | undefined,
+  itemsLength: number
+) {
+  if (typeof totalPages === "number") {
+    return currentPage < totalPages;
+  }
+  return itemsLength === PAGE_SIZE;
+}
+
 export default function ChannelPageClient({
   username,
   initialUser,
@@ -38,7 +50,6 @@ export default function ChannelPageClient({
   initialTotalPages,
   initialError,
 }: ChannelPageClientProps) {
-  const pageSize = 10;
   const router = useRouter();
   const { user: me } = useAuth();
   const pathname = usePathname();
@@ -53,15 +64,17 @@ export default function ChannelPageClient({
   const [page, setPage] = useState(initialUser ? 1 : 0);
   const [hasMore, setHasMore] = useState(() => {
     if (!initialUser) return false;
-    if (typeof initialTotalPages === "number") {
-      return 1 < initialTotalPages;
-    }
-    return initialVideos.length === pageSize;
+    return computeHasMore(1, initialTotalPages, initialVideos.length);
   });
   const [loadingMore, setLoadingMore] = useState(false);
 
   const requestSeq = useRef(0);
   const shouldFetchInitial = !initialUser && !initialError;
+  const meUsername = me?.username ?? null;
+  const userUsername = user?.username ?? null;
+  const isMe = !!meUsername && !!userUsername && meUsername === userUsername;
+  const isReady = state === "ready";
+  const isLoading = state === "loading" || state === "idle";
 
   useEffect(() => {
     if (!username) {
@@ -82,7 +95,7 @@ export default function ChannelPageClient({
       try {
         const [uRes, vsRes] = await Promise.all([
           getUser(username),
-          getUserVideos(username, 1, pageSize),
+          getUserVideos(username, 1, PAGE_SIZE),
         ]);
 
         if (requestSeq.current !== seq) return;
@@ -95,11 +108,7 @@ export default function ChannelPageClient({
         const totalPages = vs?.pagination?.totalPages;
         setVideos(initial);
         setPage(1);
-        setHasMore(
-          typeof totalPages === "number"
-            ? 1 < totalPages
-            : initial.length === pageSize
-        );
+        setHasMore(computeHasMore(1, totalPages, initial.length));
         setState("ready");
       } catch (e: unknown) {
         if (requestSeq.current !== seq) return;
@@ -114,17 +123,34 @@ export default function ChannelPageClient({
     };
 
     run();
-  }, [pageSize, shouldFetchInitial, username]);
+  }, [shouldFetchInitial, username]);
+
+  useEffect(() => {
+    if (!meUsername || !userUsername || isMe) return;
+
+    let active = true;
+
+    getUser(userUsername)
+      .then((res) => {
+        if (!active) return;
+        setUser(res.data);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, [isMe, meUsername, userUsername]);
 
   const loadMore = useCallback(async () => {
-    if (!username || state !== "ready" || loadingMore || !hasMore) return;
+    if (!username || !isReady || loadingMore || !hasMore) return;
 
     setLoadingMore(true);
     const seq = requestSeq.current;
     const nextPage = page + 1;
 
     try {
-      const vsRes = await getUserVideos(username, nextPage, pageSize);
+      const vsRes = await getUserVideos(username, nextPage, PAGE_SIZE);
       if (requestSeq.current !== seq) return;
 
       const vs = vsRes.data;
@@ -133,11 +159,7 @@ export default function ChannelPageClient({
 
       setVideos((prev) => [...prev, ...nextVideos]);
       setPage(nextPage);
-      setHasMore(
-        typeof totalPages === "number"
-          ? nextPage < totalPages
-          : nextVideos.length === pageSize
-      );
+      setHasMore(computeHasMore(nextPage, totalPages, nextVideos.length));
     } catch {
       if (requestSeq.current !== seq) return;
       setHasMore(false);
@@ -145,16 +167,15 @@ export default function ChannelPageClient({
       if (requestSeq.current !== seq) return;
       setLoadingMore(false);
     }
-  }, [hasMore, loadingMore, page, pageSize, state, username]);
+  }, [hasMore, isReady, loadingMore, page, username]);
 
   const sentinelRef = useInfiniteScroll({
     hasMore,
-    isLoading: state !== "ready" || loadingMore,
+    isLoading: !isReady || loadingMore,
     onLoadMore: loadMore,
   });
 
-  const isMe = !!me && !!user && me.username === user.username;
-  const banner = user?.bannerUrl ?? null;
+  const bannerUrl = user?.bannerUrl;
 
   const onFollowerDelta = (delta: number) => {
     setUser((prev) => {
@@ -164,7 +185,7 @@ export default function ChannelPageClient({
     });
   };
 
-  if (state === "loading" || state === "idle") {
+  if (isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-12" />
@@ -183,10 +204,10 @@ export default function ChannelPageClient({
 
   return (
     <div className="w-full">
-      {banner ? (
+      {bannerUrl ? (
         <div className="relative w-full h-30 md:h-45 block">
           <Image
-            src={banner}
+            src={bannerUrl}
             alt={`${user.username} banner`}
             fill
             className="object-cover"
@@ -262,7 +283,7 @@ export default function ChannelPageClient({
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {videos.map((v) => {
               const createdAtLabel = new Date(v.createdAt).toLocaleDateString();
-              const meta = `${createdAtLabel} ƒ?½ ${v.viewCount} views`;
+              const meta = `${v.viewCount} views • ${createdAtLabel}`;
 
               return (
                 <VideoCard
