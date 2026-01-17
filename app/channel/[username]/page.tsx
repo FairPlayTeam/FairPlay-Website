@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo";
 
 const pageSize = 10;
+type Params = { username: string };
 
 const fetchChannelData = cache(async (username: string): Promise<{
   user: PublicUser | null;
@@ -58,9 +59,11 @@ const fetchChannelData = cache(async (username: string): Promise<{
 export async function generateMetadata({
   params,
 }: {
-  params: { username: string };
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const { user } = await fetchChannelData(params.username);
+  const { username } = await params;
+
+  const { user } = await fetchChannelData(username);
 
   if (!user) {
     return {
@@ -114,16 +117,18 @@ export async function generateMetadata({
 export default async function ChannelPage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<Params>;
 }) {
-  const data = await fetchChannelData(params.username);
+  const { username } = await params;
+  
+  const data = await fetchChannelData(username);
   if (!data.user) {
     notFound();
   }
 
   return (
     <ChannelPageClient
-      username={params.username}
+      username={username}
       initialUser={data.user}
       initialVideos={data.videos}
       initialTotalPages={data.totalPages}
