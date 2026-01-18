@@ -13,8 +13,8 @@ import { z } from "zod";
 import { setToken } from "@/lib/token";
 
 const loginFormSchema = z.object({
-  identifier: z.string("Email or username is required"),
-  password: z.string("Password is required"),
+  identifier: z.string().trim().min(1, "Email or username is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
