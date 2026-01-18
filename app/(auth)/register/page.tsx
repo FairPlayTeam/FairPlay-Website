@@ -16,10 +16,10 @@ const registerFormSchema = z
   .object({
     email: z.email("Invalid email"),
     username: z.string("Username is required").min(3, "Username is too short"),
-    password: z.string("Password is required").min(8, "Password is too short"),
+    password: z.string("Password is required").min(6, "Password is too short"),
     confirmPassword: z
       .string("Password is required")
-      .min(8, "Password is too short"),
+      .min(6, "Password is too short"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
