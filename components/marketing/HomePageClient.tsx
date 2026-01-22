@@ -63,7 +63,7 @@ export default function HomePageClient() {
                 mass-produced fast-paced content,{" "}
                 <b>What space is left for humans?</b>
                 <br />
-                Thatƒ?Ts why we launched FairPlay. We want to make it a place
+                That&apos;s why we launched FairPlay. We want to make it a place
                 where your skills, interests, and content are truly highlighted.
               </p>
             </div>
