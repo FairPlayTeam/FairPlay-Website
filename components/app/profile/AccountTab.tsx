@@ -73,7 +73,7 @@ export default function AccountTab({ user }: AccountTabProps) {
       <h3 className="text-xl font-semibold mt-8 mb-4">Active Sessions</h3>
       {isLoading ? (
         <div className="flex justify-center py-4">
-          <Spinner className="size-8" />
+          <Spinner className="size-12" />
         </div>
       ) : sessions.length === 0 ? (
         <p className="text-muted-foreground">No active sessions found.</p>

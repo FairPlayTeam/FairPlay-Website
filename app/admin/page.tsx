@@ -226,7 +226,7 @@ export default function AdminPage() {
   if (!me || state === "idle" || state === "loading") {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
+        <Spinner className="size-16" />
       </div>
     );
   }

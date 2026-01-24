@@ -9,6 +9,7 @@ type VideoCardProps = {
   title: string;
   displayName?: string | null;
   meta?: string;
+  tags?: string[] | null;
   onPress?: () => void;
   className?: string;
   variant?: "grid" | "list" | "listLarge";
@@ -23,6 +24,7 @@ export function VideoCard({
   title,
   displayName,
   meta,
+  tags,
   onPress,
   className,
   variant = "grid",
@@ -54,7 +56,7 @@ export function VideoCard({
         onClick={handlePress}
         onKeyDown={handleKeyDown}
         className={cn(
-          "group rounded-2xl cursor-pointer hover:bg-white/5 transition-colors p-1 mb-2 outline-none",
+          "group rounded-2xl cursor-pointer hover:bg-white/5 transition-colors p-1 mb-2 outline-none overflow-hidden",
           className
         )}
       >
@@ -96,9 +98,34 @@ export function VideoCard({
               {displayName}
             </p>
           )}
+
           {meta && (
             <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
           )}
+
+          {tags && tags.length > 0 && (
+            <div className="pt-2 overflow-hidden min-w-0">
+              <div
+                className="flex flex-nowrap gap-1 overflow-hidden min-w-0"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
+                }}
+              >
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-(--gray-200) whitespace-nowrap"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     );

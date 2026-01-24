@@ -1,7 +1,7 @@
 import ExplorePageClient from "./ExplorePageClient";
 import type { VideoDetails, VideosResponse } from "@/lib/video";
 
-const pageSize = 12;
+const pageSize = 24;
 
 async function fetchInitialVideos(): Promise<{
   videos: VideoDetails[];

@@ -58,7 +58,7 @@ export function RelatedVideos({
         {onLoadMore ? <div ref={sentinelRef} className="h-1" /> : null}
         {isLoadingMore ? (
           <div className="w-full grid place-items-center py-6">
-            <Spinner className="size-6" />
+            <Spinner className="size-8" />
           </div>
         ) : null}
       </div>

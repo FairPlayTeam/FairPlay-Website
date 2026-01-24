@@ -20,7 +20,7 @@ export default function ExplorePageClient({
   initialTotalPages,
   initialError,
 }: ExplorePageClientProps) {
-  const pageSize = 12;
+  const pageSize = 24;
   const router = useRouter();
   const [videos, setVideos] = useState<VideoDetails[]>(initialVideos);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -111,7 +111,7 @@ export default function ExplorePageClient({
   if (isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
+        <Spinner className="size-16" />
       </div>
     );
   }
@@ -140,7 +140,8 @@ export default function ExplorePageClient({
               thumbnailUrl={video.thumbnailUrl}
               title={video.title}
               displayName={video.user?.displayName || video.user?.username}
-              meta={`${video.viewCount} views  •  ${new Date(video.createdAt).toLocaleDateString()}`}
+              meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
+              tags={video.tags}
               onPress={() => handleVideoPress(video.id)}
               variant="grid"
             />
@@ -149,7 +150,7 @@ export default function ExplorePageClient({
         <div ref={sentinelRef} className="h-1" />
         {isLoadingMore ? (
           <div className="w-full grid place-items-center py-6">
-            <Spinner className="size-8" />
+            <Spinner className="size-12" />
           </div>
         ) : null}
       </div>
