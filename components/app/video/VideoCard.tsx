@@ -125,7 +125,6 @@ export function VideoCard({
               </div>
             </div>
           )}
-
         </div>
       </div>
     );

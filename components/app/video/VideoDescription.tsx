@@ -27,17 +27,17 @@ export default function VideoDescription({ video }: VideoDescriptionProps) {
         )}
 
         {video.tags && video.tags.length > 0 && (
-            <div className="flex flex-nowrap gap-2.5 overflow-hidden">
-              {video.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-sm text-accent whitespace-nowrap shrink-0"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-nowrap gap-2.5 overflow-hidden">
+            {video.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-sm text-accent whitespace-nowrap shrink-0"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <p

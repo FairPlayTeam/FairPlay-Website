@@ -16,10 +16,9 @@ async function fetchInitialVideos(): Promise<{
     };
   }
 
-  const res = await fetch(
-    `${apiBase}/videos?page=1&limit=${pageSize}`,
-    { next: { revalidate: 60 } }
-  );
+  const res = await fetch(`${apiBase}/videos?page=1&limit=${pageSize}`, {
+    next: { revalidate: 60 },
+  });
 
   if (!res.ok) {
     return {

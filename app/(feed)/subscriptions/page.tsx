@@ -65,7 +65,9 @@ export default function SubscriptionsPage() {
         );
         setError(null);
         setPage(pageToLoad);
-        setHasMore(resolveHasMore(nextFollowing.length, pageToLoad, totalPages));
+        setHasMore(
+          resolveHasMore(nextFollowing.length, pageToLoad, totalPages)
+        );
       } catch {
         if (mode === "initial") {
           setError("Unable to load subscriptions.");
@@ -175,14 +177,9 @@ export default function SubscriptionsPage() {
                 }}
                 className="cursor-pointer"
               >
-                <div
-                  className="flex flex-col h-full justify-between gap-4 rounded-xl border border-border bg-container hover:bg-container/80 p-2 md:p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-                >
+                <div className="flex flex-col h-full justify-between gap-4 rounded-xl border border-border bg-container hover:bg-container/80 p-2 md:p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">
                   <div className="flex items-center gap-4">
-                    <UserAvatar
-                      user={creator}
-                      size={56}
-                    />
+                    <UserAvatar user={creator} size={56} />
                     <div className="min-w-0">
                       <p className="text-lg font-semibold break-all">
                         {creator.displayName || creator.username}
@@ -195,10 +192,12 @@ export default function SubscriptionsPage() {
                       className="ml-auto"
                       variant="videoDetails"
                       onClick={(event) => {
-                        event.stopPropagation()
-                        handleUnfollow(creator)
+                        event.stopPropagation();
+                        handleUnfollow(creator);
                       }}
-                      disabled={unfollowingIds.has(creator.id || creator.username)}
+                      disabled={unfollowingIds.has(
+                        creator.id || creator.username
+                      )}
                     >
                       Unfollow
                     </Button>

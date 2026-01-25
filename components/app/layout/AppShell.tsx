@@ -37,7 +37,7 @@ export function AppShell({
           <div className="fixed inset-0 z-50 grid place-items-center bg-background/80 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-4">
               <Spinner className="size-24" />
-              
+
               {isTimedOut && (
                 <div className="text-center">
                   <p className="text-sm text-text-amount">

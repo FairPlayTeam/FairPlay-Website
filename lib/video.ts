@@ -69,10 +69,7 @@ export async function getVideoServer(id: string, init?: RequestInit) {
   if (!apiBase) {
     throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
   }
-  const res = await fetch(
-    `${apiBase}/videos/${encodeURIComponent(id)}`,
-    init
-  );
+  const res = await fetch(`${apiBase}/videos/${encodeURIComponent(id)}`, init);
   if (!res.ok) {
     throw new Error("Failed to fetch video details");
   }

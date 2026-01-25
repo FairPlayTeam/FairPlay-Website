@@ -63,7 +63,9 @@ export default function AccountTab({ user }: AccountTabProps) {
           <div className="font-medium">{user.email}</div>
         </div>
         <div>
-          <div className="block text-sm text-text-amount mb-1">Member since</div>
+          <div className="block text-sm text-text-amount mb-1">
+            Member since
+          </div>
           <div className="font-medium">
             {format(new Date(user.createdAt), "PPP")}
           </div>

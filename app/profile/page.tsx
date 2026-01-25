@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/ui/Spinner";
 import Button from "@/components/ui/Button";
-import Tabs from "@/components/ui/Tabs"
+import Tabs from "@/components/ui/Tabs";
 import ChannelTab from "@/components/app/profile/ChannelTab";
 import VideosTab from "@/components/app/profile/VideosTab";
 import AccountTab from "@/components/app/profile/AccountTab";
@@ -54,7 +54,7 @@ export default function ProfilePage() {
 
   const requestedTab = searchParams.get("tab");
   const defaultTab = tabs.some((tab) => tab.id === requestedTab)
-    ? requestedTab ?? "channel"
+    ? (requestedTab ?? "channel")
     : "channel";
 
   return (

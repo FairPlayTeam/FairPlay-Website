@@ -24,11 +24,9 @@ async function fetchVideosPage(
     page: String(page),
     limit: String(VIDEO_PAGE_SIZE),
   }).toString();
-  const res = await fetch(`${apiBase}/videos?${qs}`,
-    {
-      next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
-    }
-  );
+  const res = await fetch(`${apiBase}/videos?${qs}`, {
+    next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
+  });
 
   if (!res.ok) {
     return null;
