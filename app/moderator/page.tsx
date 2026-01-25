@@ -9,7 +9,11 @@ import Button from "@/components/ui/Button";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import { ModVideoCard } from "@/components/app/video/ModVideoCard";
 
-import { listModeratorVideos, type ModVideoItem, updateModeration } from "@/lib/moderation";
+import {
+  listModeratorVideos,
+  type ModVideoItem,
+  updateModeration,
+} from "@/lib/moderation";
 import { deleteVideo } from "@/lib/video";
 import { useAuth } from "@/context/AuthContext";
 
@@ -147,7 +151,7 @@ export default function ModerationPage() {
   if (!me || state === "idle" || state === "loading") {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
+        <Spinner className="size-16" />
       </div>
     );
   }

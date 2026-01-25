@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import ChannelPageClient from "./ChannelPageClient";
-import type { PublicUser, UserVideoItem, UserVideosResponse } from "@/lib/users";
+import type {
+  PublicUser,
+  UserVideoItem,
+  UserVideosResponse,
+} from "@/lib/users";
 import {
   DEFAULT_OG_IMAGE,
   DEFAULT_OPEN_GRAPH_IMAGE,
@@ -14,47 +18,54 @@ import {
 const pageSize = 10;
 type Params = { username: string };
 
-const fetchChannelData = cache(async (username: string): Promise<{
-  user: PublicUser | null;
-  videos: UserVideoItem[];
-  totalPages?: number;
-}> => {
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (!apiBase) {
-    throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
+const fetchChannelData = cache(
+  async (
+    username: string
+  ): Promise<{
+    user: PublicUser | null;
+    videos: UserVideoItem[];
+    totalPages?: number;
+  }> => {
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!apiBase) {
+      throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
+    }
+
+    const encodedUsername = encodeURIComponent(username);
+    const [userRes, videosRes] = await Promise.all([
+      fetch(`${apiBase}/user/${encodedUsername}`, {
+        next: { revalidate: 300 },
+      }),
+      fetch(
+        `${apiBase}/user/${encodedUsername}/videos?page=1&limit=${pageSize}`,
+        {
+          next: { revalidate: 60 },
+        }
+      ),
+    ]);
+
+    if (userRes.status === 404) {
+      return { user: null, videos: [] };
+    }
+
+    if (!userRes.ok) {
+      throw new Error("Failed to fetch channel details");
+    }
+
+    const user = (await userRes.json()) as PublicUser;
+
+    if (!videosRes.ok) {
+      throw new Error("Failed to fetch channel videos");
+    }
+
+    const videosData = (await videosRes.json()) as UserVideosResponse;
+    return {
+      user,
+      videos: videosData.videos ?? [],
+      totalPages: videosData.pagination?.totalPages,
+    };
   }
-
-  const encodedUsername = encodeURIComponent(username);
-  const [userRes, videosRes] = await Promise.all([
-    fetch(`${apiBase}/user/${encodedUsername}`, {
-      next: { revalidate: 300 },
-    }),
-    fetch(`${apiBase}/user/${encodedUsername}/videos?page=1&limit=${pageSize}`, {
-      next: { revalidate: 60 },
-    }),
-  ]);
-
-  if (userRes.status === 404) {
-    return { user: null, videos: [] };
-  }
-
-  if (!userRes.ok) {
-    throw new Error("Failed to fetch channel details");
-  }
-
-  const user = (await userRes.json()) as PublicUser;
-
-  if (!videosRes.ok) {
-    throw new Error("Failed to fetch channel videos");
-  }
-
-  const videosData = (await videosRes.json()) as UserVideosResponse;
-  return {
-    user,
-    videos: videosData.videos ?? [],
-    totalPages: videosData.pagination?.totalPages,
-  };
-});
+);
 
 export async function generateMetadata({
   params,
@@ -120,7 +131,7 @@ export default async function ChannelPage({
   params: Promise<Params>;
 }) {
   const { username } = await params;
-  
+
   const data = await fetchChannelData(username);
   if (!data.user) {
     notFound();

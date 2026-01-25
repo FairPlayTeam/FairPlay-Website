@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { LuLoaderCircle } from "react-icons/lu";
 
 interface SpinnerProps {
   className?: string;
@@ -9,8 +8,16 @@ interface SpinnerProps {
 
 export default function Spinner({ className }: SpinnerProps) {
   return (
-    <LuLoaderCircle
-      className={cn("size-4 animate-spin text-accent", className)}
-    />
+    <svg viewBox="0 0 100 100" className={cn("size-16", className)} fill="none">
+      <polygon
+        points="35,20 75,50 35,80"
+        stroke="currentColor"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        pathLength="1"
+        className="triangle-loader"
+      />
+    </svg>
   );
 }

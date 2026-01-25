@@ -1,7 +1,8 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://fairplay.video";
 export const SITE_NAME = "FairPlay";
-export const DEFAULT_DESCRIPTION = "Your passions deserve more than an algorithm";
+export const DEFAULT_DESCRIPTION =
+  "Your passions deserve more than an algorithm";
 export const DEFAULT_OG_IMAGE = "/images/hero-video-thumbnail.png";
 export const TWITTER_HANDLE = "@StreamNew90503";
 

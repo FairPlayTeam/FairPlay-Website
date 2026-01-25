@@ -38,7 +38,12 @@ export default function ConfirmModal({
   onCancel,
 }: ConfirmModalProps) {
   return (
-    <Modal isOpen={isOpen} title={title} description={description} onClose={onCancel}>
+    <Modal
+      isOpen={isOpen}
+      title={title}
+      description={description}
+      onClose={onCancel}
+    >
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <Button
           type="button"

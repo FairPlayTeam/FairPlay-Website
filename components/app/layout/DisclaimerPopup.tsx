@@ -47,7 +47,9 @@ export default function DisclaimerPopup({
           This part of the website is currently under development. By clicking
           <span className="font-medium text-text"> Continue</span>, you will be
           redirected to the live build version.
-          <span className="font-medium text-text">This environment is for development purposes only.</span>
+          <span className="font-medium text-text">
+            This environment is for development purposes only.
+          </span>
         </p>
 
         <div className="flex flex-col gap-3">

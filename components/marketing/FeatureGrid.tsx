@@ -69,9 +69,7 @@ export default function FeatureGrid({ className = "" }: SectionProps) {
 
       <FeatureItem>
         <FaLightbulb className="text-accent text-[45px] mb-5" />
-        <h3 className="text-[24px] mb-3.75">
-          Relevant & Captivating Content.
-        </h3>
+        <h3 className="text-[24px] mb-3.75">Relevant & Captivating Content.</h3>
         <p className="select-none">
           No more misinformation and sensationalism. FairPlay values
           enlightening documentaries, useful tutorials, inspiring stories, and

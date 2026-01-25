@@ -12,6 +12,12 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/components/ui/Toast/toast-utils";
 
+const normalizeTags = (value: string) =>
+  value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
+
 const uploadSchema = z.object({
   title: z
     .string()
@@ -24,6 +30,29 @@ const uploadSchema = z.object({
   tags: z
     .string()
     .max(100, "Tags cannot be longer than 100 characters.")
+    .refine((value) => {
+      if (!value || value.trim().length === 0) {
+        return true;
+      }
+
+      const tags = normalizeTags(value);
+
+      if (tags.length === 0) {
+        return false;
+      }
+
+      return tags.every((tag) => !/\s/.test(tag));
+    }, "Each tag must be a single word (no spaces), separated by commas.")
+    .refine((value) => {
+      if (!value || value.trim().length === 0) {
+        return true;
+      }
+
+      const tags = normalizeTags(value);
+      const normalized = tags.map((tag) => tag.toLowerCase());
+
+      return new Set(normalized).size === normalized.length;
+    }, "Duplicate tags are not allowed.")
     .optional(),
   video: z
     .any()
@@ -71,7 +100,11 @@ export default function UploadPage() {
     }
 
     if (data.tags) {
-      formData.append("tags", data.tags.trim());
+      const normalizedTags = normalizeTags(data.tags).join(",");
+
+      if (normalizedTags.length > 0) {
+        formData.append("tags", normalizedTags);
+      }
     }
 
     try {
@@ -203,14 +236,13 @@ export default function UploadPage() {
                     {isUploading ? "Uploading..." : "Upload Video"}
                   </Button>
                 </div>
-
               </form>
-              </div>
-              <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
-                <p className="text-sm text-text text-center">
-                  Videos are reviewed before they become public!
-                </p>
-              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
+              <p className="text-sm text-text text-center">
+                Videos are reviewed before they become public!
+              </p>
+            </div>
           </div>
 
           <aside className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
@@ -224,11 +256,10 @@ export default function UploadPage() {
                 <ul className="mt-2 list-disc space-y-1 pl-4">
                   <li>Documentaries, tutorials, educational videos</li>
                   <li>Personal projects, podcasts, art, culture</li>
+                  <li>Lifestyle, development, music, creative content</li>
                   <li>
-                    Lifestyle, development, music, creative content
-                  </li>
-                  <li>
-                    Fictional violence (movies, games) when contextualized and not glorified
+                    Fictional violence (movies, games) when contextualized and
+                    not glorified
                   </li>
                 </ul>
               </div>
@@ -241,13 +272,13 @@ export default function UploadPage() {
                   <li>NSFW content</li>
                   <li>Automatically generated AI videos</li>
                   <li>
-                    Misleading or false information (relative to the scientific consensus; fake news, conspiracies, etc.)
+                    Misleading or false information (relative to the scientific
+                    consensus; fake news, conspiracies, etc.)
                   </li>
                 </ul>
               </div>
             </div>
           </aside>
-
         </div>
       </div>
     </div>

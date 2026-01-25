@@ -79,10 +79,7 @@ export default function Modal({
                     </h2>
                   ) : null}
                   {description ? (
-                    <p
-                      id={descriptionId}
-                      className="text-sm text-text-amount"
-                    >
+                    <p id={descriptionId} className="text-sm text-text-amount">
                       {description}
                     </p>
                   ) : null}
