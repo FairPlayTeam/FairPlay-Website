@@ -86,9 +86,9 @@ FairPlay follows consistent code practices to maintain code quality.
 
 ### Naming Conventions
 
-#### Variable Naming Convention 
+#### Variable Naming Convention
 
-All variables must be in **camelCase**, except constants which can be in all caps. 
+All variables must be in **camelCase**, except constants which can be in all caps.
 
 React components and pages must be in **PascalCase**.
 
@@ -108,11 +108,11 @@ All files and folders must follow the same naming convention to avoid errors, es
 
 React component files must always be in **PascalCase**.
 
-eg. ``VideoPlayer.tsx``, ``UserCard.tsx``
+eg. `VideoPlayer.tsx`, `UserCard.tsx`
 
 Utility, hooks, and service files must remain in **camelCase**.
 
-eg. ``useFetch.ts``, ``authService.ts``
+eg. `useFetch.ts`, `authService.ts`
 
 **Folders**
 
@@ -128,4 +128,3 @@ npm run format # or pnpm format
 ```
 
 This project uses Prettier for formatting and ESLint for linting to maintain a consistent style across the codebase.
-

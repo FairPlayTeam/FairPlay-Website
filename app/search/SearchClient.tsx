@@ -111,7 +111,7 @@ export default function SearchClient() {
   if (loading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
+        <Spinner className="size-16" />
       </div>
     );
   }
@@ -142,7 +142,7 @@ export default function SearchClient() {
       <div ref={sentinelRef} className="h-1" />
       {loadingMore ? (
         <div className="w-full grid place-items-center py-6">
-          <Spinner className="size-8" />
+          <Spinner className="size-12" />
         </div>
       ) : null}
     </div>

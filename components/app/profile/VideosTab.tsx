@@ -125,7 +125,7 @@ export default function VideosTab({ user }: VideosTabProps) {
   if (state === "loading" || state === "idle") {
     return (
       <div className="h-40 w-full grid place-items-center">
-        <Spinner className="size-8" />
+        <Spinner className="size-12" />
       </div>
     );
   }
@@ -177,7 +177,7 @@ export default function VideosTab({ user }: VideosTabProps) {
             <div ref={sentinelRef} className="h-1 col-span-full" />
             {loadingMore ? (
               <div className="w-full grid place-items-center py-6 col-span-full">
-                <Spinner className="size-8" />
+                <Spinner className="size-12" />
               </div>
             ) : null}
           </div>

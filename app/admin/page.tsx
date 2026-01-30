@@ -41,8 +41,9 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [banFilter, setBanFilter] = useState<BanFilter>("all");
   const [page, setPage] = useState(1);
-  const [pagination, setPagination] =
-    useState<AdminUsersResponse["pagination"] | null>(null);
+  const [pagination, setPagination] = useState<
+    AdminUsersResponse["pagination"] | null
+  >(null);
   const [roleUpdatingIds, setRoleUpdatingIds] = useState<Set<string>>(
     () => new Set()
   );
@@ -73,7 +74,11 @@ export default function AdminPage() {
         const res = await adminListUsers({
           search: searchTerm.trim() || undefined,
           isBanned:
-            banFilter === "all" ? undefined : banFilter === "banned" ? "true" : "false",
+            banFilter === "all"
+              ? undefined
+              : banFilter === "banned"
+                ? "true"
+                : "false",
           page,
           limit: pageSize,
         });
@@ -102,7 +107,10 @@ export default function AdminPage() {
     );
   };
 
-  const handleRoleChange = async (userId: string, nextRole: AdminUser["role"]) => {
+  const handleRoleChange = async (
+    userId: string,
+    nextRole: AdminUser["role"]
+  ) => {
     if (roleUpdatingIds.has(userId)) return;
     const previousUser = users.find((user) => user.id === userId);
     if (!previousUser || previousUser.role === nextRole) return;
@@ -226,7 +234,7 @@ export default function AdminPage() {
   if (!me || state === "idle" || state === "loading") {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
-        <Spinner className="size-12" />
+        <Spinner className="size-16" />
       </div>
     );
   }
@@ -290,7 +298,13 @@ export default function AdminPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button type="submit" variant="secondary" className="px-5 py-2 rounded-md">Search</Button>
+            <Button
+              type="submit"
+              variant="secondary"
+              className="px-5 py-2 rounded-md"
+            >
+              Search
+            </Button>
             <Button
               type="button"
               variant="ghost"
@@ -343,11 +357,13 @@ export default function AdminPage() {
                           <h2 className="text-lg font-semibold break-all">
                             {displayName}
                           </h2>
-                        <span className="text-xs text-text-amount break-all">
+                          <span className="text-xs text-text-amount break-all">
                             @{user.username}
                           </span>
                         </div>
-                        <p className="text-sm text-text-amount break-all">{user.email}</p>
+                        <p className="text-sm text-text-amount break-all">
+                          {user.email}
+                        </p>
                         <div className="mt-2 flex flex-wrap gap-2 text-xs">
                           <span
                             className={cn(

@@ -6,7 +6,6 @@
 [![Static Badge](https://img.shields.io/badge/FairPlay-Video-426ED9?style=for-the-badge&link=https%3A%2F%2Ffairplay.video%2F)](https://fairplay.video/)
 [![Static Badge](https://img.shields.io/badge/Ko--Fi-333333?style=for-the-badge&logo=kofi&link=https%3A%2F%2Fko-fi.com%2Ffairplay_)](https://ko-fi.com/fairplay_)
 
-
 # FairPlay - Where Creativity Stays Human
 
 **FairPlay** is a free, open-source streaming platform that puts _people_ back at the heart of online creativity.  
@@ -37,7 +36,9 @@ FairPlay is an open source project, and we're always looking for contributors to
 FairPlay is built by a community of developers who believe the internet should stay **human**. You can be a part of our community by joining the discussion on our [Discord Server](https://discord.gg/ssP35cTceU).
 
 ## Donate Us
+
 You can also support us by donating on Ko-Fi here: [Ko-Fi](https://ko-fi.com/fairplay_)
 
 ### Why should you support us?
+
 FairPlay is 100% free and open-source, but if you appreciate our project you can support us. Even if it's a small donate, we will be happy for it. **Every donate counts big or small.**

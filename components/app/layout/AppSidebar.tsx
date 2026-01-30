@@ -32,7 +32,6 @@ const mainLinks = [
   { icon: FaUpload, label: "Upload", href: "/upload" },
   { icon: FaShieldAlt, label: "Mods", href: "/moderator" },
   { icon: FaUserShield, label: "Admin", href: "/admin" },
-  
 ];
 
 const categories = [
@@ -98,7 +97,8 @@ export default function AppSidebar() {
                 user?.role === "admin" || user?.role === "moderator";
               const canShowAdmin = user?.role === "admin";
               const shouldRenderMods = !isModsLink || (isReady && canShowMods);
-              const shouldRenderAdmin = !isAdminLink || (isReady && canShowAdmin);
+              const shouldRenderAdmin =
+                !isAdminLink || (isReady && canShowAdmin);
 
               if (!shouldRenderMods || !shouldRenderAdmin) {
                 return null;

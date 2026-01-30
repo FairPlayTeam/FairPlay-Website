@@ -380,14 +380,14 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
       {isBuffering && (
         <div className="absolute inset-0 grid place-items-center pointer-events-none">
-          <Spinner className="size-12" />
+          <Spinner className="size-16" />
         </div>
       )}
 
       <div
         className={`${
           controlsVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-        } absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300`}
+        } absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-4 pb-2 pt-4 transition-opacity duration-300`}
       >
         <Slider
           step={0.25}

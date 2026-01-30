@@ -56,8 +56,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
   const [localComment, setLocalComment] = useState<CommentItem>(comment);
 
   const isStaff = user?.role === "moderator" || user?.role === "admin";
-  const canDelete =
-    !!user && (user.id === localComment.user.id || isStaff);
+  const canDelete = !!user && (user.id === localComment.user.id || isStaff);
   const isDeleted = localComment.content === "[deleted]";
 
   const form = useForm<CommentForm>({
