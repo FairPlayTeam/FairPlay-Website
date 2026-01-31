@@ -8,6 +8,7 @@ type VideoCardProps = {
   thumbnailUrl: string | null;
   title: string;
   displayName?: string | null;
+  username: string;
   meta?: string;
   tags?: string[] | null;
   onPress?: () => void;
@@ -23,6 +24,7 @@ export function VideoCard({
   thumbnailUrl,
   title,
   displayName,
+  username,
   meta,
   tags,
   onPress,
@@ -94,9 +96,12 @@ export function VideoCard({
         <div className="flex flex-col gap-2 flex-1 p-3">
           <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
           {displayName && (
-            <p className="text-sm font-medium text-(--gray-200) line-clamp-1">
+            <a
+              href={`/channel/${username}`}
+              className="text-sm text-(--gray-200) hover:text-(--gray-100) line-clamp-1"
+            >
               {displayName}
-            </p>
+            </a>
           )}
 
           {meta && (
@@ -158,10 +163,14 @@ export function VideoCard({
         <div className="flex flex-col gap-2 sm:gap-1 flex-1 justify-top p-3 sm:py-2">
           <h3 className="font-semibold text-xl line-clamp-2">{title}</h3>
           {displayName && (
-            <p className="text-sm text-(--gray-200) line-clamp-1">
+            <a
+              href={`/channel/${username}`}
+              className="text-sm text-(--gray-200) hover:text-(--gray-100) line-clamp-1"
+            >
               {displayName}
-            </p>
+            </a>
           )}
+
           {meta && (
             <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
           )}
@@ -197,10 +206,14 @@ export function VideoCard({
       <div className="flex flex-col justify-center gap-2 sm:gap-1 flex-1 sm:p-0 p-3">
         <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
         {displayName && (
-          <p className="text-sm text-(--gray-200) line-clamp-1">
+          <a
+            href={`/channel/${username}`}
+            className="text-sm text-(--gray-200) hover:text-(--gray-100) line-clamp-1"
+          >
             {displayName}
-          </p>
+          </a>
         )}
+
         {meta && (
           <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
         )}

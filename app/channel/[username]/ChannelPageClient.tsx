@@ -291,6 +291,7 @@ export default function ChannelPageClient({
                   thumbnailUrl={v.thumbnailUrl}
                   title={v.title}
                   displayName={user.displayName || user.username}
+                  username={user.username}
                   meta={meta}
                   onPress={() => router.push(`/video/${v.id}`)}
                   variant="grid"

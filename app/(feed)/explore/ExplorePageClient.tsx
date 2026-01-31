@@ -140,6 +140,7 @@ export default function ExplorePageClient({
               thumbnailUrl={video.thumbnailUrl}
               title={video.title}
               displayName={video.user?.displayName || video.user?.username}
+              username={video.user?.username || "Undefined"}
               meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
               tags={video.tags}
               onPress={() => handleVideoPress(video.id)}
