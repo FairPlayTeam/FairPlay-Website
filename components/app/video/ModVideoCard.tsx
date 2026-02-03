@@ -71,10 +71,9 @@ export function ModVideoCard({
           thumbnailUrl={video.thumbnailUrl}
           title={video.title}
           displayName={user.displayName || user.username}
-          username={user.username}
           meta={createdAtLabel}
           variant="grid"
-          href={isProcessing ? undefined : `/video/${video.id}`}
+          href={isProcessing ? "" : `/video/${video.id}`}
           className="group mb-0"
           overlayTopLeft={
             <StatusBadges
