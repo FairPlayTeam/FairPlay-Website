@@ -1,6 +1,5 @@
 ﻿"use client";
 
-import { useRouter } from "next/navigation";
 import { FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 
 import { StatusBadges } from "@/components/app/video/StatusBadge";
@@ -23,8 +22,6 @@ export function ModVideoCard({
   onModerate,
   isModerating = false,
 }: ModVideoCardProps) {
-  const router = useRouter();
-
   const isProcessing = video.processingStatus !== "done";
 
   const createdAtLabel =
@@ -77,9 +74,7 @@ export function ModVideoCard({
           username={user.username}
           meta={createdAtLabel}
           variant="grid"
-          onPress={
-            isProcessing ? undefined : () => router.push(`/video/${video.id}`)
-          }
+          href={isProcessing ? undefined : `/video/${video.id}`}
           className="group mb-0"
           overlayTopLeft={
             <StatusBadges
@@ -95,6 +90,7 @@ export function ModVideoCard({
                 className="cursor-pointer rounded-full bg-background/80 p-2 text-white shadow hover:bg-red-600"
                 aria-label="Delete video"
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   onDelete(video.id);
                 }}

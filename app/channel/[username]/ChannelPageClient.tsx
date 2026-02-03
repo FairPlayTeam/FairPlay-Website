@@ -293,7 +293,7 @@ export default function ChannelPageClient({
                   displayName={user.displayName || user.username}
                   username={user.username}
                   meta={meta}
-                  onPress={() => router.push(`/video/${v.id}`)}
+                  href={`/video/${v.id}`}
                   variant="grid"
                 />
               );
