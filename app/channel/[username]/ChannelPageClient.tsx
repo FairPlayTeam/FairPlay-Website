@@ -291,7 +291,6 @@ export default function ChannelPageClient({
                   thumbnailUrl={v.thumbnailUrl}
                   title={v.title}
                   displayName={user.displayName || user.username}
-                  username={user.username}
                   meta={meta}
                   href={`/video/${v.id}`}
                   variant="grid"

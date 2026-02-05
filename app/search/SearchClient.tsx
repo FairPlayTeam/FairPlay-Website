@@ -132,7 +132,6 @@ export default function SearchClient() {
             thumbnailUrl={video.thumbnailUrl}
             title={video.title}
             displayName={video.user?.displayName || video.user?.username}
-            username={video.user?.username || "Undefined"}
             meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
             href={`/video/${video.id}`}
             variant="listLarge"

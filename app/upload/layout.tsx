@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FeedLayout({
+export default function UploadLayout({
   children,
 }: {
   children: React.ReactNode;

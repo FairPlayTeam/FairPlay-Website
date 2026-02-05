@@ -1,76 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
-import Input from "@/components/ui/Input";
-import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/components/ui/Toast/toast-utils";
+import UploadDropzone from "./components/UploadDropzone";
+import ThumbnailDropzone from "./components/ThumbnailDropzone";
+import UploadProgress from "./components/UploadProgress";
+import UploadDetailsFormFields from "./components/UploadDetailsFormFields";
+import UploadStepScreen from "./components/UploadStepScreen";
+import { UPLOAD_STEPS, type UploadStep } from "./upload-constants";
+import { uploadVideo } from "./upload-api";
+import {
+  createIdleUploadRequestState,
+  getCombinedUploadState,
+  resolveUploadErrorMessage,
+  type UploadRequestState,
+} from "./upload-helpers";
+import { uploadSchema, type UploadFormValues } from "./upload-schema";
 
-const normalizeTags = (value: string) =>
-  value
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0);
-
-const uploadSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(100, "Title cannot be longer than 100 characters."),
-  description: z
-    .string()
-    .max(1000, "Description cannot be longer than 1000 characters.")
-    .optional(),
-  tags: z
-    .string()
-    .max(100, "Tags cannot be longer than 100 characters.")
-    .refine((value) => {
-      if (!value || value.trim().length === 0) {
-        return true;
-      }
-
-      const tags = normalizeTags(value);
-
-      if (tags.length === 0) {
-        return false;
-      }
-
-      return tags.every((tag) => !/\s/.test(tag));
-    }, "Each tag must be a single word (no spaces), separated by commas.")
-    .refine((value) => {
-      if (!value || value.trim().length === 0) {
-        return true;
-      }
-
-      const tags = normalizeTags(value);
-      const normalized = tags.map((tag) => tag.toLowerCase());
-
-      return new Set(normalized).size === normalized.length;
-    }, "Duplicate tags are not allowed.")
-    .optional(),
-  video: z
-    .any()
-    .refine((files) => files?.length === 1, "Video file is required")
-    .refine(
-      (files) => files?.[0]?.type?.startsWith("video/"),
-      "File must be a video"
-    ),
-});
-
-type UploadFormValues = z.infer<typeof uploadSchema>;
+const primaryActionClassName =
+  "w-full rounded-lg sm:min-w-50 hover:shadow-[0_0_25px_rgba(0,0,0,0.3)]";
+const secondaryActionClassName =
+  "inline-flex items-center justify-center px-[40px] py-3 text-[15px] rounded-lg sm:min-w-50";
 
 export default function UploadPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [videoRequest, setVideoRequest] = useState<UploadRequestState>(
+    createIdleUploadRequestState
+  );
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [thumbnailError, setThumbnailError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<UploadStep>(1);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -82,204 +50,283 @@ export default function UploadPage() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
   });
 
+  const resetVideoRequest = () => {
+    setVideoRequest(createIdleUploadRequestState());
+  };
+
+  const resetUploadSession = () => {
+    setThumbnailFile(null);
+    setThumbnailError(null);
+    resetVideoRequest();
+  };
+
+  const resetAll = () => {
+    setFile(null);
+    setFileError(null);
+    resetUploadSession();
+    reset();
+  };
+
+  const handleFileSelect = (nextFile: File | null) => {
+    if (!nextFile) {
+      setFile(null);
+      setFileError(null);
+      resetUploadSession();
+      setCurrentStep(1);
+      return;
+    }
+
+    if (!nextFile.type.startsWith("video/")) {
+      setFile(null);
+      setFileError("The selected file must be a video.");
+      resetUploadSession();
+      setCurrentStep(1);
+      return;
+    }
+
+    setFile(nextFile);
+    setFileError(null);
+    resetUploadSession();
+    setCurrentStep(2);
+  };
+
+  const handleThumbnailSelect = (nextFile: File | null) => {
+    if (!nextFile) {
+      setThumbnailFile(null);
+      setThumbnailError(null);
+      return;
+    }
+
+    if (!nextFile.type.startsWith("image/")) {
+      setThumbnailFile(null);
+      setThumbnailError("The selected file must be an image.");
+      return;
+    }
+
+    setThumbnailFile(nextFile);
+    setThumbnailError(null);
+  };
+
   const onSubmit = async (data: UploadFormValues) => {
-    setIsUploading(true);
-    setUploadError(null);
-
-    const formData = new FormData();
-
-    formData.append("title", data.title.trim());
-    formData.append("video", data.video[0]);
-
-    if (data.description) {
-      formData.append("description", data.description.trim());
+    if (!file) {
+      setFileError("Video file is required.");
+      setCurrentStep(1);
+      return;
     }
 
-    if (data.tags) {
-      const normalizedTags = normalizeTags(data.tags).join(",");
-
-      if (normalizedTags.length > 0) {
-        formData.append("tags", normalizedTags);
-      }
-    }
+    setCurrentStep(4);
+    setVideoRequest({
+      state: "uploading",
+      progress: 0,
+      error: null,
+    });
 
     try {
-      await api.post<{
-        message: string;
-        video: { id: string; title: string };
-      }>("/upload/video", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await uploadVideo({
+        file,
+        thumbnail: thumbnailFile,
+        values: data,
+        onProgress: (progress) => {
+          setVideoRequest((prev) => ({
+            ...prev,
+            progress,
+          }));
         },
       });
-      toast.success(
-        "Video uploaded successfully! Your video is going to be reviewed by us before being public."
-      );
 
-      router.push(`/profile?tab=videos`);
-    } catch (error) {
-      toast.error("Upload failed.");
-      setUploadError(
-        (error as { response: { data: { error: string } } })?.response.data
-          .error ?? "Something went wrong!"
+      setVideoRequest({
+        state: "done",
+        progress: 100,
+        error: null,
+      });
+
+      toast.success(
+        thumbnailFile
+          ? "Upload complete! Video and thumbnail uploaded successfully."
+          : "Upload complete! Your video is being processed."
       );
-    } finally {
-      setIsUploading(false);
+    } catch (error) {
+      const message = resolveUploadErrorMessage(error);
+      setVideoRequest((prev) => ({
+        ...prev,
+        state: "error",
+        error: message,
+      }));
+      toast.error("Upload failed.");
     }
   };
 
+  const submitUpload = handleSubmit(onSubmit);
+  const goToThumbnailStep = handleSubmit(() => setCurrentStep(3));
+
+  const isUploading = videoRequest.state === "uploading";
+  const totalTransitions = Math.max(1, UPLOAD_STEPS.length - 1);
+  const stepProgress = Math.round(((currentStep - 1) / totalTransitions) * 100);
+  const combinedUpload = getCombinedUploadState({ video: videoRequest });
+
+  let stepTitle = "Select your file";
+  let stepSubtitle: string | undefined;
+  let stepActions: ReactNode;
+  let stepContent: ReactNode = (
+    <UploadDropzone
+      file={file}
+      error={fileError}
+      disabled={isUploading}
+      onFileSelect={handleFileSelect}
+    />
+  );
+
+  if (currentStep === 2) {
+    stepTitle = "Add details";
+    stepSubtitle = "Title, description, tags.";
+    stepActions = (
+      <>
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={isUploading}
+          className={secondaryActionClassName}
+          onClick={() => setCurrentStep(1)}
+        >
+          Back
+        </Button>
+        <Button
+          type="button"
+          variant="donateSecondary"
+          disabled={isUploading || !file}
+          className={primaryActionClassName}
+          onClick={goToThumbnailStep}
+        >
+          Next
+        </Button>
+      </>
+    );
+    stepContent = (
+      <UploadDetailsFormFields
+        file={file}
+        disabled={isUploading}
+        register={register}
+        errors={errors}
+        onChangeFile={() => setCurrentStep(1)}
+      />
+    );
+  }
+
+  if (currentStep === 3) {
+    stepTitle = "Choose a thumbnail";
+    stepSubtitle = "Optional. We recommend a 16:9 format (for example 1280x720).";
+    stepActions = (
+      <>
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={isUploading}
+          className={secondaryActionClassName}
+          onClick={() => setCurrentStep(2)}
+        >
+          Back to details
+        </Button>
+        <Button
+          type="button"
+          variant="donateSecondary"
+          className={primaryActionClassName}
+          onClick={() => submitUpload()}
+          disabled={isUploading}
+        >
+          Start upload
+        </Button>
+      </>
+    );
+    stepContent = (
+      <ThumbnailDropzone
+        file={thumbnailFile}
+        error={thumbnailError}
+        disabled={isUploading}
+        onFileSelect={handleThumbnailSelect}
+      />
+    );
+  }
+
+  if (currentStep === 4) {
+    stepTitle = "Upload video";
+    stepActions = (
+      <>
+        {videoRequest.state === "error" && (
+          <Button
+            type="button"
+            variant="donateSecondary"
+            className={primaryActionClassName}
+            disabled={isUploading}
+            onClick={() => submitUpload()}
+          >
+            Retry upload
+          </Button>
+        )}
+        {combinedUpload.state === "done" && (
+          <Button
+            type="button"
+            variant="donateSecondary"
+            className={primaryActionClassName}
+            disabled={isUploading}
+            onClick={() => {
+                resetAll();
+                router.push("/profile?tab=videos");
+              }
+            }
+          >
+            Manage videos
+          </Button>
+        )}
+      </>
+    );
+    stepContent = (
+      <div className="space-y-6">
+        <UploadProgress
+          state={combinedUpload.state}
+          progress={combinedUpload.progress}
+          error={combinedUpload.error}
+          labels={combinedUpload.labels}
+          doneMessage={
+            "Your video is now being processed by our server. You can close this browser tab."
+          }
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="container px-5 py-10 md:px-10">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-8 flex flex-col gap-2">
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold">Upload Video</h1>
-          <p className="text-text-amount mt-2">
-            Share your latest work with the community.
-          </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="grid gap-6">
-            <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2 md:col-span-2">
-                    <label htmlFor="title" className="text-sm text-text-amount">
-                      Title
-                    </label>
-                    <Input
-                      id="title"
-                      placeholder="Video title"
-                      {...register("title")}
-                      aria-invalid={!!errors.title}
-                    />
-                    {errors.title && (
-                      <p className="text-red-500 text-sm">
-                        {errors.title.message as string}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2 md:col-span-2">
-                    <label
-                      htmlFor="description"
-                      className="text-sm text-text-amount"
-                    >
-                      Description
-                    </label>
-                    <Textarea
-                      id="description"
-                      placeholder="Video description"
-                      {...register("description")}
-                      aria-invalid={!!errors.description}
-                    />
-                    {errors.description && (
-                      <p className="text-red-500 text-sm">
-                        {errors.description.message as string}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="tags" className="text-sm text-text-amount">
-                      Tags (comma separated)
-                    </label>
-                    <Input
-                      id="tags"
-                      placeholder="gaming, programming, science"
-                      {...register("tags")}
-                      aria-invalid={!!errors.tags}
-                    />
-                    {errors.tags && (
-                      <p className="text-red-500 text-sm">
-                        {errors.tags.message as string}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="video" className="text-sm text-text-amount">
-                      Video file
-                    </label>
-                    <Input
-                      id="video"
-                      type="file"
-                      accept="video/*"
-                      {...register("video")}
-                      aria-invalid={!!errors.video}
-                    />
-                    {errors.video && (
-                      <p className="text-red-500 text-sm">
-                        {errors.video.message as string}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {uploadError && (
-                  <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-sm">
-                    {uploadError}
-                  </div>
-                )}
-
-                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                  <Button
-                    type="submit"
-                    variant="donateSecondary"
-                    disabled={isUploading}
-                    className="w-full rounded-lg sm:min-w-50"
-                  >
-                    {isUploading ? "Uploading..." : "Upload Video"}
-                  </Button>
-                </div>
-              </form>
-            </div>
-            <div className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
-              <p className="text-sm text-text text-center">
-                Videos are reviewed before they become public!
-              </p>
-            </div>
-          </div>
-
-          <aside className="rounded-2xl border border-border bg-container/80 p-6 md:p-6">
-            <div className="flex items-start gap-4">
-              <h2 className="text-xl font-semibold">Guidelines</h2>
-            </div>
-
-            <div className="mt-6 space-y-4 text-sm text-text-amount">
-              <div className="rounded-lg border border-border/60 bg-container-dark/60 p-4">
-                <p className="font-semibold text-green-400">Allowed content</p>
-                <ul className="mt-2 list-disc space-y-1 pl-4">
-                  <li>Documentaries, tutorials, educational videos</li>
-                  <li>Personal projects, podcasts, art, culture</li>
-                  <li>Lifestyle, development, music, creative content</li>
-                  <li>
-                    Fictional violence (movies, games) when contextualized and
-                    not glorified
-                  </li>
-                </ul>
-              </div>
-
-              <div className="rounded-lg border border-border/60 bg-container-dark/60 p-4">
-                <p className="font-semibold text-red-400">Not allowed</p>
-                <ul className="mt-2 list-disc space-y-1 pl-4">
-                  <li>Real or excessively graphic violent content</li>
-                  <li>Political or religious propaganda</li>
-                  <li>NSFW content</li>
-                  <li>Automatically generated AI videos</li>
-                  <li>
-                    Misleading or false information (relative to the scientific
-                    consensus; fake news, conspiracies, etc.)
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </aside>
-        </div>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (currentStep === 4) {
+              submitUpload();
+            }
+          }}
+          className="space-y-6"
+        >
+          <UploadStepScreen
+            title={stepTitle}
+            subtitle={stepSubtitle}
+            stepProgress={stepProgress}
+            actions={stepActions}
+          >
+            {stepContent}
+          </UploadStepScreen>
+        </form>
+        <p className="text-center text-xs text-text-amount">
+          Make sure to read our guidelines before publishing any video.
+        </p>
       </div>
     </div>
   );

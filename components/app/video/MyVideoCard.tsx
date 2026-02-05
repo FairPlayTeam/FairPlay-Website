@@ -36,10 +36,9 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
           thumbnailUrl={video.thumbnailUrl}
           title={video.title}
           displayName={user.displayName || user.username}
-          username={user.username}
           meta={meta}
           variant="grid"
-          href={isProcessing ? undefined : `/video/${video.id}`}
+          href={isProcessing ? "" : `/video/${video.id}`}
           overlayTopLeft={
             <StatusBadges
               visibility={video.visibility}
