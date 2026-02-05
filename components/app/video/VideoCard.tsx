@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type VideoCardProps = {
   thumbnailUrl: string | null;
@@ -10,7 +11,7 @@ type VideoCardProps = {
   displayName?: string | null;
   meta?: string;
   tags?: string[] | null;
-  onPress?: () => void;
+  href: string;
   className?: string;
   variant?: "grid" | "list" | "listLarge";
   overlayTopRight?: React.ReactNode;
@@ -25,7 +26,7 @@ export function VideoCard({
   displayName,
   meta,
   tags,
-  onPress,
+  href,
   className,
   variant = "grid",
   overlayCenter,
@@ -37,112 +38,138 @@ export function VideoCard({
   const isLarge = variant === "listLarge";
   const imgSrc = thumbnailUrl ?? undefined;
 
-  const handlePress = () => {
-    onPress?.();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onPress?.();
+  const cardWrapper = (children: React.ReactNode, classes: string) => {
+    if (href) {
+      return (
+        <Link href={href} className={classes}>
+          {children}
+        </Link>
+      );
     }
+
+    return <div className={classes}>{children}</div>;
   };
 
   if (isGrid) {
     return (
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={handlePress}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          "group rounded-2xl cursor-pointer hover:bg-white/5 transition-colors p-1 mb-2 outline-none overflow-hidden",
-          className
-        )}
-      >
-        <div className="w-full aspect-video rounded-xl overflow-hidden relative">
-          {overlayCenter && (
-            <div className="absolute inset-0 z-10 h-full">{overlayCenter}</div>
-          )}
+      cardWrapper(
+        <>
+          <div className="w-full aspect-video rounded-xl overflow-hidden relative">
+            {overlayCenter && (
+              <div className="absolute inset-0 z-10 h-full">{overlayCenter}</div>
+            )}
 
-          {overlayTopRight && (
-            <div className="absolute top-1 right-1 z-20">{overlayTopRight}</div>
-          )}
+            {overlayTopRight && (
+              <div className="absolute top-1 right-1 z-20">{overlayTopRight}</div>
+            )}
 
-          {overlayTopLeft && (
-            <div className="absolute top-1 left-1 z-20">{overlayTopLeft}</div>
-          )}
+            {overlayTopLeft && (
+              <div className="absolute top-1 left-1 z-20">{overlayTopLeft}</div>
+            )}
 
-          {overlayBottomLeft && (
-            <div className="absolute bottom-1 left-1 z-20">
-              {overlayBottomLeft}
-            </div>
-          )}
-
-          {imgSrc ? (
-            <Image
-              src={imgSrc}
-              alt={title}
-              fill
-              className="object-cover group-hover:scale-102 transition-transform duration-200"
-            />
-          ) : (
-            <div className="w-full h-full bg-container" />
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 flex-1 p-3">
-          <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
-          {displayName && (
-            <p className="text-sm font-medium text-(--gray-200) line-clamp-1">
-              {displayName}
-            </p>
-          )}
-
-          {meta && (
-            <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
-          )}
-
-          {tags && tags.length > 0 && (
-            <div className="pt-2 overflow-hidden min-w-0">
-              <div
-                className="flex flex-nowrap gap-1 overflow-hidden min-w-0"
-                style={{
-                  WebkitMaskImage:
-                    "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
-                  maskImage:
-                    "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
-                }}
-              >
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-(--gray-200) whitespace-nowrap"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            {overlayBottomLeft && (
+              <div className="absolute bottom-1 left-1 z-20">
+                {overlayBottomLeft}
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+
+            {imgSrc ? (
+              <Image
+                src={imgSrc}
+                alt={title}
+                fill
+                className="object-cover group-hover:scale-102 transition-transform duration-200"
+              />
+            ) : (
+              <div className="w-full h-full bg-container" />
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2 flex-1 p-3">
+            <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
+            {displayName && (
+              <p className="text-sm font-medium text-(--gray-200) line-clamp-1">
+                {displayName}
+              </p>
+            )}
+
+            {meta && (
+              <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
+            )}
+
+            {tags && tags.length > 0 && (
+              <div className="pt-2 overflow-hidden min-w-0">
+                <div
+                  className="flex flex-nowrap gap-1 overflow-hidden min-w-0"
+                  style={{
+                    WebkitMaskImage:
+                      "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
+                    maskImage:
+                      "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
+                  }}
+                >
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-(--gray-200) whitespace-nowrap"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </>,
+        cn(
+          "group block rounded-2xl hover:bg-white/5 transition-colors p-1 mb-2 outline-none overflow-hidden",
+          className
+        )
+      )
     );
   }
 
   if (isLarge) {
     return (
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={handlePress}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          "group sm:flex sm:flex-row sm:gap-3 flex-col rounded-2xl cursor-pointer hover:bg-white/5 transition-colors p-1 mb-2 outline-none",
+      cardWrapper(
+        <>
+          <div className="w-full aspect-video sm:w-72 sm:h-40 rounded-xl overflow-hidden relative shrink-0">
+            {imgSrc ? (
+              <Image
+                src={imgSrc}
+                alt={title}
+                fill
+                className="object-cover group-hover:scale-102 transition-transform duration-200"
+              />
+            ) : (
+              <div className="w-full h-full bg-container" />
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2 sm:gap-1 flex-1 justify-top p-3 sm:py-2">
+            <h3 className="font-semibold text-xl line-clamp-2">{title}</h3>
+            {displayName && (
+              <p className="text-sm text-(--gray-200) line-clamp-1">
+                {displayName}
+              </p>
+            )}
+            {meta && (
+              <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
+            )}
+          </div>
+        </>,
+        cn(
+          "group block sm:flex sm:flex-row sm:gap-3 flex-col rounded-2xl hover:bg-white/5 transition-colors p-1 mb-2 outline-none",
           className
-        )}
-      >
-        <div className="w-full aspect-video sm:w-72 sm:h-40 rounded-xl overflow-hidden relative shrink-0">
+        )
+      )
+    );
+  }
+
+  return (
+    cardWrapper(
+      <>
+        <div className="w-full aspect-video sm:w-36 sm:h-20 rounded-xl sm:rounded-lg overflow-hidden relative shrink-0">
           {imgSrc ? (
             <Image
               src={imgSrc}
@@ -155,8 +182,8 @@ export function VideoCard({
           )}
         </div>
 
-        <div className="flex flex-col gap-2 sm:gap-1 flex-1 justify-top p-3 sm:py-2">
-          <h3 className="font-semibold text-xl line-clamp-2">{title}</h3>
+        <div className="flex flex-col justify-center gap-2 sm:gap-1 flex-1 sm:p-0 p-3">
+          <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
           {displayName && (
             <p className="text-sm text-(--gray-200) line-clamp-1">
               {displayName}
@@ -166,45 +193,11 @@ export function VideoCard({
             <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
           )}
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={handlePress}
-      onKeyDown={handleKeyDown}
-      className={cn(
-        "group sm:flex sm:flex-row sm:gap-3 flex-col rounded-2xl sm:rounded-xl cursor-pointer hover:bg-white/5 transition-colors p-1 mb-2 outline-none",
+      </>,
+      cn(
+        "group block sm:flex sm:flex-row sm:gap-3 flex-col rounded-2xl sm:rounded-xl hover:bg-white/5 transition-colors p-1 mb-2 outline-none",
         className
-      )}
-    >
-      <div className="w-full aspect-video sm:w-36 sm:h-20 rounded-xl sm:rounded-lg overflow-hidden relative shrink-0">
-        {imgSrc ? (
-          <Image
-            src={imgSrc}
-            alt={title}
-            fill
-            className="object-cover group-hover:scale-102 transition-transform duration-200"
-          />
-        ) : (
-          <div className="w-full h-full bg-container" />
-        )}
-      </div>
-
-      <div className="flex flex-col justify-center gap-2 sm:gap-1 flex-1 sm:p-0 p-3">
-        <h3 className="font-semibold text-base line-clamp-2">{title}</h3>
-        {displayName && (
-          <p className="text-sm text-(--gray-200) line-clamp-1">
-            {displayName}
-          </p>
-        )}
-        {meta && (
-          <p className="text-xs text-(--gray-300) line-clamp-1">{meta}</p>
-        )}
-      </div>
-    </div>
+      )
+    )
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { VideoCard } from "./VideoCard";
 import { StatusBadges } from "@/components/app/video/StatusBadge";
 import { FaTrash } from "react-icons/fa";
@@ -16,8 +15,6 @@ type MyVideoCardProps = {
 };
 
 export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
-  const router = useRouter();
-
   const isProcessing = video.processingStatus !== "done";
 
   const createdAtLabel =
@@ -41,9 +38,7 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
           displayName={user.displayName || user.username}
           meta={meta}
           variant="grid"
-          onPress={
-            isProcessing ? undefined : () => router.push(`/video/${video.id}`)
-          }
+          href={isProcessing ? "" : `/video/${video.id}`}
           overlayTopLeft={
             <StatusBadges
               visibility={video.visibility}
@@ -58,6 +53,7 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
                 className="cursor-pointer p-2 bg-background/80 hover:bg-red-600 text-white rounded-full shadow"
                 aria-label="Delete video"
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   onDelete(video.id);
                 }}

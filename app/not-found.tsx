@@ -15,8 +15,8 @@ export default function NotFoundContent() {
           </h1>
 
           <p className="mt-3 text-base sm:text-lg text-gray-300">
-            The page you&apos;re looking for doesn&apos;t exist or hasn&apos;t been implemented
-            yet.
+            The page you&apos;re looking for doesn&apos;t exist or hasn&apos;t
+            been implemented yet.
           </p>
 
           <div className="mt-6 flex gap-3">

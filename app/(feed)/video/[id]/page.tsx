@@ -18,7 +18,13 @@ type PageProps = {
 const FALLBACK_TITLE = "FairPlay";
 const FALLBACK_DESCRIPTION = "Watch on FairPlay.";
 
-const fetchVideo = cache(async (id: string): Promise<VideoDetails | null> => {
+type FetchVideoResult = {
+  video: VideoDetails | null;
+  status: number;
+};
+
+const fetchVideo = cache(
+  async (id: string): Promise<FetchVideoResult> => {
   const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
   if (!apiBase) {
     throw new Error("env variable NEXT_PUBLIC_API_BASE_URL is not defined");
@@ -29,21 +35,21 @@ const fetchVideo = cache(async (id: string): Promise<VideoDetails | null> => {
   });
 
   if (res.status === 404) {
-    return null;
+    return { video: null, status: 404 };
   }
 
   if (!res.ok) {
-    throw new Error("Failed to fetch video details");
+    return { video: null, status: res.status };
   }
 
-  return (await res.json()) as VideoDetails;
+  return { video: (await res.json()) as VideoDetails, status: 200 };
 });
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const video = await fetchVideo(id);
+  const { video, status } = await fetchVideo(id);
   const title = video?.title?.trim() || FALLBACK_TITLE;
   const description = video?.description?.trim() || FALLBACK_DESCRIPTION;
   const canonical = `/video/${encodeURIComponent(id)}`;
@@ -53,7 +59,7 @@ export async function generateMetadata({
     : [DEFAULT_OPEN_GRAPH_IMAGE];
   const twitterImages = imageUrl ? [imageUrl] : [DEFAULT_OG_IMAGE];
 
-  if (!video) {
+  if (status === 404) {
     return {
       title: "Video not found",
       robots: {
@@ -94,8 +100,8 @@ export async function generateMetadata({
 
 export default async function VideoPage({ params }: PageProps) {
   const { id } = await params;
-  const video = await fetchVideo(id);
-  if (!video) {
+  const { status } = await fetchVideo(id);
+  if (status === 404) {
     notFound();
   }
   return <VideoPageClient videoId={id} />;

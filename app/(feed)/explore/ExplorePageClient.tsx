@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { VideoCard } from "@/components/app/video/VideoCard";
 import { getVideos, type VideoDetails } from "@/lib/video";
 import Spinner from "@/components/ui/Spinner";
@@ -21,7 +20,6 @@ export default function ExplorePageClient({
   initialError,
 }: ExplorePageClientProps) {
   const pageSize = 24;
-  const router = useRouter();
   const [videos, setVideos] = useState<VideoDetails[]>(initialVideos);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isLoadingMore, setLoadingMore] = useState<boolean>(false);
@@ -125,10 +123,6 @@ export default function ExplorePageClient({
     );
   }
 
-  const handleVideoPress = (id: string) => {
-    router.push(`/video/${id}`);
-  };
-
   return (
     <>
       <div className="container mx-auto px-4 py-8">
@@ -142,7 +136,7 @@ export default function ExplorePageClient({
               displayName={video.user?.displayName || video.user?.username}
               meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
               tags={video.tags}
-              onPress={() => handleVideoPress(video.id)}
+              href={`/video/${video.id}`}
               variant="grid"
             />
           ))}

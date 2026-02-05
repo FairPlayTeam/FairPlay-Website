@@ -168,7 +168,7 @@ export default function AppTopbar() {
                     size="sm"
                     variant="ghost"
                     onClick={() => router.push("/login")}
-                    className="bg-container-dark text-text"
+                    className="hidden lg:inline-flex text-text hover:bg-white/5 rounded-full"
                   >
                     Login
                   </Button>
@@ -176,7 +176,7 @@ export default function AppTopbar() {
                     size="sm"
                     variant="ghost"
                     onClick={() => router.push("/register")}
-                    className="bg-container-dark text-text"
+                    className="hidden lg:inline-flex text-text hover:bg-white/5 rounded-full"
                   >
                     Register
                   </Button>

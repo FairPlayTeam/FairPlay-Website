@@ -15,7 +15,6 @@ export default function Spinner({ className }: SpinnerProps) {
         strokeWidth="5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        pathLength="1"
         className="triangle-loader"
       />
     </svg>
