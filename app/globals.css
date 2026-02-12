@@ -108,16 +108,14 @@ label:has(+ input[aria-invalid="true"]) {
 }
 
 .triangle-loader {
-  stroke-dasharray: 0.3 0.7;
+  stroke-dasharray: 48 112;
+  stroke-dashoffset: 0;
   animation: triangle-spin 1.2s linear infinite;
   color: var(--blue-pastel-100);
 }
 
 @keyframes triangle-spin {
-  0% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: -1;
+  to {
+    stroke-dashoffset: -160;
   }
 }

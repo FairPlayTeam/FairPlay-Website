@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { searchVideos, VideoDetails } from "@/lib/video";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -10,7 +10,6 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function SearchClient() {
   const pageSize = 10;
-  const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [results, setResults] = useState<VideoDetails[]>([]);
@@ -134,7 +133,7 @@ export default function SearchClient() {
             title={video.title}
             displayName={video.user?.displayName || video.user?.username}
             meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
-            onPress={() => router.push(`/video/${video.id}`)}
+            href={`/video/${video.id}`}
             variant="listLarge"
           />
         ))}

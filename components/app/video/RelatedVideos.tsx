@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { VideoDetails } from "@/lib/video";
 import { VideoCard } from "@/components/app/video/VideoCard";
 import Spinner from "@/components/ui/Spinner";
@@ -22,16 +21,10 @@ export function RelatedVideos({
   isLoadingMore = false,
   onLoadMore,
 }: RelatedVideosProps) {
-  const router = useRouter();
-
   const filteredVideos = useMemo(
     () => videos.filter((v) => v.id !== currentVideoId),
     [videos, currentVideoId]
   );
-
-  const handleVideoPress = (id: string) => {
-    router.push(`/video/${id}`);
-  };
 
   const sentinelRef = useInfiniteScroll({
     hasMore: Boolean(onLoadMore) && hasMore,
@@ -51,7 +44,7 @@ export function RelatedVideos({
             title={video.title}
             displayName={video.user?.displayName || video.user?.username}
             meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}
-            onPress={() => handleVideoPress(video.id)}
+            href={`/video/${video.id}`}
             variant="list"
           />
         ))}

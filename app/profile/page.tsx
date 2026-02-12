@@ -9,7 +9,7 @@ import ChannelTab from "@/components/app/profile/ChannelTab";
 import VideosTab from "@/components/app/profile/VideosTab";
 import AccountTab from "@/components/app/profile/AccountTab";
 import { useAuth } from "@/context/AuthContext";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { MdOpenInNew } from "react-icons/md";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -59,20 +59,20 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-row mb-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
         <h1 className="text-3xl font-bold">Profile Settings</h1>
         <a
           href={`/channel/${user.username}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto"
+          className="w-full sm:ml-auto sm:w-auto"
         >
           <Button
             variant="ghost"
-            className="rounded-full text-text-para hover:bg-white/5
-            inline-flex items-center justify-center px-6.25 py-2 gap-3"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-2 text-sm font-semibold text-text-para transition hover:bg-white/10 sm:w-auto sm:px-6 sm:py-2.5"
           >
-            <FaExternalLinkAlt /> See Channel
+            <MdOpenInNew className="size-5" />
+            <span>See Channel</span>
           </Button>
         </a>
       </div>
