@@ -228,8 +228,10 @@ export default function ChannelPageClient({
       ) : null}
 
       <div className="container mx-auto px-4 pb-8">
-        <div className="flex flex-col md:flex-row gap-6 relative">
-          <div className="flex justify-center md:justify-start -mt-12 md:-mt-16 shrink-0 relative z-10">
+        <div className={`flex flex-col md:flex-row gap-6 relative ${!bannerUrl ? "md:items-center mt-4" : ""}`}>
+          <div
+            className={`flex justify-center md:justify-start shrink-0 relative z-10 ${bannerUrl ? "-mt-12 md:-mt-16" : ""}`}
+          >
             <UserAvatar
               user={user}
               size={140}
@@ -237,7 +239,7 @@ export default function ChannelPageClient({
             />
           </div>
 
-          <div className="flex-1 min-w-0 pt-3 md:pt-4 text-center md:text-left">
+          <div className="flex-1 min-w-0 md:pt-2 text-center md:text-left">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div className="space-y-3">
                 <div>
