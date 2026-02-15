@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { MdCalendarMonth } from "react-icons/md";
 
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -217,48 +218,92 @@ export default function ChannelPageClient({
         </div>
       ) : null}
 
-      <div className="container mx-auto px-4 pt-6 pb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="flex md:block justify-center md:justify-start">
-            <UserAvatar user={user} size={80} className="border-background" />
+      <div className="container mx-auto px-4 pt-8 pb-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-start">
+          <div className="flex justify-center md:justify-start">
+            <UserAvatar
+              user={user}
+              size={110}
+              className="border-background shadow-xl ring-4 ring-white/5"
+            />
           </div>
 
-          <div className="flex-1 min-w-0 text-center md:text-left">
-            <h1 className="text-2xl font-semibold truncate">
-              {user.displayName || user.username}
-            </h1>
-            <p className="text-sm text-muted-foreground">@{user.username}</p>
-            {user.bio ? (
-              <p className="mt-3 text-sm text-text/80 max-w-3xl md:text-left text-center">
+          <div className="flex-1 min-w-0 text-center md:text-left pt-2">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-3xl font-bold tracking-tight text-text">
+                {user.displayName || user.username}
+              </h1>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1">
+                <p className="text-base text-muted-foreground font-medium">@{user.username}</p>
+                <div className="w-1 h-1 rounded-full bg-white/20 hidden md:block" />
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground/70">
+                  <MdCalendarMonth className="size-4" />
+                  <span>
+                    Joined{" "}
+                    {new Date(user.createdAt).toLocaleDateString(undefined, {
+                      day: "numeric",
+                      year: "numeric",
+                      month: "long",
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {user.bio && (
+              <p className="mt-5 text-[15px] text-text/80 max-w-2xl leading-relaxed mx-auto md:mx-0">
                 {user.bio}
               </p>
-            ) : null}
+            )}
           </div>
 
-          {isMe ? (
-            <Button
-              variant="videoDetails"
-              onClick={() => router.push(`/profile`)}
-            >
-              Edit Channel
-            </Button>
-          ) : null}
+          <div className="flex flex-col items-center md:items-end gap-8 pt-2">
+            <div className="flex items-center gap-8">
+              <div className="flex flex-col items-center md:items-end">
+                <span className="text-2xl font-bold text-text tabular-nums leading-none">
+                  {user.followerCount}
+                </span>
+                <span className="text-[10px] mt-1.5 uppercase tracking-widest text-muted-foreground/60 font-black">
+                  Followers
+                </span>
+              </div>
+              <div className="w-px h-8 bg-white/10 hidden md:block" />
+              <div className="flex flex-col items-center md:items-end">
+                <span className="text-2xl font-bold text-text tabular-nums leading-none">
+                  {user.followingCount}
+                </span>
+                <span className="text-[10px] mt-1.5 uppercase tracking-widest text-muted-foreground/60 font-black">
+                  Following
+                </span>
+              </div>
+              <div className="w-px h-8 bg-white/10 hidden md:block" />
+              <div className="flex flex-col items-center md:items-end">
+                <span className="text-2xl font-bold text-text tabular-nums leading-none">
+                  {user.videoCount}
+                </span>
+                <span className="text-[10px] mt-1.5 uppercase tracking-widest text-muted-foreground/60 font-black">
+                  Videos
+                </span>
+              </div>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:text-left">
-            <p className="text-sm text-text hover:underline">
-              {user.followerCount} Followers
-            </p>
+            <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end w-full">
+              {isMe ? (
+                <Button
+                  variant="videoDetails"
+                  onClick={() => router.push(`/profile`)}
+                  className="rounded-full px-8 bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-semibold"
+                >
+                  Edit Channel
+                </Button>
+              ) : null}
 
-            <p className="text-sm text-text hover:underline">
-              {user.followingCount} Following
-            </p>
-
-            <div className="w-full md:w-auto flex justify-center md:justify-start">
               {!me ? (
                 <Link
                   href={`/login?callbackUrl=${encodeURIComponent(pathname || "/")}`}
+                  className="w-full sm:w-auto"
                 >
-                  <Button variant="videoDetails" className="rounded-full px-6">
+                  <Button variant="videoDetails" className="rounded-full px-8 bg-accent text-background hover:bg-accent/90 border-none transition-all w-full sm:w-auto font-bold">
                     Login to Subscribe
                   </Button>
                 </Link>
@@ -306,6 +351,6 @@ export default function ChannelPageClient({
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 }
