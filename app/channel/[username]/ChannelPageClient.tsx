@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { MdCalendarMonth } from "react-icons/md";
 
 import Spinner from "@/components/ui/Spinner";
 import { VideoCard } from "@/components/app/video/VideoCard";
@@ -19,6 +20,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import UserAvatar from "@/components/ui/UserAvatar";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import UserListModal from "@/components/ui/UserListModal";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -67,6 +69,10 @@ export default function ChannelPageClient({
     return computeHasMore(1, initialTotalPages, initialVideos.length);
   });
   const [loadingMore, setLoadingMore] = useState(false);
+  const [userListConfig, setUserListConfig] = useState<{
+    isOpen: boolean;
+    type: "followers" | "following";
+  }>({ isOpen: false, type: "followers" });
 
   const requestSeq = useRef(0);
   const shouldFetchInitial = !initialUser && !initialError;
@@ -185,6 +191,10 @@ export default function ChannelPageClient({
     });
   };
 
+  const openUserList = (type: "followers" | "following") => {
+    setUserListConfig({ isOpen: true, type });
+  };
+
   if (isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
@@ -217,58 +227,91 @@ export default function ChannelPageClient({
         </div>
       ) : null}
 
-      <div className="container mx-auto px-4 pt-6 pb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="flex md:block justify-center md:justify-start">
-            <UserAvatar user={user} size={80} className="border-background" />
+      <div className="container mx-auto px-4 pb-8">
+        <div className={`flex flex-col md:flex-row gap-6 relative ${!bannerUrl ? "md:items-center mt-4" : ""}`}>
+          <div
+            className={`flex justify-center md:justify-start shrink-0 relative z-10 ${bannerUrl ? "-mt-12 md:-mt-16" : ""}`}
+          >
+            <UserAvatar
+              user={user}
+              size={140}
+              className="border-[6px] border-background shadow-2xl bg-background"
+            />
           </div>
 
-          <div className="flex-1 min-w-0 text-center md:text-left">
-            <h1 className="text-2xl font-semibold truncate">
-              {user.displayName || user.username}
-            </h1>
-            <p className="text-sm text-muted-foreground">@{user.username}</p>
-            {user.bio ? (
-              <p className="mt-3 text-sm text-text/80 max-w-3xl md:text-left text-center">
-                {user.bio}
-              </p>
-            ) : null}
-          </div>
+          <div className="flex-1 min-w-0 md:pt-2 text-center md:text-left">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+              <div className="space-y-3">
+                <div>
+                  <h1 className="text-3xl font-bold tracking-tight text-text leading-none">
+                    {user.displayName || user.username}
+                  </h1>
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1 mt-2 text-sm text-muted-foreground/80 font-medium">
+                    <span>@{user.username}</span>
+                    <span className="text-white/20">•</span>
+                    <div className="flex items-center gap-1.5">
+                      <MdCalendarMonth className="size-3.5" />
+                      <span>
+                        Joined {new Date(user.createdAt).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-          {isMe ? (
-            <Button
-              variant="videoDetails"
-              onClick={() => router.push(`/profile`)}
-            >
-              Edit Channel
-            </Button>
-          ) : null}
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-[15px]">
+                  <button
+                    onClick={() => openUserList("followers")}
+                    className="flex items-center gap-1.5 group cursor-pointer hover:text-accent transition-colors"
+                  >
+                    <span className="font-bold text-text tabular-nums">{user.followerCount}</span>
+                    <span className="text-muted-foreground group-hover:text-accent/80 transition-colors">Followers</span>
+                  </button>
+                  <button
+                    onClick={() => openUserList("following")}
+                    className="flex items-center gap-1.5 group cursor-pointer hover:text-accent transition-colors"
+                  >
+                    <span className="font-bold text-text tabular-nums">{user.followingCount}</span>
+                    <span className="text-muted-foreground group-hover:text-accent/80 transition-colors">Following</span>
+                  </button>
+                  <div className="flex items-center gap-1.5 cursor-default">
+                    <span className="font-bold text-text tabular-nums">{user.videoCount}</span>
+                    <span className="text-muted-foreground">Videos</span>
+                  </div>
+                </div>
 
-          <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:text-left">
-            <p className="text-sm text-text hover:underline">
-              {user.followerCount} Followers
-            </p>
+                {user.bio && (
+                  <p className="max-w-3xl text-[15px] leading-relaxed text-text/90 pt-1">
+                    {user.bio}
+                  </p>
+                )}
+              </div>
 
-            <p className="text-sm text-text hover:underline">
-              {user.followingCount} Following
-            </p>
-
-            <div className="w-full md:w-auto flex justify-center md:justify-start">
-              {!me ? (
-                <Link
-                  href={`/login?callbackUrl=${encodeURIComponent(pathname || "/")}`}
-                >
-                  <Button variant="videoDetails" className="rounded-full px-6">
-                    Login to Subscribe
+              <div className="flex flex-col items-center md:items-end gap-3 shrink-0 pt-1">
+                {isMe ? (
+                  <Button
+                    variant="videoDetails"
+                    onClick={() => router.push(`/profile`)}
+                    className="rounded-full px-6 bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium h-10"
+                  >
+                    Edit Channel
                   </Button>
-                </Link>
-              ) : !isMe ? (
-                <FollowButton
-                  username={user.username ?? ""}
-                  initialFollowing={Boolean(user.isFollowing)}
-                  onChangeCount={onFollowerDelta}
-                />
-              ) : null}
+                ) : !me ? (
+                  <Link href={`/login?callbackUrl=${encodeURIComponent(pathname || "/")}`}>
+                    <Button variant="primary" className="rounded-full px-8 h-10 font-bold shadow-lg shadow-accent/20">
+                      Login to Subscribe
+                    </Button>
+                  </Link>
+                ) : (
+                  <FollowButton
+                    username={user.username ?? ""}
+                    initialFollowing={Boolean(user.isFollowing)}
+                    onChangeCount={onFollowerDelta}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -306,6 +349,15 @@ export default function ChannelPageClient({
           </div>
         )}
       </div>
+
+      <UserListModal
+        isOpen={userListConfig.isOpen}
+        onClose={() =>
+          setUserListConfig((prev) => ({ ...prev, isOpen: false }))
+        }
+        username={user.username}
+        type={userListConfig.type}
+      />
     </div>
   );
 }

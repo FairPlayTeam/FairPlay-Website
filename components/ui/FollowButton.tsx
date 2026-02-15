@@ -59,7 +59,7 @@ export function FollowButton({
       <span
         className={cn(following ? "text-text" : "text-black", "font-semibold")}
       >
-        {following ? "Following" : "Follow"}
+        {following ? "Subscribed" : "Subscribe"}
       </span>
     </button>
   );
