@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type VideoCardProps = {
   thumbnailUrl: string | null;
@@ -38,12 +39,23 @@ export function VideoCard({
   const isLarge = variant === "listLarge";
   const imgSrc = thumbnailUrl ?? undefined;
 
+  const router = useRouter();
+
   const cardWrapper = (children: React.ReactNode, classes: string) => {
     if (href) {
+      // use div with click handler instead of Link to avoid nested anchors
       return (
-        <Link href={href} className={classes}>
+        <div
+          className={classes}
+          role="link"
+          tabIndex={0}
+          onClick={() => router.push(href)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") router.push(href);
+          }}
+        >
           {children}
-        </Link>
+        </div>
       );
     }
 
@@ -109,12 +121,17 @@ export function VideoCard({
                   }}
                 >
                   {tags.map((tag) => (
-                    <span
+                    <Link
                       key={tag}
-                      className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-(--gray-200) whitespace-nowrap"
+                      href={`/search?q=${encodeURIComponent(tag)}`}
+                      className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-(--gray-200) whitespace-nowrap cursor-pointer hover:bg-white/20"
+                      onClick={(e) => {
+                        // prevent the card's onClick handler from firing when a tag is clicked
+                        e.stopPropagation();
+                      }}
                     >
                       {tag}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>

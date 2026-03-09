@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { VideoDetails } from "@/lib/video";
 
 interface VideoDescriptionProps {
@@ -29,12 +30,13 @@ export default function VideoDescription({ video }: VideoDescriptionProps) {
         {video.tags && video.tags.length > 0 && (
           <div className="flex flex-nowrap gap-2.5 overflow-hidden">
             {video.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="text-sm text-accent whitespace-nowrap shrink-0"
+                href={`/search?q=${encodeURIComponent(tag)}`}
+                className="text-sm text-accent whitespace-nowrap shrink-0 cursor-pointer hover:underline"
               >
                 #{tag}
-              </span>
+              </Link>
             ))}
           </div>
         )}
