@@ -199,7 +199,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
               disabled={!user}
               aria-label={localComment.likedByMe ? 'Unlike comment' : 'Like comment'}
             >
-              {localComment.likedByMe ? <ThumbsUp /> : <ThumbsUp className="fill-current" />}
+              {localComment.likedByMe ? <ThumbsUp className="fill-current" /> : <ThumbsUp />}
             </Button>
             {localComment.likeCount > 0 && <span>{localComment.likeCount}</span>}
           </div>
