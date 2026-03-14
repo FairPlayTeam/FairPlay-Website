@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FairPlay Frontend
+
+FairPlay's web frontend, built with Next.js App Router, TypeScript, Tailwind CSS v4, React Query, and Zustand.
+
+## Overview
+
+This repository contains the full client-side experience for:
+
+- Authentication (`/login`, `/register`)
+- Discovery feed (`/explore`, `/search`)
+- Video playback (`/video/[id]`)
+- Public channels (`/channel/[username]`)
+- User profile management (`/profile`)
+- Upload flow (`/upload`)
+- Moderation and admin tools (`/moderator`, `/admin`)
+
+## Tech Stack
+
+- Next.js `16` (App Router)
+- React `19`
+- TypeScript (strict mode)
+- Tailwind CSS v4 + `tw-animate-css`
+- Radix UI primitives + custom UI layer
+- TanStack Query (React Query)
+- Zustand (persistent client stores)
+- Axios for API calls
+- Zod + React Hook Form for form validation
+- Sonner for toast notifications
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+
+### Environment Variables
+
+Create `.env.local` in project root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install and Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open: `http://localhost:3000`
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev`: Start local dev server
+- `npm run build`: Create production build
+- `npm run start`: Run production build
+- `npm run lint`: Run ESLint checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Recommended Checks Before Push
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run lint
+npx tsc --noEmit
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+app/          Route segments, pages, and layouts (App Router)
+components/   Reusable UI + domain components
+context/      React context providers (auth, sidebar)
+hooks/        Shared custom hooks
+lib/          API clients, stores, utilities, domain types
+public/       Static assets
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture Docs
+
+For a full technical walkthrough, see:
+
+- [Architecture Guide](docs/ARCHITECTURE.md)
+
+## Conventions
+
+- File names: `kebab-case`
+- React components and types: `PascalCase`
+- Variables and functions: `camelCase`
+- Shared imports use alias: `@/*`
+- UI state patterns are standardized (`idle/loading/ready/error`)
+
+## Security Notes
+
+- Frontend auth uses a Bearer token transport.
+- `callbackUrl` redirects are sanitized via `lib/safe-redirect.ts`.
+- Unauthorized access is handled by route-level guards and auth context.
+
+## Contributing
+
+1. Create a branch from `main`.
+2. Keep changes scoped and consistent with existing conventions.
+3. Run lint and type checks locally.
+4. Open a pull request with:
+   - problem summary
+   - implementation details
+   - screenshots/videos for UI updates
+
+## License
+
+No license file is currently defined in this repository.
