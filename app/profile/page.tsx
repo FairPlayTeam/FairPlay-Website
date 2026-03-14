@@ -55,7 +55,7 @@ export default function ProfilePage() {
         >
           <Button
             variant="outline"
-            className="w-full rounded-full gap-2 px-5 py-2 text-sm font-semibold"
+            className="w-full rounded-full gap-3 px-4 py-2 text-sm font-semibold"
           >
             <ExternalLink className="size-4" />
             <span>See Channel</span>

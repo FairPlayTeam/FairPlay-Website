@@ -140,7 +140,7 @@ export default function AppTopbar() {
               <Menu className="size-4" />
             </Button>
 
-            <Link href="/" className="text-xl font-bold leading-none text-foreground">
+            <Link href="/explore" className="text-xl font-bold leading-none text-foreground">
               Rewind
             </Link>
           </div>

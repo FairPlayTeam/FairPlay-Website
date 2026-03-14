@@ -372,7 +372,7 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
         <div className="mb-8 p-4 flex flex-col items-center gap-4">
           <p>Please login to comment</p>
           <Link href={buildAuthHref('/login', `/video/${videoId}#comments`)}>
-            <Button variant="outline" className="rounded-full px-5 py-2 text-sm font-semibold">
+            <Button variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold">
               Login
             </Button>
           </Link>

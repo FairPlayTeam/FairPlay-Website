@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { CalendarDays } from 'lucide-react'
+import { CalendarDays, Pencil } from 'lucide-react'
 
 import { Spinner } from '@/components/ui/spinner'
 import { VideoCard } from '@/components/app/video/video-card'
@@ -340,13 +340,14 @@ export default function ChannelPageClient({
                   <Button
                     variant="outline"
                     onClick={() => router.push(`/profile`)}
-                    className="rounded-full py-4 px-5"
+                    className="w-full rounded-full gap-3 px-4 py-2 text-sm font-semibold"
                   >
-                    Edit Channel
+                    <Pencil className="size-4" />
+                    <span>Edit Channel</span>
                   </Button>
                 ) : !me ? (
                   <Link href={buildAuthHref('/login', pathname || '/')}>
-                    <Button variant="outline" className="rounded-full px-5 py-2 text-sm font-semibold">
+                    <Button variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold">
                       Login to Subscribe
                     </Button>
                   </Link>
