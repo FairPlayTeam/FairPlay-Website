@@ -30,7 +30,9 @@ export function AppShell({ children, mainClassName = '', contentClassName = '' }
   }, [isReady])
 
   return (
-    <SidebarProvider>
+    /* Reset sidebar state on navigation to prevent the close animation
+    from playing when navigating to pages where the sidebar is hidden */
+    <SidebarProvider key={pathname ?? 'app-shell'}>
       <div className="min-h-screen bg-background text-foreground">
         {!isReady && (
           <div className="fixed inset-0 z-50 grid place-items-center bg-background/80 backdrop-blur-sm">
