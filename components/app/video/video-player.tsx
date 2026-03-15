@@ -81,6 +81,9 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const volumeRef = useRef(volume);
   const controlsHideTimeoutRef = useRef<number | null>(null);
 
+  // Support share-at-time via ?t=<seconds> query param
+  const initialTimeRef = useRef<number>(0);
+
   useVideoAmbilight({
     videoRef,
     glowRef,
@@ -117,6 +120,17 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     volumeRef.current = volume;
     applyPreferences();
   }, [isMuted, volume, applyPreferences]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const t = url.searchParams.get("t");
+    if (!t) return;
+    const parsed = Number(t);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      initialTimeRef.current = parsed;
+    }
+  }, []);
 
   const clearControlsHideTimeout = useCallback(() => {
     if (controlsHideTimeoutRef.current !== null) {
@@ -329,6 +343,34 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     closeContextMenu();
   }, [closeContextMenu]);
 
+  const handleShareAtTime = useCallback(async () => {
+    const url = new URL(window.location.href);
+    const time = Math.floor(currentTime);
+    if (time > 0) {
+      url.searchParams.set("t", String(time));
+    } else {
+      url.searchParams.delete("t");
+    }
+
+    const shareUrl = url.toString();
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: document.title, url: shareUrl });
+      } catch {
+        // ignore
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Link copied to clipboard.");
+      } catch {
+        // ignore
+      }
+    }
+
+    closeContextMenu();
+  }, [closeContextMenu, currentTime]);
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(document.fullscreenElement === containerRef.current);
@@ -465,6 +507,11 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       hls.on(Events.MANIFEST_PARSED, () => {
         applyPreferences();
 
+        if (initialTimeRef.current > 0) {
+          video.currentTime = initialTimeRef.current;
+          setCurrentTime(initialTimeRef.current);
+        }
+
         const raw = hls.levels || [];
         const paired = raw.map((lvl, idx) => ({ lvl, idx }));
         paired.sort((a, b) => {
@@ -530,6 +577,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       const onLoadedMetadata = () => {
         applyPreferences();
+        if (initialTimeRef.current > 0) {
+          video.currentTime = initialTimeRef.current;
+          setCurrentTime(initialTimeRef.current);
+        }
         if (isPlayingRef.current) {
           handlePlayPromise(video.play());
         } else {
@@ -592,7 +643,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           }}
           onLoadedMetadata={() => {
             if (videoRef.current) {
-              setDuration(videoRef.current.duration);
+              const video = videoRef.current;
+              setDuration(video.duration);
+              if (initialTimeRef.current > 0) {
+                video.currentTime = initialTimeRef.current;
+                setCurrentTime(initialTimeRef.current);
+              }
               setIsBuffering(false);
             }
           }}
@@ -707,6 +763,13 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
               >
                 <FaShareAlt className="size-4" />
                 Share
+              </button>
+              <button
+                onClick={handleShareAtTime}
+                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
+              >
+                <FaShareAlt className="size-4" />
+                Share at current time
               </button>
               <button
                 onClick={() => {
