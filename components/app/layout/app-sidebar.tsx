@@ -68,7 +68,7 @@ export default function AppSidebar() {
       {isOpen && (
         <div
           className={cn(
-            'fixed inset-0 z-50 bg-background/80 backdrop-blur-sm cursor-pointer',
+            'fixed inset-0 z-50 bg-background/50 cursor-pointer',
             !isVideoWatchPage && 'lg:hidden',
           )}
           onClick={close}
