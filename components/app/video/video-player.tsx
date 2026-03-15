@@ -7,6 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { getToken } from "@/lib/token";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
 
@@ -42,11 +43,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const isMutedRef = useRef(isMuted);
   const volumeRef = useRef(volume);
   const controlsHideTimeoutRef = useRef<number | null>(null);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useVideoAmbilight({
     videoRef,
     glowRef,
-    enabled: true,
+    enabled: isDesktop,
     blendFactor: 0.1,
     blurPx: 80,
     opacity: 0.4,
@@ -242,7 +244,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
   return (
     <div className="relative isolate">
-      <canvas ref={glowRef} aria-hidden />
+      <canvas ref={glowRef} aria-hidden className="hidden md:block" />
 
       <div
         ref={containerRef}
