@@ -25,7 +25,7 @@ export function RelatedVideos({
   });
 
   return (
-    <>
+    <div className="px-4 lg:px-0">
       <h2 className="font-semibold text-2xl text-foreground mb-3">Related Videos</h2>
 
       <div className="flex flex-col">
@@ -49,6 +49,6 @@ export function RelatedVideos({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
