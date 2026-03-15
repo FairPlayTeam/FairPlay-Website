@@ -105,6 +105,14 @@ export function useVideoAmbilight({
     glow.style.zIndex = "-1";
   }, [glowRef, scale, blurPx]);
 
+  useEffect(() => {
+    const glow = glowRef.current;
+    if (!glow) return;
+
+    // Smoothly fade the glow in/out when ambilight is toggled.
+    glow.style.opacity = enabled ? String(opacity) : "0";
+  }, [enabled, opacity, glowRef]);
+
   // Resize handling
   useEffect(() => {
     const glow = glowRef.current;

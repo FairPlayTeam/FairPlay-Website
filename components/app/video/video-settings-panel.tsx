@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 interface VideoSettingsPanelProps {
@@ -20,6 +21,8 @@ interface VideoSettingsPanelProps {
   setPreferredQuality: (quality: string) => void;
   playbackRate: number;
   setPlaybackRatePref: (rate: number) => void;
+  ambilight: boolean;
+  setAmbilight: (enabled: boolean) => void;
   hlsRef: React.MutableRefObject<Hls | null>;
   showControls: (autoHide?: boolean) => void;
 }
@@ -37,6 +40,8 @@ export default function VideoSettingsPanel({
   setPreferredQuality,
   playbackRate,
   setPlaybackRatePref,
+  ambilight,
+  setAmbilight,
   hlsRef,
   showControls,
 }: VideoSettingsPanelProps) {
@@ -67,6 +72,7 @@ export default function VideoSettingsPanel({
 
   useEffect(() => {
     if (!open) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveSetting("main");
     showControls(false);
   }, [open, showControls]);
@@ -94,6 +100,28 @@ export default function VideoSettingsPanel({
             className="space-y-2"
           >
             <div className="text-xs tracking-wide text-white/70">Settings</div>
+
+            <button
+              onClick={() => setAmbilight(!ambilight)}
+              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
+            >
+              <span className="text-sm">Ambient Light</span>
+              <Switch
+                checked={ambilight}
+                onCheckedChange={(checked) => setAmbilight(Boolean(checked))}
+                size="sm"
+                className="ml-2"
+              />
+            </button>
+
+            <button
+              onClick={() => setActiveSetting("speed")}
+              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
+            >
+              <span className="text-sm">Speed</span>
+              <span className="text-xs text-white/70">{playbackRate.toFixed(2)}x</span>
+            </button>
+
             <button
               ref={resolutionSelectRef}
               onClick={() => setActiveSetting("quality")}
@@ -107,13 +135,6 @@ export default function VideoSettingsPanel({
                   ? `${availableLevels[selectedLevel].height}p`
                   : `${Math.round((availableLevels[selectedLevel]?.bitrate ?? 0) / 1000)}kbps`}
               </span>
-            </button>
-            <button
-              onClick={() => setActiveSetting("speed")}
-              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
-            >
-              <span className="text-sm">Speed</span>
-              <span className="text-xs text-white/70">{playbackRate.toFixed(2)}x</span>
             </button>
           </motion.div>
         ) : (

@@ -52,6 +52,9 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const preferredQuality = usePreferenceStore((s) => s.preferredQuality);
   const setPreferredQuality = usePreferenceStore((s) => s.setPreferredQuality);
 
+  const ambilight = usePreferenceStore((s) => s.ambilight);
+  const setAmbilight = usePreferenceStore((s) => s.setAmbilight);
+
   // Player State
   const [isPlaying, setIsPlaying] = useState(true);
   const [isBuffering, setIsBuffering] = useState(true);
@@ -87,7 +90,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   useVideoAmbilight({
     videoRef,
     glowRef,
-    enabled: true,
+    enabled: ambilight,
     blendFactor: 0.1,
     blurPx: 80,
     opacity: 0.4,
@@ -719,6 +722,8 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           setPreferredQuality={setPreferredQuality}
           playbackRate={playbackRate}
           setPlaybackRatePref={setPlaybackRatePref}
+          ambilight={ambilight}
+          setAmbilight={setAmbilight}
           hlsRef={hlsRef}
           showControls={showControls}
         />
