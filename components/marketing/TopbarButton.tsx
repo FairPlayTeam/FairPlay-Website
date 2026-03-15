@@ -31,7 +31,7 @@ export default function TopbarButton({
         "after:origin-center after:scale-x-0 after:scale-y-0",
         "after:transition-transform after:duration-300 after:ease-out",
         "hover:after:scale-x-100 hover:after:scale-y-100",
-        className
+        className,
       )}
       {...props}
     >

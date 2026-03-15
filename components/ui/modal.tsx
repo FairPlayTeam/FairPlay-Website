@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect, useId, type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { cn } from '@/lib/utils'
+import { useEffect, useId, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ModalProps {
-  isOpen: boolean
-  title?: string
-  description?: ReactNode
-  children?: ReactNode
-  onClose: () => void
-  className?: string
-  showCloseButton?: boolean
+  isOpen: boolean;
+  title?: string;
+  description?: ReactNode;
+  children?: ReactNode;
+  onClose: () => void;
+  className?: string;
+  showCloseButton?: boolean;
 }
 
 export default function Modal({
@@ -23,28 +23,28 @@ export default function Modal({
   className,
   showCloseButton = false,
 }: ModalProps) {
-  const titleId = useId()
-  const descriptionId = useId()
+  const titleId = useId();
+  const descriptionId = useId();
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        onClose()
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
       }
-    }
+    };
 
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', handleKeyDown)
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -72,13 +72,13 @@ export default function Modal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{
-                type: 'spring',
+                type: "spring",
                 duration: 0.4,
                 bounce: 0.2,
               }}
               className={cn(
-                'w-full max-w-lg rounded-t-2xl border border-white/10 bg-background shadow-2xl sm:rounded-2xl pointer-events-auto',
-                'max-h-[85vh] overflow-hidden flex flex-col',
+                "w-full max-w-lg rounded-t-2xl border border-white/10 bg-background shadow-2xl sm:rounded-2xl pointer-events-auto",
+                "max-h-[85vh] overflow-hidden flex flex-col",
                 className,
               )}
             >
@@ -118,5 +118,5 @@ export default function Modal({
         </div>
       )}
     </AnimatePresence>
-  )
+  );
 }

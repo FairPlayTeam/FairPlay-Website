@@ -1,10 +1,10 @@
-﻿'use client'
+﻿"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { VideoCard } from '@/components/app/video/video-card'
-import { getVideos, type VideoDetails } from '@/lib/video'
-import { Spinner } from '@/components/ui/spinner'
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { VideoCard } from "@/components/app/video/video-card";
+import { getVideos, type VideoDetails } from "@/lib/video";
+import { Spinner } from "@/components/ui/spinner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,134 +13,133 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { toast } from 'sonner'
-import useInfiniteScroll from '@/hooks/use-infinite-scroll'
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
-const PAGE_SIZE = 24
+const PAGE_SIZE = 24;
 
 function mergeUniqueById(prev: VideoDetails[], next: VideoDetails[]) {
-  if (next.length === 0) return prev
-  const seen = new Set(prev.map((item) => item.id))
-  const merged = [...prev]
+  if (next.length === 0) return prev;
+  const seen = new Set(prev.map((item) => item.id));
+  const merged = [...prev];
 
   for (const item of next) {
     if (!seen.has(item.id)) {
-      seen.add(item.id)
-      merged.push(item)
+      seen.add(item.id);
+      merged.push(item);
     }
   }
 
-  return merged
+  return merged;
 }
 
 type ExplorePageClientProps = {
-  initialVideos: VideoDetails[]
-  initialTotalPages?: number
-  initialError?: string | null
-}
+  initialVideos: VideoDetails[];
+  initialTotalPages?: number;
+  initialError?: string | null;
+};
 
 export default function ExplorePageClient({
   initialVideos,
   initialTotalPages,
   initialError,
 }: ExplorePageClientProps) {
-  const params = useSearchParams()
+  const params = useSearchParams();
 
-  const shouldFetchInit = Boolean(initialError)
+  const shouldFetchInit = Boolean(initialError);
 
-  const [videos, setVideos] = useState<VideoDetails[]>(initialVideos)
-  const [isLoading, setLoading] = useState<boolean>(shouldFetchInit)
-  const [isLoadingMore, setLoadingMore] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(shouldFetchInit ? null : (initialError ?? null))
+  const [videos, setVideos] = useState<VideoDetails[]>(initialVideos);
+  const [isLoading, setLoading] = useState<boolean>(shouldFetchInit);
+  const [isLoadingMore, setLoadingMore] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(
+    shouldFetchInit ? null : (initialError ?? null),
+  );
 
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(params.has('popup'))
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(params.has("popup"));
 
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(1);
 
   const [hasMore, setHasMore] = useState<boolean>(() => {
-    if (typeof initialTotalPages === 'number') {
-      return 1 < initialTotalPages
+    if (typeof initialTotalPages === "number") {
+      return 1 < initialTotalPages;
     }
-    return initialVideos.length === PAGE_SIZE
-  })
+    return initialVideos.length === PAGE_SIZE;
+  });
 
   const resolveHasMore = (itemsCount: number, pageToLoad: number, totalPages?: number) => {
-    if (typeof totalPages === 'number') {
-      return pageToLoad < totalPages
+    if (typeof totalPages === "number") {
+      return pageToLoad < totalPages;
     }
-    return itemsCount === PAGE_SIZE
-  }
+    return itemsCount === PAGE_SIZE;
+  };
 
-  const fetchVideos = useCallback(
-    async (pageToLoad: number, mode: 'initial' | 'more') => {
-      try {
-        if (mode === 'initial') {
-          setLoading(true)
-        } else {
-          setLoadingMore(true)
-        }
-
-        const { data } = await getVideos(pageToLoad, PAGE_SIZE)
-        const nextVideos = data.videos ?? []
-        const totalPages = data.pagination?.totalPages
-
-        setVideos((prev) => (pageToLoad === 1 ? nextVideos : mergeUniqueById(prev, nextVideos)))
-        setError(null)
-        setPage(pageToLoad)
-        setHasMore(resolveHasMore(nextVideos.length, pageToLoad, totalPages))
-      } catch {
-        if (mode === 'initial') {
-          setError('Unable to load videos. Please try later.')
-        }
-        toast.error('Error while fetching videos.', { position: 'bottom-right' })
-        setHasMore(false)
-      } finally {
-        if (mode === 'initial') {
-          setLoading(false)
-        } else {
-          setLoadingMore(false)
-        }
+  const fetchVideos = useCallback(async (pageToLoad: number, mode: "initial" | "more") => {
+    try {
+      if (mode === "initial") {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
       }
-    },
-    [],
-  )
+
+      const { data } = await getVideos(pageToLoad, PAGE_SIZE);
+      const nextVideos = data.videos ?? [];
+      const totalPages = data.pagination?.totalPages;
+
+      setVideos((prev) => (pageToLoad === 1 ? nextVideos : mergeUniqueById(prev, nextVideos)));
+      setError(null);
+      setPage(pageToLoad);
+      setHasMore(resolveHasMore(nextVideos.length, pageToLoad, totalPages));
+    } catch {
+      if (mode === "initial") {
+        setError("Unable to load videos. Please try later.");
+      }
+      toast.error("Error while fetching videos.", { position: "bottom-right" });
+      setHasMore(false);
+    } finally {
+      if (mode === "initial") {
+        setLoading(false);
+      } else {
+        setLoadingMore(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    if (!shouldFetchInit) return
-    fetchVideos(1, 'initial')
-  }, [fetchVideos, shouldFetchInit])
+    if (!shouldFetchInit) return;
+    fetchVideos(1, "initial");
+  }, [fetchVideos, shouldFetchInit]);
 
   useEffect(() => {
-    setIsPopupOpen(params.has('popup'))
-  }, [params])
+    setIsPopupOpen(params.has("popup"));
+  }, [params]);
 
   const loadMore = useCallback(() => {
-    if (isLoading || isLoadingMore || !hasMore) return
-    fetchVideos(page + 1, 'more')
-  }, [fetchVideos, hasMore, isLoading, isLoadingMore, page])
+    if (isLoading || isLoadingMore || !hasMore) return;
+    fetchVideos(page + 1, "more");
+  }, [fetchVideos, hasMore, isLoading, isLoadingMore, page]);
 
   const sentinelRef = useInfiniteScroll({
     hasMore,
     isLoading: isLoading || isLoadingMore,
     onLoadMore: loadMore,
-  })
+  });
 
   if (isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-18" />
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl mb-4">Error</h2>
-        <p className="text-muted-foreground">{error || 'Failed to load videos.'}</p>
+        <p className="text-muted-foreground">{error || "Failed to load videos."}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -186,6 +185,5 @@ export default function ExplorePageClient({
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }
-

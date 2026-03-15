@@ -1,46 +1,46 @@
-'use client'
+"use client";
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from "react";
 
 type UseInfiniteScrollOptions = {
-  hasMore: boolean
-  isLoading: boolean
-  onLoadMore: () => void
-  rootMargin?: string
-}
+  hasMore: boolean;
+  isLoading: boolean;
+  onLoadMore: () => void;
+  rootMargin?: string;
+};
 
 export default function useInfiniteScroll({
   hasMore,
   isLoading,
   onLoadMore,
-  rootMargin = '200px',
+  rootMargin = "200px",
 }: UseInfiniteScrollOptions) {
-  const sentinelRef = useRef<HTMLDivElement | null>(null)
-  const onLoadMoreRef = useRef(onLoadMore)
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const onLoadMoreRef = useRef(onLoadMore);
 
   useEffect(() => {
-    onLoadMoreRef.current = onLoadMore
-  }, [onLoadMore])
+    onLoadMoreRef.current = onLoadMore;
+  }, [onLoadMore]);
 
   useEffect(() => {
-    if (!hasMore) return
+    if (!hasMore) return;
 
-    const node = sentinelRef.current
-    if (!node) return
+    const node = sentinelRef.current;
+    if (!node) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isLoading && hasMore) {
-          onLoadMoreRef.current()
+          onLoadMoreRef.current();
         }
       },
       { rootMargin },
-    )
+    );
 
-    observer.observe(node)
+    observer.observe(node);
 
-    return () => observer.disconnect()
-  }, [hasMore, isLoading, rootMargin])
+    return () => observer.disconnect();
+  }, [hasMore, isLoading, rootMargin]);
 
-  return sentinelRef
+  return sentinelRef;
 }

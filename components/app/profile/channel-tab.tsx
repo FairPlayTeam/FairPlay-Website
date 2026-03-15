@@ -1,88 +1,88 @@
-﻿'use client'
+﻿"use client";
 
-import Image from 'next/image'
-import { ChangeEvent, useRef } from 'react'
-import { Pencil } from 'lucide-react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { useImagesUpload } from '@/hooks/use-images-upload'
-import { useAuth } from '@/context/auth-context'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'sonner'
-import UserAvatar from '@/components/ui/user-avatar'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { updateProfile } from '@/lib/users'
-import { User } from '@/lib/users'
-import { z } from 'zod'
+import Image from "next/image";
+import { ChangeEvent, useRef } from "react";
+import { Pencil } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useImagesUpload } from "@/hooks/use-images-upload";
+import { useAuth } from "@/context/auth-context";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import UserAvatar from "@/components/ui/user-avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { updateProfile } from "@/lib/users";
+import { User } from "@/lib/users";
+import { z } from "zod";
 
 interface ChannelTabProps {
-  user: User
+  user: User;
 }
 
 const channelFormSchema = z.object({
-  username: z.string().min(1, 'Username is required').min(3, 'Username is too short'),
+  username: z.string().min(1, "Username is required").min(3, "Username is too short"),
   displayName: z
-    .union([z.string().min(3, 'Display name is too short'), z.literal('')])
+    .union([z.string().min(3, "Display name is too short"), z.literal("")])
     .optional()
     .transform((value) => (value ? value : undefined)),
   bio: z
-    .union([z.string().min(3, 'Bio is too short'), z.literal('')])
+    .union([z.string().min(3, "Bio is too short"), z.literal("")])
     .optional()
     .transform((value) => (value ? value : undefined)),
-})
+});
 
-type ChannelFormValues = z.input<typeof channelFormSchema>
+type ChannelFormValues = z.input<typeof channelFormSchema>;
 
 export default function ChannelTab({ user }: ChannelTabProps) {
-  const { uploadUserAvatar, uploadUserBanner } = useImagesUpload()
-  const { refetchUser } = useAuth()
+  const { uploadUserAvatar, uploadUserBanner } = useImagesUpload();
+  const { refetchUser } = useAuth();
 
-  const avatarInputRef = useRef<HTMLInputElement>(null)
-  const bannerInputRef = useRef<HTMLInputElement>(null)
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ChannelFormValues>({
     resolver: zodResolver(channelFormSchema),
     defaultValues: {
       username: user.username,
-      displayName: user.displayName || '',
-      bio: user.bio || '',
+      displayName: user.displayName || "",
+      bio: user.bio || "",
     },
-  })
+  });
 
   const onSubmit: SubmitHandler<ChannelFormValues> = async (values) => {
     try {
-      await updateProfile(values)
-      toast.success('Profile updated successfully!')
-      await refetchUser()
+      await updateProfile(values);
+      toast.success("Profile updated successfully!");
+      await refetchUser();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update profile')
+      toast.error(err instanceof Error ? err.message : "Failed to update profile");
     }
-  }
+  };
 
   const handleImageChange =
-    (type: 'avatar' | 'banner') => async (e: ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0]
+    (type: "avatar" | "banner") => async (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
 
-      if (!file) return
+      if (!file) return;
 
       try {
-        if (type === 'avatar') {
-          await uploadUserAvatar(file)
-          toast.success('Avatar uploaded successfully!')
+        if (type === "avatar") {
+          await uploadUserAvatar(file);
+          toast.success("Avatar uploaded successfully!");
         } else {
-          await uploadUserBanner(file)
-          toast.success('Banner uploaded successfully!')
+          await uploadUserBanner(file);
+          toast.success("Banner uploaded successfully!");
         }
 
-        refetchUser()
+        refetchUser();
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Upload failed')
+        toast.error(err instanceof Error ? err.message : "Upload failed");
       } finally {
-        e.target.value = ''
+        e.target.value = "";
       }
-    }
+    };
 
   return (
     <div className="space-y-8">
@@ -109,7 +109,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
           type="file"
           accept="image/*"
           hidden
-          onChange={handleImageChange('banner')}
+          onChange={handleImageChange("banner")}
         />
       </div>
 
@@ -132,7 +132,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
             type="file"
             accept="image/*"
             hidden
-            onChange={handleImageChange('avatar')}
+            onChange={handleImageChange("avatar")}
           />
         </div>
 
@@ -146,7 +146,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
                 placeholder="Username"
                 autoComplete="name"
                 aria-invalid={!!form.formState.errors.username}
-                {...form.register('username')}
+                {...form.register("username")}
                 disabled
               />
               {form.formState.errors.username && (
@@ -161,7 +161,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
                 placeholder="Display Name"
                 autoComplete="name"
                 aria-invalid={!!form.formState.errors.displayName}
-                {...form.register('displayName')}
+                {...form.register("displayName")}
               />
               {form.formState.errors.displayName && (
                 <p className="text-sm text-red-500">{form.formState.errors.displayName.message}</p>
@@ -173,7 +173,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
                 id="bio"
                 placeholder="A short description about yourself"
                 aria-invalid={!!form.formState.errors.bio}
-                {...form.register('bio')}
+                {...form.register("bio")}
               />
               {form.formState.errors.bio && (
                 <p className="text-sm text-red-500">{form.formState.errors.bio.message}</p>
@@ -187,12 +187,11 @@ export default function ChannelTab({ user }: ChannelTabProps) {
               disabled={form.formState.isSubmitting}
               aria-busy={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? 'Updating...' : 'Update'}
+              {form.formState.isSubmitting ? "Updating..." : "Update"}
             </Button>
           </form>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

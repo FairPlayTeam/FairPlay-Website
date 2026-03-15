@@ -1,19 +1,19 @@
-﻿'use client'
+﻿"use client";
 
-import { useEffect, useState } from 'react'
-import NextImage from 'next/image'
-import { ImageIcon, Trash2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { formatBytes } from '../upload-utils'
-import { useFileDropzone } from './use-file-dropzone'
+import { useEffect, useState } from "react";
+import NextImage from "next/image";
+import { ImageIcon, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { formatBytes } from "../upload-utils";
+import { useFileDropzone } from "./use-file-dropzone";
 
 export type ThumbnailDropzoneProps = {
-  file: File | null
-  error?: string | null
-  disabled?: boolean
-  onFileSelect: (file: File | null) => void
-}
+  file: File | null;
+  error?: string | null;
+  disabled?: boolean;
+  onFileSelect: (file: File | null) => void;
+};
 
 export default function ThumbnailDropzone({
   file,
@@ -21,8 +21,8 @@ export default function ThumbnailDropzone({
   disabled,
   onFileSelect,
 }: ThumbnailDropzoneProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [ratioHint, setRatioHint] = useState<string | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [ratioHint, setRatioHint] = useState<string | null>(null);
   const {
     inputRef,
     isDragActive,
@@ -34,43 +34,43 @@ export default function ThumbnailDropzone({
   } = useFileDropzone({
     disabled,
     onFileSelect,
-  })
+  });
 
   useEffect(() => {
-    if (!file) return
+    if (!file) return;
 
-    const objectUrl = URL.createObjectURL(file)
-    let isActive = true
+    const objectUrl = URL.createObjectURL(file);
+    let isActive = true;
 
-    const image = new Image()
+    const image = new Image();
     image.onload = () => {
-      if (!isActive) return
-      setPreviewUrl(objectUrl)
-      const targetRatio = 16 / 9
-      const currentRatio = image.width / image.height
-      const ratioDiff = Math.abs(currentRatio - targetRatio)
+      if (!isActive) return;
+      setPreviewUrl(objectUrl);
+      const targetRatio = 16 / 9;
+      const currentRatio = image.width / image.height;
+      const ratioDiff = Math.abs(currentRatio - targetRatio);
 
       if (ratioDiff > 0.03) {
         setRatioHint(
           `Current image ratio is ${image.width}:${image.height}. Recommended ratio is 16:9.`,
-        )
+        );
       }
-    }
+    };
 
     image.onerror = () => {
-      if (!isActive) return
-      setRatioHint('We recommend using a 16:9 thumbnail format.')
-    }
+      if (!isActive) return;
+      setRatioHint("We recommend using a 16:9 thumbnail format.");
+    };
 
-    image.src = objectUrl
+    image.src = objectUrl;
 
     return () => {
-      isActive = false
-      URL.revokeObjectURL(objectUrl)
-      setPreviewUrl(null)
-      setRatioHint(null)
-    }
-  }, [file])
+      isActive = false;
+      URL.revokeObjectURL(objectUrl);
+      setPreviewUrl(null);
+      setRatioHint(null);
+    };
+  }, [file]);
 
   return (
     <div className="space-y-3">
@@ -79,9 +79,9 @@ export default function ThumbnailDropzone({
         tabIndex={0}
         onClick={handleBrowse}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            handleBrowse()
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleBrowse();
           }
         }}
         onDragEnter={handleDragEnter}
@@ -89,13 +89,13 @@ export default function ThumbnailDropzone({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={cn(
-          'rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors duration-200',
-          disabled && 'cursor-not-allowed opacity-60',
+          "rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors duration-200",
+          disabled && "cursor-not-allowed opacity-60",
           error
-            ? 'border-destructive/70 bg-destructive/5'
+            ? "border-destructive/70 bg-destructive/5"
             : isDragActive
-              ? 'border-primary bg-primary/5'
-              : 'border-border/70 hover:border-primary/50',
+              ? "border-primary bg-primary/5"
+              : "border-border/70 hover:border-primary/50",
         )}
         aria-disabled={disabled}
         aria-label="Thumbnail upload dropzone"
@@ -116,7 +116,7 @@ export default function ThumbnailDropzone({
               <div className="min-w-0">
                 <p className="break-all text-sm font-semibold text-foreground">{file.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {formatBytes(file.size)} - {file.type || 'image'}
+                  {formatBytes(file.size)} - {file.type || "image"}
                 </p>
               </div>
             </div>
@@ -126,8 +126,8 @@ export default function ThumbnailDropzone({
                 variant="secondary"
                 size="sm"
                 onClick={(event) => {
-                  event.stopPropagation()
-                  handleBrowse()
+                  event.stopPropagation();
+                  handleBrowse();
                 }}
                 disabled={disabled}
               >
@@ -139,8 +139,8 @@ export default function ThumbnailDropzone({
                 size="sm"
                 className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 onClick={(event) => {
-                  event.stopPropagation()
-                  onFileSelect(null)
+                  event.stopPropagation();
+                  onFileSelect(null);
                 }}
                 disabled={disabled}
               >
@@ -167,8 +167,8 @@ export default function ThumbnailDropzone({
               size="sm"
               className="mt-1"
               onClick={(event) => {
-                event.stopPropagation()
-                handleBrowse()
+                event.stopPropagation();
+                handleBrowse();
               }}
               disabled={disabled}
             >
@@ -196,6 +196,5 @@ export default function ThumbnailDropzone({
 
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
-  )
+  );
 }
-

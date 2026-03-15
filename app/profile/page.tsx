@@ -1,47 +1,47 @@
-﻿'use client'
+﻿"use client";
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ExternalLink } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import ChannelTab from '@/components/app/profile/channel-tab'
-import VideosTab from '@/components/app/profile/videos-tab'
-import AccountTab from '@/components/app/profile/account-tab'
-import { useAuth } from '@/context/auth-context'
-import { buildAuthHref } from '@/lib/safe-redirect'
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ExternalLink } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import ChannelTab from "@/components/app/profile/channel-tab";
+import VideosTab from "@/components/app/profile/videos-tab";
+import AccountTab from "@/components/app/profile/account-tab";
+import { useAuth } from "@/context/auth-context";
+import { buildAuthHref } from "@/lib/safe-redirect";
 
 export default function ProfilePage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const { user, isLoading } = useAuth()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.replace(buildAuthHref('/login', '/profile'))
+      router.replace(buildAuthHref("/login", "/profile"));
     }
-  }, [user, isLoading, router])
+  }, [user, isLoading, router]);
 
   if (isLoading || !user) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-18" />
       </div>
-    )
+    );
   }
 
   const tabs = [
-    { id: 'channel', label: 'Channel', content: <ChannelTab user={user} /> },
-    { id: 'videos', label: 'Videos', content: <VideosTab user={user} /> },
-    { id: 'account', label: 'Account', content: <AccountTab user={user} /> },
-  ]
+    { id: "channel", label: "Channel", content: <ChannelTab user={user} /> },
+    { id: "videos", label: "Videos", content: <VideosTab user={user} /> },
+    { id: "account", label: "Account", content: <AccountTab user={user} /> },
+  ];
 
-  const requestedTab = searchParams.get('tab')
+  const requestedTab = searchParams.get("tab");
   const defaultTab = tabs.some((tab) => tab.id === requestedTab)
-    ? (requestedTab ?? 'channel')
-    : 'channel'
+    ? (requestedTab ?? "channel")
+    : "channel";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -88,6 +88,5 @@ export default function ProfilePage() {
         ))}
       </Tabs>
     </div>
-  )
+  );
 }
-

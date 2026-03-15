@@ -1,18 +1,18 @@
-﻿'use client'
+﻿"use client";
 
-import { useEffect, useRef, useState, type ComponentProps, type FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
-import { Ban, UserCheck, Search, X } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
+import { useEffect, useRef, useState, type ComponentProps, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { Ban, UserCheck, Search, X } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -20,201 +20,201 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Input } from '@/components/ui/input'
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
-import { toast } from 'sonner'
-import UserAvatar from '@/components/ui/user-avatar'
-import { useAuth } from '@/context/auth-context'
-import { buildAuthHref } from '@/lib/safe-redirect'
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import UserAvatar from "@/components/ui/user-avatar";
+import { useAuth } from "@/context/auth-context";
+import { buildAuthHref } from "@/lib/safe-redirect";
 import {
   adminListUsers,
   adminUpdateBan,
   adminUpdateRole,
   type AdminViewUser,
   type AdminUsersResponse,
-} from '@/lib/admin'
-import { cn } from '@/lib/utils'
+} from "@/lib/admin";
+import { cn } from "@/lib/utils";
 
-type LoadState = 'idle' | 'loading' | 'ready' | 'error'
-type BanFilter = 'all' | 'unbanned' | 'banned'
-const PAGE_SIZE = 20
+type LoadState = "idle" | "loading" | "ready" | "error";
+type BanFilter = "all" | "unbanned" | "banned";
+const PAGE_SIZE = 20;
 
-const roleOptions = ['user', 'moderator', 'admin'] as const
-const roleLabels: Record<AdminViewUser['role'], string> = {
-  user: 'User',
-  moderator: 'Moderator',
-  admin: 'Admin',
-}
+const roleOptions = ["user", "moderator", "admin"] as const;
+const roleLabels: Record<AdminViewUser["role"], string> = {
+  user: "User",
+  moderator: "Moderator",
+  admin: "Admin",
+};
 
-type BadgeVariant = ComponentProps<typeof Badge>['variant']
+type BadgeVariant = ComponentProps<typeof Badge>["variant"];
 
-const roleBadgeVariant = (role: AdminViewUser['role']): BadgeVariant => {
-  if (role === 'admin') return 'destructive'
-  if (role === 'moderator') return 'secondary'
-  return 'outline'
-}
+const roleBadgeVariant = (role: AdminViewUser["role"]): BadgeVariant => {
+  if (role === "admin") return "destructive";
+  if (role === "moderator") return "secondary";
+  return "outline";
+};
 
 export default function AdminPage() {
-  const router = useRouter()
-  const { user: me, isLoading } = useAuth()
-  const isAdmin = me?.role === 'admin'
+  const router = useRouter();
+  const { user: me, isLoading } = useAuth();
+  const isAdmin = me?.role === "admin";
 
-  const [users, setUsers] = useState<AdminViewUser[]>([])
-  const [state, setState] = useState<LoadState>('idle')
-  const [error, setError] = useState<string | null>(null)
-  const [searchInput, setSearchInput] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [banFilter, setBanFilter] = useState<BanFilter>('all')
-  const [page, setPage] = useState(1)
-  const [pagination, setPagination] = useState<AdminUsersResponse['pagination'] | null>(null)
-  const [roleUpdatingIds, setRoleUpdatingIds] = useState<Set<string>>(() => new Set())
-  const [banUpdatingIds, setBanUpdatingIds] = useState<Set<string>>(() => new Set())
-  const [banTarget, setBanTarget] = useState<AdminViewUser | null>(null)
+  const [users, setUsers] = useState<AdminViewUser[]>([]);
+  const [state, setState] = useState<LoadState>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [banFilter, setBanFilter] = useState<BanFilter>("all");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<AdminUsersResponse["pagination"] | null>(null);
+  const [roleUpdatingIds, setRoleUpdatingIds] = useState<Set<string>>(() => new Set());
+  const [banUpdatingIds, setBanUpdatingIds] = useState<Set<string>>(() => new Set());
+  const [banTarget, setBanTarget] = useState<AdminViewUser | null>(null);
 
-  const requestSeq = useRef(0)
+  const requestSeq = useRef(0);
 
   useEffect(() => {
     if (!isLoading && !me) {
-      router.replace(buildAuthHref('/login', '/admin'))
+      router.replace(buildAuthHref("/login", "/admin"));
     }
-  }, [me, isLoading, router])
+  }, [me, isLoading, router]);
 
   useEffect(() => {
-    const seq = ++requestSeq.current
-    if (!me || !isAdmin) return
+    const seq = ++requestSeq.current;
+    if (!me || !isAdmin) return;
 
     const run = async () => {
-      setState('loading')
-      setError(null)
+      setState("loading");
+      setError(null);
 
       try {
         const res = await adminListUsers({
           search: searchTerm.trim() || undefined,
-          isBanned: banFilter === 'all' ? undefined : banFilter === 'banned' ? 'true' : 'false',
+          isBanned: banFilter === "all" ? undefined : banFilter === "banned" ? "true" : "false",
           page,
           limit: PAGE_SIZE,
-        })
+        });
 
-        if (requestSeq.current !== seq) return
+        if (requestSeq.current !== seq) return;
 
-        setUsers(res.data?.users ?? [])
-        setPagination(res.data?.pagination ?? null)
-        setState('ready')
+        setUsers(res.data?.users ?? []);
+        setPagination(res.data?.pagination ?? null);
+        setState("ready");
       } catch (err) {
-        if (requestSeq.current !== seq) return
+        if (requestSeq.current !== seq) return;
 
-        setState('error')
-        setError(err instanceof Error ? err.message : 'Failed to load users.')
-        setUsers([])
-        setPagination(null)
+        setState("error");
+        setError(err instanceof Error ? err.message : "Failed to load users.");
+        setUsers([]);
+        setPagination(null);
       }
-    }
+    };
 
-    run()
+    run();
 
     return () => {
-      requestSeq.current += 1
-    }
-  }, [me, isAdmin, searchTerm, banFilter, page])
+      requestSeq.current += 1;
+    };
+  }, [me, isAdmin, searchTerm, banFilter, page]);
 
   const updateUser = (updatedUser: AdminViewUser) => {
-    setUsers((prev) => prev.map((user) => (user.id === updatedUser.id ? updatedUser : user)))
-  }
+    setUsers((prev) => prev.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
+  };
 
-  const handleRoleChange = async (userId: string, nextRole: AdminViewUser['role']) => {
-    if (userId === me?.id) return
-    if (roleUpdatingIds.has(userId)) return
-    const previousUser = users.find((user) => user.id === userId)
-    if (!previousUser || previousUser.role === nextRole) return
+  const handleRoleChange = async (userId: string, nextRole: AdminViewUser["role"]) => {
+    if (userId === me?.id) return;
+    if (roleUpdatingIds.has(userId)) return;
+    const previousUser = users.find((user) => user.id === userId);
+    if (!previousUser || previousUser.role === nextRole) return;
 
-    setRoleUpdatingIds((prev) => new Set(prev).add(userId))
+    setRoleUpdatingIds((prev) => new Set(prev).add(userId));
     setUsers((prev) =>
       prev.map((user) => (user.id === userId ? { ...user, role: nextRole } : user)),
-    )
+    );
 
     try {
-      const res = await adminUpdateRole(userId, nextRole)
-      updateUser(res.data.user)
-      toast.success('Role updated.')
+      const res = await adminUpdateRole(userId, nextRole);
+      updateUser(res.data.user);
+      toast.success("Role updated.");
     } catch {
-      setUsers((prev) => prev.map((user) => (user.id === userId ? previousUser : user)))
-      toast.error('Failed to update role.')
+      setUsers((prev) => prev.map((user) => (user.id === userId ? previousUser : user)));
+      toast.error("Failed to update role.");
     } finally {
       setRoleUpdatingIds((prev) => {
-        const next = new Set(prev)
-        next.delete(userId)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(userId);
+        return next;
+      });
     }
-  }
+  };
 
   const handleToggleBan = async (targetUser: AdminViewUser) => {
-    if (targetUser.id === me?.id) return
-    if (banUpdatingIds.has(targetUser.id)) return
-    const nextIsBanned = !targetUser.isBanned
+    if (targetUser.id === me?.id) return;
+    if (banUpdatingIds.has(targetUser.id)) return;
+    const nextIsBanned = !targetUser.isBanned;
 
-    setBanUpdatingIds((prev) => new Set(prev).add(targetUser.id))
+    setBanUpdatingIds((prev) => new Set(prev).add(targetUser.id));
 
     try {
-      const res = await adminUpdateBan(targetUser.id, nextIsBanned)
-      const updatedUser = res.data.user
+      const res = await adminUpdateBan(targetUser.id, nextIsBanned);
+      const updatedUser = res.data.user;
 
       setUsers((prev) => {
-        const next = prev.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-        if (banFilter === 'unbanned' && updatedUser.isBanned)
-          return next.filter((u) => u.id !== updatedUser.id)
-        if (banFilter === 'banned' && !updatedUser.isBanned)
-          return next.filter((u) => u.id !== updatedUser.id)
-        return next
-      })
+        const next = prev.map((user) => (user.id === updatedUser.id ? updatedUser : user));
+        if (banFilter === "unbanned" && updatedUser.isBanned)
+          return next.filter((u) => u.id !== updatedUser.id);
+        if (banFilter === "banned" && !updatedUser.isBanned)
+          return next.filter((u) => u.id !== updatedUser.id);
+        return next;
+      });
 
-      toast.success(nextIsBanned ? 'User banned successfully.' : 'User unbanned.')
+      toast.success(nextIsBanned ? "User banned successfully." : "User unbanned.");
     } catch {
-      toast.error('Failed to update ban status.')
+      toast.error("Failed to update ban status.");
     } finally {
       setBanUpdatingIds((prev) => {
-        const next = new Set(prev)
-        next.delete(targetUser.id)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(targetUser.id);
+        return next;
+      });
     }
-  }
+  };
 
   const handleOpenBanModal = (targetUser: AdminViewUser) => {
-    if (banUpdatingIds.has(targetUser.id)) return
-    setBanTarget(targetUser)
-  }
+    if (banUpdatingIds.has(targetUser.id)) return;
+    setBanTarget(targetUser);
+  };
 
   const handleConfirmBan = async () => {
-    if (!banTarget) return
-    const targetUser = banTarget
-    setBanTarget(null)
-    await handleToggleBan(targetUser)
-  }
+    if (!banTarget) return;
+    const targetUser = banTarget;
+    setBanTarget(null);
+    await handleToggleBan(targetUser);
+  };
 
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setPage(1)
-    setSearchTerm(searchInput.trim())
-  }
+    event.preventDefault();
+    setPage(1);
+    setSearchTerm(searchInput.trim());
+  };
 
   const handleClearSearch = () => {
-    setSearchInput('')
-    setSearchTerm('')
-    setPage(1)
-  }
+    setSearchInput("");
+    setSearchTerm("");
+    setPage(1);
+  };
 
-  const totalPages = pagination?.totalPages ?? 1
-  const currentPage = pagination?.page ?? page
-  const totalItems = pagination?.totalItems ?? users.length
+  const totalPages = pagination?.totalPages ?? 1;
+  const currentPage = pagination?.page ?? page;
+  const totalItems = pagination?.totalItems ?? users.length;
 
   if (!isLoading && me && !isAdmin) {
     return (
@@ -223,28 +223,28 @@ export default function AdminPage() {
         <p className="text-muted-foreground mb-6">
           You don&apos;t have permission to access admin tools.
         </p>
-        <Button variant="secondary" onClick={() => router.push('/explore')}>
+        <Button variant="secondary" onClick={() => router.push("/explore")}>
           Back to Explore
         </Button>
       </div>
-    )
+    );
   }
 
-  if (!me || state === 'idle') {
+  if (!me || state === "idle") {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-18" />
       </div>
-    )
+    );
   }
 
-  if (state === 'error') {
+  if (state === "error") {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl mb-4">Error</h2>
-        <p className="text-muted-foreground">{error || 'Failed to load users.'}</p>
+        <p className="text-muted-foreground">{error || "Failed to load users."}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -253,7 +253,7 @@ export default function AdminPage() {
         <div className="mb-8 flex flex-col gap-1.5">
           <h1 className="text-3xl font-bold">Admin Panel</h1>
           <p className="text-sm text-muted-foreground">
-            {totalItems} {totalItems === 1 ? 'user' : 'users'} found
+            {totalItems} {totalItems === 1 ? "user" : "users"} found
           </p>
         </div>
 
@@ -277,8 +277,8 @@ export default function AdminPage() {
               <Select
                 value={banFilter}
                 onValueChange={(val) => {
-                  setBanFilter(val as BanFilter)
-                  setPage(1)
+                  setBanFilter(val as BanFilter);
+                  setPage(1);
                 }}
               >
                 <SelectTrigger className="h-9 text-sm w-full">
@@ -313,7 +313,7 @@ export default function AdminPage() {
         </form>
 
         <div className="mt-8">
-          {state === 'loading' ? (
+          {state === "loading" ? (
             <div className="h-64 grid place-items-center">
               <Spinner className="size-14" />
             </div>
@@ -322,10 +322,10 @@ export default function AdminPage() {
           ) : (
             <Accordion type="multiple" className="flex flex-col gap-3">
               {users.map((user) => {
-                const displayName = user.displayName || user.username
-                const isRoleUpdating = roleUpdatingIds.has(user.id)
-                const isBanUpdating = banUpdatingIds.has(user.id)
-                const isSelf = user.id === me?.id
+                const displayName = user.displayName || user.username;
+                const isRoleUpdating = roleUpdatingIds.has(user.id);
+                const isBanUpdating = banUpdatingIds.has(user.id);
+                const isSelf = user.id === me?.id;
 
                 return (
                   <AccordionItem
@@ -393,22 +393,26 @@ export default function AdminPage() {
                             <span className="font-medium">@{user.username}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-24 shrink-0">Display name</span>
-                            <span className="font-medium">{user.displayName || '-'}</span>
+                            <span className="text-muted-foreground w-24 shrink-0">
+                              Display name
+                            </span>
+                            <span className="font-medium">{user.displayName || "-"}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-muted-foreground w-24 shrink-0">Joined</span>
                             <span className="font-medium">
                               {new Date(user.createdAt).toLocaleDateString(undefined, {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
                               })}
                             </span>
                           </div>
                           {user.isBanned && user.banReasonPublic && (
                             <div className="flex items-start gap-2">
-                              <span className="text-muted-foreground w-24 shrink-0">Ban reason</span>
+                              <span className="text-muted-foreground w-24 shrink-0">
+                                Ban reason
+                              </span>
                               <span className="text-destructive font-medium">
                                 {user.banReasonPublic}
                               </span>
@@ -427,7 +431,7 @@ export default function AdminPage() {
                               value={user.role}
                               disabled={isRoleUpdating || isSelf}
                               onValueChange={(val) =>
-                                handleRoleChange(user.id, val as AdminViewUser['role'])
+                                handleRoleChange(user.id, val as AdminViewUser["role"])
                               }
                             >
                               <SelectTrigger className="w-full">
@@ -455,13 +459,13 @@ export default function AdminPage() {
                             </Button>
                             <Button
                               type="button"
-                              variant={user.isBanned ? 'outline' : 'destructive'}
+                              variant={user.isBanned ? "outline" : "destructive"}
                               size="sm"
-                              title={isSelf ? 'You cannot ban your own account.' : undefined}
+                              title={isSelf ? "You cannot ban your own account." : undefined}
                               className={cn(
-                                'flex-1 gap-1.5',
+                                "flex-1 gap-1.5",
                                 user.isBanned &&
-                                  'border-green-500/40 text-green-600 hover:bg-green-500/10 hover:text-green-600',
+                                  "border-green-500/40 text-green-600 hover:bg-green-500/10 hover:text-green-600",
                               )}
                               disabled={isBanUpdating || isSelf}
                               onClick={() => handleOpenBanModal(user)}
@@ -483,7 +487,7 @@ export default function AdminPage() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                )
+                );
               })}
             </Accordion>
           )}
@@ -519,12 +523,10 @@ export default function AdminPage() {
       <AlertDialog open={Boolean(banTarget)} onOpenChange={(open) => !open && setBanTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              {banTarget?.isBanned ? 'Unban user?' : 'Ban user?'}
-            </AlertDialogTitle>
+            <AlertDialogTitle>{banTarget?.isBanned ? "Unban user?" : "Ban user?"}</AlertDialogTitle>
             <AlertDialogDescription>
               {banTarget
-                ? `Are you sure you want to ${banTarget.isBanned ? 'unban' : 'ban'} ${banTarget.username}?`
+                ? `Are you sure you want to ${banTarget.isBanned ? "unban" : "ban"} ${banTarget.username}?`
                 : null}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -533,14 +535,14 @@ export default function AdminPage() {
               Cancel
             </Button>
             <Button
-              variant={banTarget?.isBanned ? 'default' : 'destructive'}
+              variant={banTarget?.isBanned ? "default" : "destructive"}
               onClick={handleConfirmBan}
             >
-              {banTarget?.isBanned ? 'Unban' : 'Ban'}
+              {banTarget?.isBanned ? "Unban" : "Ban"}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

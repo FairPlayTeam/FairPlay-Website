@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface AuthState {
-  token: string | null
-  setToken: (token: string | null) => void
-  clearToken: () => void
-  hasHydrated: boolean
-  setHasHydrated: (value: boolean) => void
+  token: string | null;
+  setToken: (token: string | null) => void;
+  clearToken: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,12 +22,12 @@ export const useAuthStore = create<AuthState>()(
         setHasHydrated: (value) => set({ hasHydrated: value }),
       }),
       {
-        name: 'auth-store',
+        name: "auth-store",
         storage: createJSONStorage(() => localStorage),
         onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true)
+          state?.setHasHydrated(true);
         },
       },
     ),
   ),
-)
+);

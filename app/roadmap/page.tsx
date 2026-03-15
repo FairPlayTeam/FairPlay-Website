@@ -45,10 +45,7 @@ export default function RoadmapPage() {
       phase: "Phase 1",
       title: "Foundation & Core Setup",
       description: (
-        <>
-          Initialization of the project, setting up the repo and the foundation
-          of the framework.
-        </>
+        <>Initialization of the project, setting up the repo and the foundation of the framework.</>
       ),
       status: "done",
       date: "Q2 2025",
@@ -58,8 +55,7 @@ export default function RoadmapPage() {
       title: "Core Features & API",
       description: (
         <>
-          Implementation of core functionalities, community contributions, code
-          refactoring, and{" "}
+          Implementation of core functionalities, community contributions, code refactoring, and{" "}
           <Link href="https://apiv2.fairplay.video/docs/" variant="secondary">
             public API
           </Link>
@@ -103,9 +99,7 @@ export default function RoadmapPage() {
     {
       phase: "Phase 5",
       title: "Beta Release",
-      description: (
-        <>Official Beta release of the FairPlay streaming platform.</>
-      ),
+      description: <>Official Beta release of the FairPlay streaming platform.</>,
       status: "planned",
       date: "Q1 2026",
     },
@@ -119,8 +113,8 @@ export default function RoadmapPage() {
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Project Roadmap</h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            A clear vision of our evolution. Each step builds the foundation of
-            a free and human project. Thank you for making this possible!
+            A clear vision of our evolution. Each step builds the foundation of a free and human
+            project. Thank you for making this possible!
           </p>
         </section>
 
@@ -140,18 +134,14 @@ export default function RoadmapPage() {
                 <span
                   className={cn(
                     "inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium",
-                    statusMeta[item.status].className
+                    statusMeta[item.status].className,
                   )}
                 >
                   {(() => {
                     const StatusIcon = statusMeta[item.status].icon;
                     return (
                       <>
-                        <StatusIcon
-                          className={cn(
-                            item.status === "progress" && "animate-spin"
-                          )}
-                        />
+                        <StatusIcon className={cn(item.status === "progress" && "animate-spin")} />
                         {statusMeta[item.status].label}
                       </>
                     );
@@ -168,9 +158,7 @@ export default function RoadmapPage() {
         <div className="text-center mt-20">
           <Button
             variant="secondary"
-            onClick={() =>
-              (window.location.href = "https://github.com/FairPlayTeam")
-            }
+            onClick={() => (window.location.href = "https://github.com/FairPlayTeam")}
           >
             Contribute on Github <FaArrowRight className="w-4 h-4 ml-2" />
           </Button>

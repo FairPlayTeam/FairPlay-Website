@@ -12,12 +12,7 @@ interface LinkProps {
   variant?: "primary" | "secondary";
 }
 
-export default function Link({
-  href,
-  children,
-  className = "",
-  variant = "primary",
-}: LinkProps) {
+export default function Link({ href, children, className = "", variant = "primary" }: LinkProps) {
   return (
     <NextLink
       href={href}
@@ -32,7 +27,7 @@ export default function Link({
         "transition-colors duration-200 ease-in-out",
         "hover:border-primary-200/50 hover:text-primary-200",
         "group",
-        className
+        className,
       )}
     >
       <span>{children}</span>

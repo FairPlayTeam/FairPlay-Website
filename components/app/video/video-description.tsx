@@ -1,24 +1,24 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { VideoDetails } from '@/lib/video'
-import Link from "next/link"
-import { LICENSE_LABELS, type VideoLicense } from '@/app/upload/upload-schema'
+import { useState } from "react";
+import { VideoDetails } from "@/lib/video";
+import Link from "next/link";
+import { LICENSE_LABELS, type VideoLicense } from "@/app/upload/upload-schema";
 
 export default function VideoDescription({ video }: { video: VideoDetails }) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const text = video.description?.trim() || 'No description provided.'
+  const text = video.description?.trim() || "No description provided.";
   const createdAtLabel = video.createdAt
     ? new Intl.DateTimeFormat(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
         hour12: true,
       }).format(new Date(video.createdAt))
-    : null
+    : null;
 
   return (
     <div className="flex flex-col gap-3">
@@ -34,7 +34,8 @@ export default function VideoDescription({ video }: { video: VideoDetails }) {
                 <Link
                   key={tag}
                   href={`/search?q=${encodeURIComponent(tag)}`}
-                  className="text-primary-100 whitespace-nowrap shrink-0 cursor-pointer hover:underline">
+                  className="text-primary-100 whitespace-nowrap shrink-0 cursor-pointer hover:underline"
+                >
                   #{tag.toLowerCase()}
                 </Link>
               ))}
@@ -43,7 +44,7 @@ export default function VideoDescription({ video }: { video: VideoDetails }) {
         </div>
 
         <p
-          className={`mt-3 whitespace-pre-wrap transition-all ${isExpanded ? '' : 'line-clamp-3'}`}
+          className={`mt-3 whitespace-pre-wrap transition-all ${isExpanded ? "" : "line-clamp-3"}`}
         >
           {text}
         </p>
@@ -53,19 +54,19 @@ export default function VideoDescription({ video }: { video: VideoDetails }) {
           onClick={() => setIsExpanded((prev) => !prev)}
           className="mt-3 font-medium text-primary-100 hover:underline"
         >
-          {isExpanded ? 'Show less' : 'Show more'}
+          {isExpanded ? "Show less" : "Show more"}
         </button>
       </div>
       {video.license && (
         <div className="text-sm bg-card text-muted-foreground rounded-lg p-4">
-          This video is published under the{' '}
+          This video is published under the{" "}
           <span className="font-medium text-foreground">
             {LICENSE_LABELS[video.license as VideoLicense]}
-          </span>{' '}
+          </span>{" "}
           license.
-          {video.license !== 'all_rights_reserved' && video.license !== 'cc0' && (
+          {video.license !== "all_rights_reserved" && video.license !== "cc0" && (
             <a
-              href={`https://creativecommons.org/licenses/${video.license.replace('cc_', '').replace(/_/g, '-')}/4.0/`}
+              href={`https://creativecommons.org/licenses/${video.license.replace("cc_", "").replace(/_/g, "-")}/4.0/`}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-1 underline hover:text-foreground"
@@ -73,7 +74,7 @@ export default function VideoDescription({ video }: { video: VideoDetails }) {
               Learn more
             </a>
           )}
-          {video.license === 'cc0' && (
+          {video.license === "cc0" && (
             <a
               href="https://creativecommons.org/publicdomain/zero/1.0/"
               target="_blank"
@@ -86,5 +87,5 @@ export default function VideoDescription({ video }: { video: VideoDetails }) {
         </div>
       )}
     </div>
-  )
+  );
 }

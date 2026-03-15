@@ -8,13 +8,7 @@ import DocsSidebar from "@/components/marketing/docs/DocsSidebar";
 import Link from "@/components/marketing/Link";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import {
-  FaLightbulb,
-  FaCogs,
-  FaPalette,
-  FaDatabase,
-  FaUsers,
-} from "react-icons/fa";
+import { FaLightbulb, FaCogs, FaPalette, FaDatabase, FaUsers } from "react-icons/fa";
 
 const codeBlockStyle = {
   borderRadius: "0.75rem",
@@ -43,13 +37,12 @@ export default function DocsPage() {
       content: (
         <>
           <p>
-            Welcome to the FairPlay documentation. This guide helps you
-            understand how the platform works and how to contribute.
+            Welcome to the FairPlay documentation. This guide helps you understand how the platform
+            works and how to contribute.
           </p>
           <p>
-            FairPlay is an <strong>open-source streaming platform</strong> built
-            to redefine how creators and viewers connect in a healthy
-            environment.
+            FairPlay is an <strong>open-source streaming platform</strong> built to redefine how
+            creators and viewers connect in a healthy environment.
           </p>
         </>
       ),
@@ -60,48 +53,31 @@ export default function DocsPage() {
       icon: <FaCogs size={16} />,
       content: (
         <>
-          <p>
-            To get started, clone the repository and install the dependencies:
-          </p>
+          <p>To get started, clone the repository and install the dependencies:</p>
 
-          <SyntaxHighlighter
-            language="bash"
-            style={vscDarkPlus}
-            customStyle={codeBlockStyle}
-          >
+          <SyntaxHighlighter language="bash" style={vscDarkPlus} customStyle={codeBlockStyle}>
             {`git clone https://github.com/FairPlayTeam/FairPlay-Website
 cd FairPlay-Website
 npm install
 npm run dev`}
           </SyntaxHighlighter>
 
-          <p className="mt-4">
-            This project consists of four main repositories:
-          </p>
+          <p className="mt-4">This project consists of four main repositories:</p>
           <ul className="list-disc ml-5 mt-2">
             <li>
               Website:{" "}
-              <Link href="https://github.com/FairPlayTeam/FairPlay-Website">
-                FairPlay-Website
-              </Link>
+              <Link href="https://github.com/FairPlayTeam/FairPlay-Website">FairPlay-Website</Link>
             </li>
             <li>
               Expo frontend (TypeScript):{" "}
-              <Link href="https://github.com/FairPlayTeam/frontend">
-                frontend
-              </Link>
+              <Link href="https://github.com/FairPlayTeam/frontend">frontend</Link>
             </li>
             <li>
               TypeScript backend:{" "}
-              <Link href="https://github.com/FairPlayTeam/ts-backend">
-                ts-backend
-              </Link>
+              <Link href="https://github.com/FairPlayTeam/ts-backend">ts-backend</Link>
             </li>
             <li>
-              Rust backend:{" "}
-              <Link href="https://github.com/FairPlayTeam/backend">
-                backend
-              </Link>
+              Rust backend: <Link href="https://github.com/FairPlayTeam/backend">backend</Link>
             </li>
           </ul>
 
@@ -130,13 +106,12 @@ npm run dev`}
             <Link href="https://lab.fairplay.video" variant="secondary">
               lab.fairplay.video
             </Link>{" "}
-            uses Expo/React Native, while this website is built with Next.js and
-            TailwindCSS.
+            uses Expo/React Native, while this website is built with Next.js and TailwindCSS.
           </p>
 
           <p className="mt-4">
-            Here are the main theme tokens exposed by <code>globals.css</code>.
-            Click a swatch to copy the CSS variable.
+            Here are the main theme tokens exposed by <code>globals.css</code>. Click a swatch to
+            copy the CSS variable.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -154,16 +129,13 @@ npm run dev`}
                 <span className="mt-3 text-sm font-medium text-foreground group-hover:text-primary">
                   {name}
                 </span>
-                <span className="mt-1 text-xs text-muted-foreground">
-                  {variable}
-                </span>
+                <span className="mt-1 text-xs text-muted-foreground">{variable}</span>
               </button>
             ))}
           </div>
 
           <p className="mt-10">
-            We are using the <code>next-icons</code> icon set across the
-            frontend.
+            We are using the <code>next-icons</code> icon set across the frontend.
           </p>
         </>
       ),
@@ -175,29 +147,27 @@ npm run dev`}
       content: (
         <>
           <p>
-            Our backend is fully open-source. You can use our API for free, see
-            more details on our{" "}
+            Our backend is fully open-source. You can use our API for free, see more details on our{" "}
             <Link href="https://apiv2.fairplay.video/docs/" variant="secondary">
               API enpoints list
             </Link>
             .
           </p>
           <p>
-            It is currently written in TypeScript, with plans to migrate to Rust
-            for enhanced performance.
+            It is currently written in TypeScript, with plans to migrate to Rust for enhanced
+            performance.
           </p>
 
           <h3 className="font-bold text-xl mt-6">Storage</h3>
           <p>
-            Videos are processed using <code>ffmpeg</code> into HLS playlists
-            (.m3u8) and stored as S3 objects. Avatars and banners are saved in
-            MinIO buckets, while the user database runs on PostgreSQL.
+            Videos are processed using <code>ffmpeg</code> into HLS playlists (.m3u8) and stored as
+            S3 objects. Avatars and banners are saved in MinIO buckets, while the user database runs
+            on PostgreSQL.
           </p>
           <p>
-            Our backend runs entirely on self-hosted servers, made possible by
-            generous donations! We currently operate with 2TB of video storage
-            and a dedicated compute server, all managed with <code>Docker</code>
-            . Thanks to{" "}
+            Our backend runs entirely on self-hosted servers, made possible by generous donations!
+            We currently operate with 2TB of video storage and a dedicated compute server, all
+            managed with <code>Docker</code>. Thanks to{" "}
             <Link href="https://www.4hostings.com/" variant="secondary">
               4-Hosting
             </Link>{" "}
@@ -213,12 +183,8 @@ npm run dev`}
       content: (
         <>
           <p>
-            Contributions are welcome! Before submitting a pull request, please
-            read the{" "}
-            <Link href="/docs/contribution-guidelines">
-              contribution guidelines
-            </Link>
-            .
+            Contributions are welcome! Before submitting a pull request, please read the{" "}
+            <Link href="/docs/contribution-guidelines">contribution guidelines</Link>.
           </p>
           <p>
             Discussions and planning take place in our{" "}
@@ -240,12 +206,10 @@ npm run dev`}
           }
         }
       },
-      { threshold: 0.9 }
+      { threshold: 0.9 },
     );
 
-    document
-      .querySelectorAll("section[id]")
-      .forEach((el) => observer.observe(el));
+    document.querySelectorAll("section[id]").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -257,8 +221,8 @@ npm run dev`}
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Documentation</h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Learn how to use, configure, and contribute to FairPlay, the
-            open-source streaming ecosystem.
+            Learn how to use, configure, and contribute to FairPlay, the open-source streaming
+            ecosystem.
           </p>
         </section>
 
@@ -267,12 +231,7 @@ npm run dev`}
 
           <div className="md:col-span-3 space-y-16">
             {sections.map((section, i) => (
-              <DocsSection
-                key={section.id}
-                id={section.id}
-                title={section.title}
-                index={i}
-              >
+              <DocsSection key={section.id} id={section.id} title={section.title} index={i}>
                 {section.content}
               </DocsSection>
             ))}

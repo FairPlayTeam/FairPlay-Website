@@ -23,9 +23,7 @@ export default function HeroText() {
         className={cn(
           "text-[53px] leading-[1.1] mb-6.25 font-bold",
           "transition-all duration-800 ease-out",
-          animate
-            ? "opacity-100 translate-x-0 delay-100"
-            : "opacity-0 -translate-x-12.5"
+          animate ? "opacity-100 translate-x-0 delay-100" : "opacity-0 -translate-x-12.5",
         )}
       >
         FairPlay, where creativity stays human
@@ -35,9 +33,7 @@ export default function HeroText() {
         className={cn(
           "mb-8.75 max-w-150 text-[19px] text-muted-foreground",
           "transition-all duration-800 ease-out",
-          animate
-            ? "opacity-100 translate-x-0 delay-300"
-            : "opacity-0 -translate-x-12.5"
+          animate ? "opacity-100 translate-x-0 delay-300" : "opacity-0 -translate-x-12.5",
         )}
       >
         Your passions deserve more than an algorithm
@@ -45,11 +41,9 @@ export default function HeroText() {
 
       <div
         className={cn(
-          animate
-            ? "opacity-100 translate-x-0 delay-500"
-            : "opacity-0 -translate-x-12.5",
+          animate ? "opacity-100 translate-x-0 delay-500" : "opacity-0 -translate-x-12.5",
           "transition-all duration-800 ease-out",
-          "w-full flex justify-center lg:justify-start"
+          "w-full flex justify-center lg:justify-start",
         )}
       >
         <ExploreButton onClick={() => (window.location.href = "/explore")} />

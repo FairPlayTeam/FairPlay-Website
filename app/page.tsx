@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import HomePageClient from "@/components/marketing/HomePageClient";
-import {
-  DEFAULT_OG_IMAGE,
-  DEFAULT_OPEN_GRAPH_IMAGE,
-  SITE_NAME,
-  TWITTER_HANDLE,
-} from "@/lib/seo";
+import { DEFAULT_OG_IMAGE, DEFAULT_OPEN_GRAPH_IMAGE, SITE_NAME, TWITTER_HANDLE } from "@/lib/seo";
 
 const title = SITE_NAME;
-const description =
-  "FairPlay is a human-first streaming platform where creativity stays human.";
+const description = "FairPlay is a human-first streaming platform where creativity stays human.";
 
 export const metadata: Metadata = {
   title,

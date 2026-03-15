@@ -2,12 +2,8 @@
 
 export default function ExtensionPreview() {
   return (
-    <div
-      className="w-[320px] rounded-2xl border border-border bg-card/95 px-6 py-5 text-foreground shadow-xl"
-    >
-      <h1 className="mb-5 text-center text-3xl font-semibold text-foreground">
-        FairPlay
-      </h1>
+    <div className="w-[320px] rounded-2xl border border-border bg-card/95 px-6 py-5 text-foreground shadow-xl">
+      <h1 className="mb-5 text-center text-3xl font-semibold text-foreground">FairPlay</h1>
 
       <div className="space-y-3 text-sm">
         <label className="flex items-center gap-3">
@@ -45,9 +41,7 @@ export default function ExtensionPreview() {
       </div>
 
       <div className="mt-6">
-        <h4 className="mb-2 text-sm font-medium text-foreground">
-          Block custom website
-        </h4>
+        <h4 className="mb-2 text-sm font-medium text-foreground">Block custom website</h4>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between rounded-md border border-border bg-muted/60 px-3 py-2 text-sm">
@@ -68,9 +62,7 @@ export default function ExtensionPreview() {
         </div>
       </div>
 
-      <button
-        className="mt-5 w-full cursor-pointer rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground transition-transform duration-150 hover:-translate-y-px hover:bg-primary-400 hover:shadow-lg"
-      >
+      <button className="mt-5 w-full cursor-pointer rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground transition-transform duration-150 hover:-translate-y-px hover:bg-primary-400 hover:shadow-lg">
         Add
       </button>
 

@@ -1,17 +1,17 @@
-﻿'use client'
+﻿"use client";
 
-import { CloudUpload, FileVideo, Trash2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { formatBytes } from '../upload-utils'
-import { useFileDropzone } from './use-file-dropzone'
+import { CloudUpload, FileVideo, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { formatBytes } from "../upload-utils";
+import { useFileDropzone } from "./use-file-dropzone";
 
 export type UploadDropzoneProps = {
-  file: File | null
-  error?: string | null
-  disabled?: boolean
-  onFileSelect: (file: File | null) => void
-}
+  file: File | null;
+  error?: string | null;
+  disabled?: boolean;
+  onFileSelect: (file: File | null) => void;
+};
 
 export default function UploadDropzone({
   file,
@@ -30,17 +30,17 @@ export default function UploadDropzone({
   } = useFileDropzone({
     disabled,
     onFileSelect,
-  })
+  });
 
   const dropzoneClassName = cn(
-    'rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors duration-200',
-    disabled && 'cursor-not-allowed opacity-60',
+    "rounded-xl border-2 border-dashed px-6 py-12 text-center transition-colors duration-200",
+    disabled && "cursor-not-allowed opacity-60",
     error
-      ? 'border-destructive/70 bg-destructive/5'
+      ? "border-destructive/70 bg-destructive/5"
       : isDragActive
-        ? 'border-primary bg-primary/5'
-        : 'border-border/70 hover:border-primary/50',
-  )
+        ? "border-primary bg-primary/5"
+        : "border-border/70 hover:border-primary/50",
+  );
 
   return (
     <div className="space-y-3">
@@ -49,9 +49,9 @@ export default function UploadDropzone({
         tabIndex={0}
         onClick={handleBrowse}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            handleBrowse()
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleBrowse();
           }
         }}
         onDragEnter={handleDragEnter}
@@ -78,7 +78,7 @@ export default function UploadDropzone({
               <div className="min-w-0">
                 <p className="break-all text-sm font-semibold text-foreground">{file.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {formatBytes(file.size)} - {file.type || 'video'}
+                  {formatBytes(file.size)} - {file.type || "video"}
                 </p>
               </div>
             </div>
@@ -88,8 +88,8 @@ export default function UploadDropzone({
                 variant="secondary"
                 size="sm"
                 onClick={(event) => {
-                  event.stopPropagation()
-                  handleBrowse()
+                  event.stopPropagation();
+                  handleBrowse();
                 }}
                 disabled={disabled}
               >
@@ -101,8 +101,8 @@ export default function UploadDropzone({
                 size="sm"
                 className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 onClick={(event) => {
-                  event.stopPropagation()
-                  onFileSelect(null)
+                  event.stopPropagation();
+                  onFileSelect(null);
                 }}
                 disabled={disabled}
               >
@@ -129,8 +129,8 @@ export default function UploadDropzone({
               size="sm"
               className="mt-1"
               onClick={(event) => {
-                event.stopPropagation()
-                handleBrowse()
+                event.stopPropagation();
+                handleBrowse();
               }}
               disabled={disabled}
             >
@@ -142,6 +142,5 @@ export default function UploadDropzone({
 
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
-  )
+  );
 }
-

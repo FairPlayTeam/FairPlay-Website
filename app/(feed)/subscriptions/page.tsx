@@ -1,148 +1,148 @@
-﻿'use client'
+﻿"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Spinner } from '@/components/ui/spinner'
-import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/ui/user-avatar'
-import { toast } from 'sonner'
-import useInfiniteScroll from '@/hooks/use-infinite-scroll'
-import { useAuth } from '@/context/auth-context'
-import { buildAuthHref } from '@/lib/safe-redirect'
-import { getFollowing, unfollowUser, type BaseUser } from '@/lib/users'
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import UserAvatar from "@/components/ui/user-avatar";
+import { toast } from "sonner";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
+import { useAuth } from "@/context/auth-context";
+import { buildAuthHref } from "@/lib/safe-redirect";
+import { getFollowing, unfollowUser, type BaseUser } from "@/lib/users";
 
-type FetchMode = 'initial' | 'more'
-const PAGE_SIZE = 18
+type FetchMode = "initial" | "more";
+const PAGE_SIZE = 18;
 
 function mergeUniqueUsers(prev: BaseUser[], next: BaseUser[]) {
-  if (next.length === 0) return prev
-  const seen = new Set(prev.map((item) => item.id || item.username))
-  const merged = [...prev]
+  if (next.length === 0) return prev;
+  const seen = new Set(prev.map((item) => item.id || item.username));
+  const merged = [...prev];
 
   for (const item of next) {
-    const key = item.id || item.username
+    const key = item.id || item.username;
     if (!seen.has(key)) {
-      seen.add(key)
-      merged.push(item)
+      seen.add(key);
+      merged.push(item);
     }
   }
 
-  return merged
+  return merged;
 }
 
 export default function SubscriptionsPage() {
-  const router = useRouter()
-  const { user, isLoading: isAuthLoading } = useAuth()
+  const router = useRouter();
+  const { user, isLoading: isAuthLoading } = useAuth();
 
-  const [following, setFollowing] = useState<BaseUser[]>([])
-  const [isLoading, setLoading] = useState(true)
-  const [isLoadingMore, setLoadingMore] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
-  const [unfollowingIds, setUnfollowingIds] = useState<Set<string>>(() => new Set())
+  const [following, setFollowing] = useState<BaseUser[]>([]);
+  const [isLoading, setLoading] = useState(true);
+  const [isLoadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [unfollowingIds, setUnfollowingIds] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     if (!isAuthLoading && !user) {
-      router.replace(buildAuthHref('/login', '/subscriptions'))
+      router.replace(buildAuthHref("/login", "/subscriptions"));
     }
-  }, [isAuthLoading, router, user])
+  }, [isAuthLoading, router, user]);
 
   const resolveHasMore = (itemsCount: number, pageToLoad: number, totalPages?: number) => {
-    if (typeof totalPages === 'number') {
-      return pageToLoad < totalPages
+    if (typeof totalPages === "number") {
+      return pageToLoad < totalPages;
     }
-    return itemsCount === PAGE_SIZE
-  }
+    return itemsCount === PAGE_SIZE;
+  };
 
   const fetchFollowing = useCallback(
     async (pageToLoad: number, mode: FetchMode) => {
-      if (!user) return
+      if (!user) return;
 
       try {
-        if (mode === 'initial') {
-          setLoading(true)
+        if (mode === "initial") {
+          setLoading(true);
         } else {
-          setLoadingMore(true)
+          setLoadingMore(true);
         }
 
-        const idOrUsername = user.username || user.id
-        const { data } = await getFollowing(idOrUsername, pageToLoad, PAGE_SIZE)
-        const nextFollowing = data.following ?? []
-        const totalPages = data.pagination?.totalPages
+        const idOrUsername = user.username || user.id;
+        const { data } = await getFollowing(idOrUsername, pageToLoad, PAGE_SIZE);
+        const nextFollowing = data.following ?? [];
+        const totalPages = data.pagination?.totalPages;
 
         setFollowing((prev) =>
           pageToLoad === 1 ? nextFollowing : mergeUniqueUsers(prev, nextFollowing),
-        )
-        setError(null)
-        setPage(pageToLoad)
-        setHasMore(resolveHasMore(nextFollowing.length, pageToLoad, totalPages))
+        );
+        setError(null);
+        setPage(pageToLoad);
+        setHasMore(resolveHasMore(nextFollowing.length, pageToLoad, totalPages));
       } catch {
-        if (mode === 'initial') {
-          setError('Unable to load subscriptions.')
+        if (mode === "initial") {
+          setError("Unable to load subscriptions.");
         }
-        toast.error('Error while fetching subscriptions.')
-        setHasMore(false)
+        toast.error("Error while fetching subscriptions.");
+        setHasMore(false);
       } finally {
-        if (mode === 'initial') {
-          setLoading(false)
+        if (mode === "initial") {
+          setLoading(false);
         } else {
-          setLoadingMore(false)
+          setLoadingMore(false);
         }
       }
     },
     [user],
-  )
+  );
 
   useEffect(() => {
-    if (!user) return
-    fetchFollowing(1, 'initial')
-  }, [fetchFollowing, user])
+    if (!user) return;
+    fetchFollowing(1, "initial");
+  }, [fetchFollowing, user]);
 
   const loadMore = useCallback(() => {
-    if (isLoading || isLoadingMore || !hasMore) return
-    fetchFollowing(page + 1, 'more')
-  }, [fetchFollowing, isLoading, isLoadingMore, hasMore, page])
+    if (isLoading || isLoadingMore || !hasMore) return;
+    fetchFollowing(page + 1, "more");
+  }, [fetchFollowing, isLoading, isLoadingMore, hasMore, page]);
 
   const sentinelRef = useInfiniteScroll({
     hasMore,
     isLoading: isLoading || isLoadingMore,
     onLoadMore: loadMore,
-  })
+  });
 
   const handleUnfollow = async (creator: BaseUser) => {
-    const key = creator.id || creator.username
-    if (!key || unfollowingIds.has(key)) return
+    const key = creator.id || creator.username;
+    if (!key || unfollowingIds.has(key)) return;
 
     setUnfollowingIds((prev) => {
-      const next = new Set(prev)
-      next.add(key)
-      return next
-    })
+      const next = new Set(prev);
+      next.add(key);
+      return next;
+    });
 
     try {
-      await unfollowUser(creator.username || creator.id)
+      await unfollowUser(creator.username || creator.id);
       setFollowing((prev) =>
         prev.filter((item) => (item.id || item.username) !== (creator.id || creator.username)),
-      )
-      toast.success('Unfollowed.')
+      );
+      toast.success("Unfollowed.");
     } catch {
-      toast.error('Unable to unfollow.')
+      toast.error("Unable to unfollow.");
     } finally {
       setUnfollowingIds((prev) => {
-        const next = new Set(prev)
-        next.delete(key)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
     }
-  }
+  };
 
   if (isAuthLoading || !user || isLoading) {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-18" />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -151,7 +151,7 @@ export default function SubscriptionsPage() {
         <h2 className="text-2xl mb-4">Error</h2>
         <p className="text-muted-foreground">{error}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -162,7 +162,7 @@ export default function SubscriptionsPage() {
           <Button
             variant="outline"
             className="mt-4 rounded-full px-5 py-4"
-            onClick={() => router.push('/explore')}
+            onClick={() => router.push("/explore")}
           >
             Discover creators
           </Button>
@@ -181,9 +181,9 @@ export default function SubscriptionsPage() {
                 tabIndex={0}
                 onClick={() => router.push(`/channel/${creator.username || creator.id}`)}
                 onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault()
-                    router.push(`/channel/${creator.username || creator.id}`)
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    router.push(`/channel/${creator.username || creator.id}`);
                   }
                 }}
                 aria-label={`Open ${creator.displayName || creator.username || creator.id} channel`}
@@ -201,8 +201,8 @@ export default function SubscriptionsPage() {
                     className="ml-auto rounded-full p-4"
                     variant="secondary"
                     onClick={(event) => {
-                      event.stopPropagation()
-                      handleUnfollow(creator)
+                      event.stopPropagation();
+                      handleUnfollow(creator);
                     }}
                     disabled={unfollowingIds.has(creator.id || creator.username)}
                   >
@@ -222,6 +222,5 @@ export default function SubscriptionsPage() {
         </div>
       ) : null}
     </div>
-  )
+  );
 }
-

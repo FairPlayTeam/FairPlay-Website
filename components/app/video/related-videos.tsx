@@ -1,17 +1,17 @@
-﻿'use client'
+﻿"use client";
 
-import { useMemo } from 'react'
-import { VideoDetails } from '@/lib/video'
-import { VideoCard } from './video-card'
-import { Spinner } from '@/components/ui/spinner'
-import useInfiniteScroll from '@/hooks/use-infinite-scroll'
+import { useMemo } from "react";
+import { VideoDetails } from "@/lib/video";
+import { VideoCard } from "./video-card";
+import { Spinner } from "@/components/ui/spinner";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
 interface RelatedVideosProps {
-  videos: VideoDetails[]
-  currentVideoId: string
-  hasMore?: boolean
-  isLoadingMore?: boolean
-  onLoadMore?: () => void
+  videos: VideoDetails[];
+  currentVideoId: string;
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 export function RelatedVideos({
@@ -24,13 +24,13 @@ export function RelatedVideos({
   const filteredVideos = useMemo(
     () => videos.filter((v) => v.id !== currentVideoId),
     [videos, currentVideoId],
-  )
+  );
 
   const sentinelRef = useInfiniteScroll({
     hasMore: Boolean(onLoadMore) && hasMore,
     isLoading: isLoadingMore,
     onLoadMore: onLoadMore ?? (() => undefined),
-  })
+  });
 
   return (
     <div className="mx-4 space-y-4">
@@ -58,6 +58,5 @@ export function RelatedVideos({
         )}
       </div>
     </div>
-  )
+  );
 }
-

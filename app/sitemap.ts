@@ -16,10 +16,7 @@ function parseLastModified(value: string | undefined, fallback: Date) {
   return Number.isNaN(date.getTime()) ? fallback : date;
 }
 
-async function fetchVideosPage(
-  apiBase: string,
-  page: number
-): Promise<VideosResponse | null> {
+async function fetchVideosPage(apiBase: string, page: number): Promise<VideosResponse | null> {
   const qs = new URLSearchParams({
     page: String(page),
     limit: String(VIDEO_PAGE_SIZE),

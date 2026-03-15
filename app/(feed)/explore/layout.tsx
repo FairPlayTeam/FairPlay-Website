@@ -1,26 +1,26 @@
-import type { Metadata } from 'next'
-import { Suspense } from 'react'
-import { DEFAULT_OG_IMAGE, DEFAULT_OPEN_GRAPH_IMAGE, SITE_NAME, TWITTER_HANDLE } from '@/lib/seo'
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { DEFAULT_OG_IMAGE, DEFAULT_OPEN_GRAPH_IMAGE, SITE_NAME, TWITTER_HANDLE } from "@/lib/seo";
 
-const title = 'Explore'
-const description = 'Discover the latest videos and creators on FairPlay'
+const title = "Explore";
+const description = "Discover the latest videos and creators on FairPlay";
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: {
-    canonical: '/explore',
+    canonical: "/explore",
   },
   openGraph: {
     title,
     description,
-    url: '/explore',
-    type: 'website',
+    url: "/explore",
+    type: "website",
     siteName: SITE_NAME,
     images: [DEFAULT_OPEN_GRAPH_IMAGE],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title,
     description,
     images: [DEFAULT_OG_IMAGE],
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-}
+};
 
 export default function ExploreLayout({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={null}>{children}</Suspense>
+  return <Suspense fallback={null}>{children}</Suspense>;
 }

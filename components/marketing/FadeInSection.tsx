@@ -8,10 +8,7 @@ interface FadeInSectionProps {
   className?: string;
 }
 
-export default function FadeInSection({
-  children,
-  className = "",
-}: FadeInSectionProps) {
+export default function FadeInSection({ children, className = "" }: FadeInSectionProps) {
   const { ref, visible } = useFadeInOnScroll();
 
   return (
@@ -20,7 +17,7 @@ export default function FadeInSection({
       className={cn(
         "transition-all duration-1000 ease-out",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
-        className
+        className,
       )}
     >
       {children}

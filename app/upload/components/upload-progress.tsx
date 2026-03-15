@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { cn } from '@/lib/utils'
-import type { UploadState } from '../upload-constants'
-import { clampPercentage } from '../upload-utils'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
+import { cn } from "@/lib/utils";
+import type { UploadState } from "../upload-constants";
+import { clampPercentage } from "../upload-utils";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 
 export type UploadProgressProps = {
-  state: UploadState
-  progress: number
-  error?: string | null
+  state: UploadState;
+  progress: number;
+  error?: string | null;
   labels?: {
-    idle?: string
-    uploading?: string
-    done?: string
-    error?: string
-  }
-  doneMessage?: string | null
-}
+    idle?: string;
+    uploading?: string;
+    done?: string;
+    error?: string;
+  };
+  doneMessage?: string | null;
+};
 
 export default function UploadProgress({
   state,
@@ -26,17 +26,17 @@ export default function UploadProgress({
   doneMessage,
 }: UploadProgressProps) {
   const resolvedLabels = {
-    idle: 'Ready to upload',
-    uploading: 'Uploading',
-    done: 'Upload complete',
-    error: 'Upload failed',
+    idle: "Ready to upload",
+    uploading: "Uploading",
+    done: "Upload complete",
+    error: "Upload failed",
     ...labels,
-  }
+  };
 
-  const statusLabel = resolvedLabels[state] ?? resolvedLabels.idle
-  const clampedProgress = clampPercentage(Number.isFinite(progress) ? progress : 0)
-  const isDone = state === 'done'
-  const isError = state === 'error'
+  const statusLabel = resolvedLabels[state] ?? resolvedLabels.idle;
+  const clampedProgress = clampPercentage(Number.isFinite(progress) ? progress : 0);
+  const isDone = state === "done";
+  const isError = state === "error";
 
   return (
     <div className="space-y-4">
@@ -53,7 +53,7 @@ export default function UploadProgress({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span
-                className={cn('font-semibold', isError ? 'text-destructive' : 'text-foreground')}
+                className={cn("font-semibold", isError ? "text-destructive" : "text-foreground")}
               >
                 {statusLabel}
               </span>
@@ -73,8 +73,8 @@ export default function UploadProgress({
             >
               <div
                 className={cn(
-                  'h-full rounded-full transition-all duration-300',
-                  isError ? 'bg-destructive' : 'bg-primary',
+                  "h-full rounded-full transition-all duration-300",
+                  isError ? "bg-destructive" : "bg-primary",
                 )}
                 style={{ width: `${clampedProgress}%` }}
               />
@@ -90,5 +90,5 @@ export default function UploadProgress({
         </>
       )}
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -29,8 +29,8 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
         },
       }),
       {
-        name: 'preference-storage',
+        name: "preference-storage",
       },
-    )
-  )
+    ),
+  ),
 );

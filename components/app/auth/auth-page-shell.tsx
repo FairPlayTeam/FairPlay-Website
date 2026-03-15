@@ -1,21 +1,21 @@
-import Link from 'next/link'
-import type { FormEventHandler, ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
+import Link from "next/link";
+import type { FormEventHandler, ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 
 type AuthPageShellProps = {
-  title: string
-  switchHref: string
-  switchLabel: string
-  formId: string
-  onSubmit: FormEventHandler<HTMLFormElement>
-  submitLabel: string
-  submitPendingLabel: string
-  isSubmitting: boolean
-  error: string | null
-  errorId: string
-  children: ReactNode
-  footerContent?: ReactNode
-}
+  title: string;
+  switchHref: string;
+  switchLabel: string;
+  formId: string;
+  onSubmit: FormEventHandler<HTMLFormElement>;
+  submitLabel: string;
+  submitPendingLabel: string;
+  isSubmitting: boolean;
+  error: string | null;
+  errorId: string;
+  children: ReactNode;
+  footerContent?: ReactNode;
+};
 
 export function AuthPageShell({
   title,
@@ -31,7 +31,7 @@ export function AuthPageShell({
   children,
   footerContent,
 }: AuthPageShellProps) {
-  const titleId = `${formId}-title`
+  const titleId = `${formId}-title`;
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -91,5 +91,5 @@ export function AuthPageShell({
         {/* TODO: Add auth illustration/content */}
       </aside>
     </div>
-  )
+  );
 }

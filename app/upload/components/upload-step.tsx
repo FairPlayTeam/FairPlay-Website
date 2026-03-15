@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import type { ReactNode } from 'react'
-import { clampPercentage } from '../upload-utils'
+import type { ReactNode } from "react";
+import { clampPercentage } from "../upload-utils";
 
 export type UploadStepScreenProps = {
-  title: string
-  subtitle?: string
-  children: ReactNode
-  actions?: ReactNode
-  stepProgress?: number
-}
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+  actions?: ReactNode;
+  stepProgress?: number;
+};
 
 export default function UploadStepScreen({
   title,
@@ -18,7 +18,7 @@ export default function UploadStepScreen({
   actions,
   stepProgress = 0,
 }: UploadStepScreenProps) {
-  const clampedProgress = clampPercentage(Number.isFinite(stepProgress) ? stepProgress : 0)
+  const clampedProgress = clampPercentage(Number.isFinite(stepProgress) ? stepProgress : 0);
 
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-8">
@@ -39,5 +39,5 @@ export default function UploadStepScreen({
         </div>
       )}
     </section>
-  )
+  );
 }

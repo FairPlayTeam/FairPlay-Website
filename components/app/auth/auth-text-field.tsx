@@ -1,26 +1,26 @@
-import type { ComponentProps, HTMLInputTypeAttribute } from 'react'
-import type { UseFormRegisterReturn } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import type { ComponentProps, HTMLInputTypeAttribute } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type AuthTextFieldProps = {
-  id: string
-  label: string
-  placeholder?: string
-  type?: HTMLInputTypeAttribute
-  autoComplete?: string
-  inputMode?: ComponentProps<'input'>['inputMode']
-  registration: UseFormRegisterReturn
-  error?: string
-  autoFocus?: boolean
-  descriptionId?: string
-}
+  id: string;
+  label: string;
+  placeholder?: string;
+  type?: HTMLInputTypeAttribute;
+  autoComplete?: string;
+  inputMode?: ComponentProps<"input">["inputMode"];
+  registration: UseFormRegisterReturn;
+  error?: string;
+  autoFocus?: boolean;
+  descriptionId?: string;
+};
 
 export function AuthTextField({
   id,
   label,
   placeholder,
-  type = 'text',
+  type = "text",
   autoComplete,
   inputMode,
   registration,
@@ -28,8 +28,8 @@ export function AuthTextField({
   autoFocus,
   descriptionId,
 }: AuthTextFieldProps) {
-  const errorId = `${id}-error`
-  const describedBy = [descriptionId, error ? errorId : null].filter(Boolean).join(' ')
+  const errorId = `${id}-error`;
+  const describedBy = [descriptionId, error ? errorId : null].filter(Boolean).join(" ");
 
   return (
     <div className="grid gap-2">
@@ -54,5 +54,5 @@ export function AuthTextField({
         </p>
       ) : null}
     </div>
-  )
+  );
 }

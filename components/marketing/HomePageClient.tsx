@@ -24,8 +24,7 @@ export default function HomePageClient() {
         const headerHeight = header ? header.offsetHeight + 50 : 0;
 
         if (section) {
-          const top =
-            section.getBoundingClientRect().top + window.scrollY - headerHeight;
+          const top = section.getBoundingClientRect().top + window.scrollY - headerHeight;
           window.scrollTo({ top, behavior: "smooth" });
         }
       }
@@ -52,19 +51,15 @@ export default function HomePageClient() {
         <FadeInSection>
           <Section id="about" className="mt-10 md:mt-25">
             <div className="intro-card mx-auto max-w-200 text-center">
-              <h2 className="text-[33px] mb-6.25 font-bold">
-                Our Mission: Redefining Streaming
-              </h2>
+              <h2 className="text-[33px] mb-6.25 font-bold">Our Mission: Redefining Streaming</h2>
               <p className="text-[18px] text-muted-foreground">
-                The internet is in bad shape. <b>47%</b> of internet traffic
-                comes from bots, <b>52%</b> of internet content is AI-generated
-                including <b>71%</b> of images on social media like YouTube.
-                Between all the deepfakes, misinformation, and the flood of
-                mass-produced fast-paced content,{" "}
-                <b>What space is left for humans?</b>
+                The internet is in bad shape. <b>47%</b> of internet traffic comes from bots,{" "}
+                <b>52%</b> of internet content is AI-generated including <b>71%</b> of images on
+                social media like YouTube. Between all the deepfakes, misinformation, and the flood
+                of mass-produced fast-paced content, <b>What space is left for humans?</b>
                 <br />
-                That&apos;s why we launched FairPlay. We want to make it a place
-                where your skills, interests, and content are truly highlighted.
+                That&apos;s why we launched FairPlay. We want to make it a place where your skills,
+                interests, and content are truly highlighted.
               </p>
             </div>
           </Section>
@@ -72,9 +67,7 @@ export default function HomePageClient() {
 
         <FadeInSection>
           <Section id="values" variant="secondary" className="mt-10 md:mt-25">
-            <h2 className="text-[33px] font-bold mb-12.5">
-              Why choose FairPlay?
-            </h2>
+            <h2 className="text-[33px] font-bold mb-12.5">Why choose FairPlay?</h2>
             <FeatureGrid />
           </Section>
         </FadeInSection>
@@ -90,9 +83,8 @@ export default function HomePageClient() {
                   Control Your Web experience with the FairPlay extension
                 </h2>
                 <p className="mb-12.5 text-center text-[16px] text-muted-foreground lg:text-left">
-                  Tired of short, addictive, and useless content polluting your
-                  feed? Our browser extension allows you to hide them and take
-                  back control.
+                  Tired of short, addictive, and useless content polluting your feed? Our browser
+                  extension allows you to hide them and take back control.
                 </p>
                 <ul className="mb-12.5 flex flex-col items-start gap-3">
                   <li className="flex items-start text-[16px]">
@@ -134,35 +126,26 @@ export default function HomePageClient() {
         </FadeInSection>
 
         <FadeInSection>
-          <Section
-            id="development"
-            variant="secondary"
-            className="mt-10 md:mt-25"
-          >
+          <Section id="development" variant="secondary" className="mt-10 md:mt-25">
             <h2 className="text-[33px] mb-6.25 font-bold">
               FairPlay: An open and evolving project
             </h2>
             <p className="m-10 text-[18px] text-muted-foreground">
-              We believe in the power of collaboration. FairPlay is entirely
-              Open Source, meaning its code is accessible and modifiable by
-              everyone. Our public and free API encourages innovation and allows
-              everyone to build on our platform.
+              We believe in the power of collaboration. FairPlay is entirely Open Source, meaning
+              its code is accessible and modifiable by everyone. Our public and free API encourages
+              innovation and allows everyone to build on our platform.
             </p>
             <div className="flex flex-col lg:flex-row justify-center gap-5">
               <Button
                 className="gap-2"
-                onClick={() =>
-                  (window.location.href = "https://github.com/FairPlayTeam")
-                }
+                onClick={() => (window.location.href = "https://github.com/FairPlayTeam")}
               >
                 <PiGithubLogo />
                 &nbsp;Source code{" "}
               </Button>
               <Button
                 className="gap-2"
-                onClick={() =>
-                  (window.location.href = "https://apiv2.fairplay.video/docs/")
-                }
+                onClick={() => (window.location.href = "https://apiv2.fairplay.video/docs/")}
               >
                 {" "}
                 <PiCodeLight />
@@ -170,9 +153,7 @@ export default function HomePageClient() {
               </Button>
               <Button
                 className="gap-2"
-                onClick={() =>
-                  (window.location.href = "/docs/contribution-guidelines")
-                }
+                onClick={() => (window.location.href = "/docs/contribution-guidelines")}
               >
                 {" "}
                 <PiBookOpenTextLight />
@@ -186,20 +167,13 @@ export default function HomePageClient() {
           <Section id="community" className="mt-10 md:mt-25">
             <div className="flex flex-col lg:flex-row gap-12.5 text-left lg:items-center">
               <div className="flex flex-1 flex-col justify-center items-center lg:items-start text-center lg:text-left">
-                <h2 className="text-[33px] font-bold mb-6.25">
-                  Join our community
-                </h2>
+                <h2 className="text-[33px] font-bold mb-6.25">Join our community</h2>
                 <p className="mb-6.25 max-w-lg text-[18px] text-muted-foreground">
-                  FairPlay is more than a platform, it&apos;s a movement. By
-                  joining our community, you contribute to shaping the future of
-                  streaming and Internet. Share your passions, discover new
-                  perspectives, and connect with others FairPlayers.
+                  FairPlay is more than a platform, it&apos;s a movement. By joining our community,
+                  you contribute to shaping the future of streaming and Internet. Share your
+                  passions, discover new perspectives, and connect with others FairPlayers.
                 </p>
-                <Button
-                  onClick={() =>
-                    (window.location.href = "https://discord.gg/6g5cBUVra9")
-                  }
-                >
+                <Button onClick={() => (window.location.href = "https://discord.gg/6g5cBUVra9")}>
                   Discover our Discord
                 </Button>
               </div>
@@ -224,16 +198,13 @@ export default function HomePageClient() {
                 Support FairPlay, Support Quality Content
               </h2>
               <p className="mb-7.5 text-[19px] text-muted-foreground">
-                FairPlay is 100% free and ad-free, and that will always be our
-                commitment. If you appreciate our mission and our platform, your
-                donation directly helps us cover infrastructure costs, improve
-                features, and grow our community. Every contribution counts, big
-                or small.
+                FairPlay is 100% free and ad-free, and that will always be our commitment. If you
+                appreciate our mission and our platform, your donation directly helps us cover
+                infrastructure costs, improve features, and grow our community. Every contribution
+                counts, big or small.
               </p>
               <Button
-                onClick={() =>
-                  (window.location.href = "https://ko-fi.com/fairplay_")
-                }
+                onClick={() => (window.location.href = "https://ko-fi.com/fairplay_")}
                 className="rounded-full p-5"
               >
                 Donate

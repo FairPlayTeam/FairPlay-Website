@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
-import { Monitor, Smartphone, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Spinner } from '@/components/ui/spinner'
-import { Card, CardContent } from '@/components/ui/card'
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { Monitor, Smartphone, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -15,55 +15,55 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Separator } from '@/components/ui/separator'
-import { getSessions, revokeSession, Session, User } from '@/lib/users'
+} from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
+import { getSessions, revokeSession, Session, User } from "@/lib/users";
 
 export default function AccountTab({ user }: { user: User }) {
-  const [sessions, setSessions] = useState<Session[]>([])
-  const [isLoadingSessions, setIsLoadingSessions] = useState(true)
-  const [sessionToRevoke, setSessionToRevoke] = useState<Session | null>(null)
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [isLoadingSessions, setIsLoadingSessions] = useState(true);
+  const [sessionToRevoke, setSessionToRevoke] = useState<Session | null>(null);
 
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
 
     const run = async () => {
       try {
-        const res = await getSessions()
+        const res = await getSessions();
         if (!cancelled) {
-          setSessions(res.data.sessions)
+          setSessions(res.data.sessions);
         }
       } catch {
         if (!cancelled) {
-          toast.error('Failed to load session.')
+          toast.error("Failed to load session.");
         }
       } finally {
         if (!cancelled) {
-          setIsLoadingSessions(false)
+          setIsLoadingSessions(false);
         }
       }
-    }
+    };
 
-    run()
+    run();
 
     return () => {
-      cancelled = true
-    }
-  }, [])
+      cancelled = true;
+    };
+  }, []);
 
   const handleConfirmRevoke = async () => {
-    if (!sessionToRevoke) return
-    const sessionId = sessionToRevoke.id
-    setSessionToRevoke(null)
+    if (!sessionToRevoke) return;
+    const sessionId = sessionToRevoke.id;
+    setSessionToRevoke(null);
 
     try {
-      await revokeSession(sessionId)
-      setSessions((prev) => prev.filter((s) => s.id !== sessionId))
-      toast.success('Session revoked.')
+      await revokeSession(sessionId);
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+      toast.success("Session revoked.");
     } catch {
-      toast.error('Failed to revoke session.')
+      toast.error("Failed to revoke session.");
     }
-  }
+  };
 
   return (
     <div className="md:px-4 space-y-8">
@@ -77,7 +77,7 @@ export default function AccountTab({ user }: { user: User }) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground mb-1">Member since</p>
-            <p className="font-medium">{format(new Date(user.createdAt), 'PPP')}</p>
+            <p className="font-medium">{format(new Date(user.createdAt), "PPP")}</p>
           </div>
         </div>
       </section>
@@ -97,7 +97,7 @@ export default function AccountTab({ user }: { user: User }) {
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {sessions.map((session) => {
-              const isMobile = session.deviceInfo?.toLowerCase().includes('mobile')
+              const isMobile = session.deviceInfo?.toLowerCase().includes("mobile");
 
               return (
                 <Card key={session.id} className="p-0">
@@ -110,7 +110,7 @@ export default function AccountTab({ user }: { user: User }) {
                       )}
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 font-medium flex-wrap">
-                          <span>{session.deviceInfo || 'Unknown Device'}</span>
+                          <span>{session.deviceInfo || "Unknown Device"}</span>
                           {session.isCurrent && (
                             <Badge
                               variant="outline"
@@ -121,8 +121,8 @@ export default function AccountTab({ user }: { user: User }) {
                           )}
                         </div>
                         <div className="flex flex-col text-sm text-muted-foreground break-all mt-0.5">
-                          <span>{session.ipAddress || 'Unknown IP'}</span>
-                          <span>Last active {format(new Date(session.lastUsedAt), 'PP p')}</span>
+                          <span>{session.ipAddress || "Unknown IP"}</span>
+                          <span>Last active {format(new Date(session.lastUsedAt), "PP p")}</span>
                         </div>
                       </div>
                     </div>
@@ -141,7 +141,7 @@ export default function AccountTab({ user }: { user: User }) {
                     )}
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
         )}
@@ -157,7 +157,7 @@ export default function AccountTab({ user }: { user: User }) {
             <AlertDialogTitle>Revoke session?</AlertDialogTitle>
             <AlertDialogDescription>
               {sessionToRevoke
-                ? `Are you sure you want to revoke ${sessionToRevoke.deviceInfo || 'this session'}?`
+                ? `Are you sure you want to revoke ${sessionToRevoke.deviceInfo || "this session"}?`
                 : null}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -172,5 +172,5 @@ export default function AccountTab({ user }: { user: User }) {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

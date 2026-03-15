@@ -14,9 +14,7 @@ export default function HeroImage() {
   return (
     <div
       className={`hero-image flex justify-center items-center py-12 transition-all duration-1000 ${
-        animate
-          ? "animate-heroImageEntrance"
-          : "opacity-0 translate-y-17.5 scale-90"
+        animate ? "animate-heroImageEntrance" : "opacity-0 translate-y-17.5 scale-90"
       }`}
     >
       <div className="video-card-container perspective-[1000px]">
@@ -45,9 +43,7 @@ export default function HeroImage() {
               <h3 className="video-title mb-2 mt-0 text-lg font-bold leading-[1.7] text-foreground">
                 The Obviously True Theorem No One Can Prove
               </h3>
-              <p className="video-rating mb-2.5 text-sm text-muted-foreground">
-                4.5 / 5
-              </p>
+              <p className="video-rating mb-2.5 text-sm text-muted-foreground">4.5 / 5</p>
               <div className="video-tags flex gap-2">
                 <span className="tag rounded-full bg-secondary px-2.5 py-1 text-sm lowercase text-secondary-foreground">
                   math

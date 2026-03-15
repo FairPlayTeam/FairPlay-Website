@@ -1,25 +1,33 @@
-'use client'
+"use client";
 
-import { FaCompress, FaExpand, FaPause, FaPlay, FaVolumeDown, FaVolumeMute, FaVolumeUp } from 'react-icons/fa'
-import { FaArrowRotateRight } from 'react-icons/fa6'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import { formatTime } from '@/lib/time'
+import {
+  FaCompress,
+  FaExpand,
+  FaPause,
+  FaPlay,
+  FaVolumeDown,
+  FaVolumeMute,
+  FaVolumeUp,
+} from "react-icons/fa";
+import { FaArrowRotateRight } from "react-icons/fa6";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { formatTime } from "@/lib/time";
 
 type VideoPlayerControlsProps = {
-  controlsVisible: boolean
-  currentTime: number
-  duration: number
-  isPlaying: boolean
-  isMuted: boolean
-  volume: number
-  isFullscreen: boolean
-  onSeek: (value: number) => void
-  onTogglePlay: () => void
-  onToggleMute: () => void
-  onVolumeChange: (value: number) => void
-  onToggleFullscreen: () => void
-}
+  controlsVisible: boolean;
+  currentTime: number;
+  duration: number;
+  isPlaying: boolean;
+  isMuted: boolean;
+  volume: number;
+  isFullscreen: boolean;
+  onSeek: (value: number) => void;
+  onTogglePlay: () => void;
+  onToggleMute: () => void;
+  onVolumeChange: (value: number) => void;
+  onToggleFullscreen: () => void;
+};
 
 export function VideoPlayerControls({
   controlsVisible,
@@ -38,7 +46,7 @@ export function VideoPlayerControls({
   return (
     <div
       className={`${
-        controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+        controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
       } absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent px-4 pb-2 pt-4 transition-opacity duration-300`}
     >
       <Slider
@@ -54,7 +62,13 @@ export function VideoPlayerControls({
       <div className="flex items-center justify-between text-white">
         <div className="flex items-center gap-2">
           <Button size="icon" variant="ghost" onClick={onTogglePlay} className="rounded-full">
-            {currentTime >= duration ? <FaArrowRotateRight /> : isPlaying ? <FaPause /> : <FaPlay />}
+            {currentTime >= duration ? (
+              <FaArrowRotateRight />
+            ) : isPlaying ? (
+              <FaPause />
+            ) : (
+              <FaPlay />
+            )}
           </Button>
 
           <div className="group/volume flex items-center gap-2">
@@ -89,5 +103,5 @@ export function VideoPlayerControls({
         </Button>
       </div>
     </div>
-  )
+  );
 }

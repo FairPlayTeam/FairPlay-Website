@@ -1,31 +1,31 @@
-'use client'
+"use client";
 
-import { FileVideo } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import type { UploadFormValues } from '../upload-schema'
-import { formatBytes } from '../upload-utils'
+import { FileVideo } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import type { UploadFormValues } from "../upload-schema";
+import { formatBytes } from "../upload-utils";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from '@/components/ui/field'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Controller, type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form'
-import LicensePicker from './license-picker'
+} from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Controller, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
+import LicensePicker from "./license-picker";
 
 export type UploadDetailsFormFieldsProps = {
-  file: File | null
-  disabled?: boolean
-  register: UseFormRegister<UploadFormValues>
-  control: Control<UploadFormValues>
-  errors: FieldErrors<UploadFormValues>
-  onChangeFile: () => void
-}
+  file: File | null;
+  disabled?: boolean;
+  register: UseFormRegister<UploadFormValues>;
+  control: Control<UploadFormValues>;
+  errors: FieldErrors<UploadFormValues>;
+  onChangeFile: () => void;
+};
 
 export default function UploadDetailsFormFields({
   file,
@@ -46,7 +46,7 @@ export default function UploadDetailsFormFields({
             <div>
               <p className="text-sm font-semibold text-foreground break-all">{file.name}</p>
               <p className="text-xs text-muted-foreground">
-                {formatBytes(file.size)} - {file.type || 'video'}
+                {formatBytes(file.size)} - {file.type || "video"}
               </p>
             </div>
           </div>
@@ -70,7 +70,7 @@ export default function UploadDetailsFormFields({
           <Input
             id="title"
             placeholder="Video title"
-            {...register('title')}
+            {...register("title")}
             aria-invalid={!!errors.title}
             disabled={disabled}
           />
@@ -86,7 +86,7 @@ export default function UploadDetailsFormFields({
           <Textarea
             id="description"
             placeholder="Tell viewers what to expect"
-            {...register('description')}
+            {...register("description")}
             aria-invalid={!!errors.description}
             disabled={disabled}
           />
@@ -102,7 +102,7 @@ export default function UploadDetailsFormFields({
           <Input
             id="tags"
             placeholder="gaming, programming, science"
-            {...register('tags')}
+            {...register("tags")}
             aria-invalid={!!errors.tags}
             disabled={disabled}
           />
@@ -133,5 +133,5 @@ export default function UploadDetailsFormFields({
         <LicensePicker control={control} errors={errors} disabled={disabled} />
       </div>
     </>
-  )
+  );
 }

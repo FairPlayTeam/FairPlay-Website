@@ -84,9 +84,7 @@ export default function MarqueeDonators() {
       key={`donor-${index}`}
       className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-5 py-2 shadow-md transition-all duration-300"
     >
-      <span className="text-lg font-extrabold text-foreground">
-        {donor.amount}
-      </span>
+      <span className="text-lg font-extrabold text-foreground">{donor.amount}</span>
       <span className="font-medium text-foreground">{donor.name}</span>
     </div>
   ));
@@ -97,11 +95,7 @@ export default function MarqueeDonators() {
       className="my-12 overflow-hidden py-2 mask-[linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)]"
       aria-label="Donators list"
     >
-      <div
-        ref={trackRef}
-        className="flex gap-4"
-        style={{ willChange: "transform" }}
-      >
+      <div ref={trackRef} className="flex gap-4" style={{ willChange: "transform" }}>
         {/* first set */}
         {items}
         {/* second set */}

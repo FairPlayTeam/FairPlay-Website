@@ -14,45 +14,31 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
         <section className="mx-auto mb-10 max-w-250 px-2 text-[0.95rem] leading-relaxed text-muted-foreground sm:px-0">
           <p className="mb-5">
             Looking for a{" "}
-            <strong className="text-foreground">
-              free streaming platform without ads
-            </strong>
-            ? FairPlay offers a refreshing alternative to mainstream video
-            services. Watch high-quality content with no interruptions, no
-            subscriptions, and no tracking. Our community-driven platform is
-            open source, ethical, and respects your privacy. Whether you&apos;re
-            into{" "}
+            <strong className="text-foreground">free streaming platform without ads</strong>?
+            FairPlay offers a refreshing alternative to mainstream video services. Watch
+            high-quality content with no interruptions, no subscriptions, and no tracking. Our
+            community-driven platform is open source, ethical, and respects your privacy. Whether
+            you&apos;re into{" "}
             <strong className="text-foreground">
               documentaries, tutorials, or inspiring stories
             </strong>
             , FairPlay lets you stream without distractions. Discover an{" "}
-            <strong className="text-foreground">
-              ad-free alternative to YouTube
-            </strong>{" "}
-            - designed for people who care about quality and transparency.
+            <strong className="text-foreground">ad-free alternative to YouTube</strong> - designed
+            for people who care about quality and transparency.
           </p>
           <p>
-            FairPlay is built by volunteers, supported by donations, and driven
-            by a mission:{" "}
-            <strong className="text-foreground">
-              redefine streaming with values
-            </strong>
-            . Join our growing community and be part of the change. No
-            algorithms, no autoplay traps - just meaningful videos, handpicked
-            and fairly moderated. Try FairPlay today and experience the freedom
-            of{" "}
-            <strong className="text-foreground">
-              streaming without compromise
-            </strong>
+            FairPlay is built by volunteers, supported by donations, and driven by a mission:{" "}
+            <strong className="text-foreground">redefine streaming with values</strong>. Join our
+            growing community and be part of the change. No algorithms, no autoplay traps - just
+            meaningful videos, handpicked and fairly moderated. Try FairPlay today and experience
+            the freedom of <strong className="text-foreground">streaming without compromise</strong>
             .
           </p>
         </section>
       )}
 
       <div className="mx-auto mb-8 flex max-w-350 flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-        <div className="font-heading text-2xl font-bold text-foreground">
-          FairPlay
-        </div>
+        <div className="font-heading text-2xl font-bold text-foreground">FairPlay</div>
 
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:justify-center">
           <Link

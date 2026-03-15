@@ -1,114 +1,114 @@
-﻿'use client'
+﻿"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react'
-import Modal from '@/components/ui/modal'
-import { Spinner } from '@/components/ui/spinner'
-import UserAvatar from './user-avatar'
-import Link from 'next/link'
-import { getFollowers, getFollowing, type BaseUser } from '@/lib/users'
-import useInfiniteScroll from '@/hooks/use-infinite-scroll'
-import { cn } from '@/lib/utils'
+import { useEffect, useState, useCallback, useRef } from "react";
+import Modal from "@/components/ui/modal";
+import { Spinner } from "@/components/ui/spinner";
+import UserAvatar from "./user-avatar";
+import Link from "next/link";
+import { getFollowers, getFollowing, type BaseUser } from "@/lib/users";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
+import { cn } from "@/lib/utils";
 
 interface UserListModalProps {
-  isOpen: boolean
-  onClose: () => void
-  username: string
-  type: 'followers' | 'following'
+  isOpen: boolean;
+  onClose: () => void;
+  username: string;
+  type: "followers" | "following";
 }
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 20;
 
 function mergeUniqueUsers(prev: BaseUser[], next: BaseUser[]) {
-  if (next.length === 0) return prev
-  const seen = new Set(prev.map((item) => item.id || item.username))
-  const merged = [...prev]
+  if (next.length === 0) return prev;
+  const seen = new Set(prev.map((item) => item.id || item.username));
+  const merged = [...prev];
 
   for (const item of next) {
-    const key = item.id || item.username
+    const key = item.id || item.username;
     if (!seen.has(key)) {
-      seen.add(key)
-      merged.push(item)
+      seen.add(key);
+      merged.push(item);
     }
   }
 
-  return merged
+  return merged;
 }
 
 export default function UserListModal({ isOpen, onClose, username, type }: UserListModalProps) {
-  const [users, setUsers] = useState<BaseUser[]>([])
-  const [loading, setLoading] = useState(false)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [users, setUsers] = useState<BaseUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const requestSeq = useRef(0)
+  const requestSeq = useRef(0);
 
   const fetchUsers = useCallback(
     async (pageNum: number, isInitial = false) => {
-      if (!username) return
+      if (!username) return;
 
-      const seq = ++requestSeq.current
-      setLoading(true)
-      setError(null)
+      const seq = ++requestSeq.current;
+      setLoading(true);
+      setError(null);
 
       try {
-        let newUsers: BaseUser[] = []
-        let pagination: { page: number; totalPages: number } | undefined
+        let newUsers: BaseUser[] = [];
+        let pagination: { page: number; totalPages: number } | undefined;
 
-        if (type === 'followers') {
-          const res = await getFollowers(username, pageNum, PAGE_SIZE)
-          if (requestSeq.current !== seq) return
-          newUsers = res.data.followers ?? []
-          pagination = res.data.pagination
+        if (type === "followers") {
+          const res = await getFollowers(username, pageNum, PAGE_SIZE);
+          if (requestSeq.current !== seq) return;
+          newUsers = res.data.followers ?? [];
+          pagination = res.data.pagination;
         } else {
-          const res = await getFollowing(username, pageNum, PAGE_SIZE)
-          if (requestSeq.current !== seq) return
-          newUsers = res.data.following ?? []
-          pagination = res.data.pagination
+          const res = await getFollowing(username, pageNum, PAGE_SIZE);
+          if (requestSeq.current !== seq) return;
+          newUsers = res.data.following ?? [];
+          pagination = res.data.pagination;
         }
 
-        setUsers((prev) => (isInitial ? newUsers : mergeUniqueUsers(prev, newUsers)))
-        setHasMore((pagination?.page ?? 0) < (pagination?.totalPages ?? 0))
-        setPage(pagination?.page ?? pageNum)
+        setUsers((prev) => (isInitial ? newUsers : mergeUniqueUsers(prev, newUsers)));
+        setHasMore((pagination?.page ?? 0) < (pagination?.totalPages ?? 0));
+        setPage(pagination?.page ?? pageNum);
       } catch {
-        if (requestSeq.current !== seq) return
-        setError('Failed to load users.')
+        if (requestSeq.current !== seq) return;
+        setError("Failed to load users.");
       } finally {
-        if (requestSeq.current !== seq) return
-        setLoading(false)
+        if (requestSeq.current !== seq) return;
+        setLoading(false);
       }
     },
     [username, type],
-  )
+  );
 
   useEffect(() => {
     if (!isOpen) {
-      requestSeq.current += 1
-      return
+      requestSeq.current += 1;
+      return;
     }
 
-    setUsers([])
-    setPage(1)
-    setHasMore(true)
-    fetchUsers(1, true)
-  }, [isOpen, fetchUsers])
+    setUsers([]);
+    setPage(1);
+    setHasMore(true);
+    fetchUsers(1, true);
+  }, [isOpen, fetchUsers]);
 
   const loadMore = useCallback(() => {
-    if (!isOpen || loading || !hasMore) return
-    fetchUsers(page + 1)
-  }, [isOpen, loading, hasMore, page, fetchUsers])
+    if (!isOpen || loading || !hasMore) return;
+    fetchUsers(page + 1);
+  }, [isOpen, loading, hasMore, page, fetchUsers]);
 
   const sentinelRef = useInfiniteScroll({
     hasMore,
     isLoading: loading,
     onLoadMore: loadMore,
-  })
+  });
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={type === 'followers' ? 'Followers' : 'Following'}
+      title={type === "followers" ? "Followers" : "Following"}
       showCloseButton
       className="max-w-md"
     >
@@ -136,7 +136,7 @@ export default function UserListModal({ isOpen, onClose, username, type }: UserL
         <div ref={sentinelRef} className="h-4" />
       </div>
     </Modal>
-  )
+  );
 }
 
 function UserItem({ user, onClose }: { user: BaseUser; onClose: () => void }) {
@@ -146,8 +146,8 @@ function UserItem({ user, onClose }: { user: BaseUser; onClose: () => void }) {
         href={`/channel/${user.username}`}
         onClick={onClose}
         className={cn(
-          'flex items-center gap-3 p-3 rounded-xl transition-colors',
-          'hover:bg-secondary group',
+          "flex items-center gap-3 p-3 rounded-xl transition-colors",
+          "hover:bg-secondary group",
         )}
       >
         <UserAvatar
@@ -163,5 +163,5 @@ function UserItem({ user, onClose }: { user: BaseUser; onClose: () => void }) {
         </div>
       </Link>
     </li>
-  )
+  );
 }

@@ -1,22 +1,21 @@
-﻿import type { Metadata } from 'next'
-import { AppShell } from '@/components/app/layout/app-shell'
+﻿import type { Metadata } from "next";
+import { AppShell } from "@/components/app/layout/app-shell";
 
-const title = 'Admin'
-const description = 'Admin tools for FairPlay'
+const title = "Admin";
+const description = "Admin tools for FairPlay";
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: {
-    canonical: '/admin',
+    canonical: "/admin",
   },
   robots: {
     index: false,
     follow: false,
   },
-}
+};
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <AppShell>{children}</AppShell>
+  return <AppShell>{children}</AppShell>;
 }
-

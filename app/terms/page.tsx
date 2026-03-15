@@ -16,8 +16,8 @@ export default function TermsPage() {
       content: (
         <>
           <p>
-            This part is currently being written. Please check back later for
-            the full Terms and Conditions.
+            This part is currently being written. Please check back later for the full Terms and
+            Conditions.
           </p>
         </>
       ),
@@ -35,12 +35,10 @@ export default function TermsPage() {
           }
         }
       },
-      { threshold: 0.9 }
+      { threshold: 0.9 },
     );
 
-    document
-      .querySelectorAll("section[id]")
-      .forEach((el) => observer.observe(el));
+    document.querySelectorAll("section[id]").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -59,12 +57,7 @@ export default function TermsPage() {
 
           <div className="md:col-span-3 space-y-16">
             {sections.map((section, i) => (
-              <DocsSection
-                key={section.id}
-                id={section.id}
-                title={section.title}
-                index={i}
-              >
+              <DocsSection key={section.id} id={section.id} title={section.title} index={i}>
                 {section.content}
               </DocsSection>
             ))}

@@ -5,10 +5,7 @@ interface ExploreButtonProps {
   className?: string;
 }
 
-export default function ExploreButton({
-  onClick,
-  className = "",
-}: ExploreButtonProps) {
+export default function ExploreButton({ onClick, className = "" }: ExploreButtonProps) {
   return (
     <button
       type="button"
@@ -18,7 +15,7 @@ export default function ExploreButton({
         "bg-primary px-[17px] py-2 text-primary-foreground shadow-xl",
         "cursor-pointer backdrop-blur-md transition-colors duration-300 hover:bg-primary-400",
         "lg:font-semibold isolation-auto group",
-        className
+        className,
       )}
     >
       Explore

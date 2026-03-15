@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { User } from '@/lib/users'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { User } from "@/lib/users";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export interface UserAvatarProps {
   user?:
     | User
     | {
-        id?: string
-        username: string
-        displayName: string | null
-        avatarUrl?: string | null
+        id?: string;
+        username: string;
+        displayName: string | null;
+        avatarUrl?: string | null;
       }
-    | null
-  size?: 'default' | 'sm' | 'lg'
-  className?: string
+    | null;
+  size?: "default" | "sm" | "lg";
+  className?: string;
 }
 
 export default function UserAvatar({ user, size, className }: UserAvatarProps) {
@@ -22,8 +22,8 @@ export default function UserAvatar({ user, size, className }: UserAvatarProps) {
     <Avatar size={size} className={className}>
       <AvatarImage src={user?.avatarUrl ?? undefined} />
       <AvatarFallback>
-        {user?.displayName?.[0]?.toUpperCase() ?? user?.username?.[0]?.toUpperCase() ?? '?'}
+        {user?.displayName?.[0]?.toUpperCase() ?? user?.username?.[0]?.toUpperCase() ?? "?"}
       </AvatarFallback>
     </Avatar>
-  )
+  );
 }

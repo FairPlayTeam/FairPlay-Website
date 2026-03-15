@@ -1,36 +1,36 @@
-﻿'use client'
+﻿"use client";
 
-import { cn } from '@/lib/utils'
-import { VideoCard } from './video-card'
-import { StatusBadges } from '@/components/app/video/status-badge'
-import { Trash2 } from 'lucide-react'
+import { cn } from "@/lib/utils";
+import { VideoCard } from "./video-card";
+import { StatusBadges } from "@/components/app/video/status-badge";
+import { Trash2 } from "lucide-react";
 
-import type { MyVideoItem } from '@/lib/users'
-import type { User } from '@/lib/users'
+import type { MyVideoItem } from "@/lib/users";
+import type { User } from "@/lib/users";
 
 type MyVideoCardProps = {
-  video: MyVideoItem
-  user: User
-  onDelete: () => void
-}
+  video: MyVideoItem;
+  user: User;
+  onDelete: () => void;
+};
 
 export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
-  const isProcessing = video.processingStatus !== 'done'
+  const isProcessing = video.processingStatus !== "done";
 
-  const createdAtLabel = new Date(video.createdAt).toLocaleDateString()
+  const createdAtLabel = new Date(video.createdAt).toLocaleDateString();
 
-  const meta = `${createdAtLabel} - ${video.viewCount} views`
+  const meta = `${createdAtLabel} - ${video.viewCount} views`;
 
   return (
-    <div className={cn('relative', isProcessing ? 'cursor-not-allowed' : 'cursor-pointer')}>
-      <div className={cn(isProcessing && 'pointer-events-none')}>
+    <div className={cn("relative", isProcessing ? "cursor-not-allowed" : "cursor-pointer")}>
+      <div className={cn(isProcessing && "pointer-events-none")}>
         <VideoCard
           thumbnailUrl={video.thumbnailUrl}
           title={video.title}
           displayName={user.displayName || user.username}
           meta={meta}
           variant="grid"
-          href={isProcessing ? '' : `/video/${video.id}`}
+          href={isProcessing ? "" : `/video/${video.id}`}
           overlayTopLeft={
             <StatusBadges
               visibility={video.visibility}
@@ -45,9 +45,9 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
                 className="cursor-pointer p-2 bg-background/80 hover:bg-red-600 text-white rounded-full shadow"
                 aria-label="Delete video"
                 onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  onDelete()
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDelete();
                 }}
               >
                 <Trash2 className="size-4" />
@@ -64,6 +64,5 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
         />
       </div>
     </div>
-  )
+  );
 }
-

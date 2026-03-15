@@ -1,17 +1,17 @@
-﻿'use client'
+﻿"use client";
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { formatDistanceToNow } from 'date-fns'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import UserAvatar from '@/components/ui/user-avatar'
-import { useAuth } from '@/context/auth-context'
-import { buildAuthHref } from '@/lib/safe-redirect'
-import { ThumbsUp, Reply, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import Link from "next/link";
+import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formatDistanceToNow } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import UserAvatar from "@/components/ui/user-avatar";
+import { useAuth } from "@/context/auth-context";
+import { buildAuthHref } from "@/lib/safe-redirect";
+import { ThumbsUp, Reply, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   addComment,
   deleteComment,
@@ -19,162 +19,162 @@ import {
   likeComment,
   unlikeComment,
   CommentItem,
-} from '@/lib/comments'
-import * as z from 'zod'
+} from "@/lib/comments";
+import * as z from "zod";
 
 const commentSchema = z.object({
   content: z
     .string()
-    .min(1, 'Comment is required')
-    .max(500, 'Comment cannot be longer than 500 characters.'),
-})
+    .min(1, "Comment is required")
+    .max(500, "Comment cannot be longer than 500 characters."),
+});
 
-type CommentForm = z.infer<typeof commentSchema>
+type CommentForm = z.infer<typeof commentSchema>;
 
 interface CommentsProps {
-  videoId: string
-  initialComments: CommentItem[]
-  allowComments?: boolean
+  videoId: string;
+  initialComments: CommentItem[];
+  allowComments?: boolean;
 }
 
 interface CommentProps {
-  comment: CommentItem
-  videoId: string
-  onReplySuccess?: () => void
-  onDelete?: (commentId: string) => void
+  comment: CommentItem;
+  videoId: string;
+  onReplySuccess?: () => void;
+  onDelete?: (commentId: string) => void;
 }
 
 function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
-  const [isReplying, setIsReplying] = useState<boolean>(false)
-  const [showReplies, setShowReplies] = useState<boolean>(false)
+  const [isReplying, setIsReplying] = useState<boolean>(false);
+  const [showReplies, setShowReplies] = useState<boolean>(false);
 
-  const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false)
-  const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false)
-  const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
+  const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const [replies, setReplies] = useState<CommentItem[]>([])
-  const [localComment, setLocalComment] = useState<CommentItem>(comment)
+  const [replies, setReplies] = useState<CommentItem[]>([]);
+  const [localComment, setLocalComment] = useState<CommentItem>(comment);
 
-  const isStaff = user?.role === 'moderator' || user?.role === 'admin'
-  const canDelete = !!user && (user.id === localComment.user.id || isStaff)
-  const isDeleted = localComment.content === '[deleted]'
+  const isStaff = user?.role === "moderator" || user?.role === "admin";
+  const canDelete = !!user && (user.id === localComment.user.id || isStaff);
+  const isDeleted = localComment.content === "[deleted]";
 
   const form = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
-    defaultValues: { content: '' },
-  })
+    defaultValues: { content: "" },
+  });
 
-  const isSubmitting = form.formState.isSubmitting
-  const replyContent = useWatch({ control: form.control, name: 'content' }) ?? ''
+  const isSubmitting = form.formState.isSubmitting;
+  const replyContent = useWatch({ control: form.control, name: "content" }) ?? "";
 
   const onSubmit = async ({ content }: CommentForm) => {
-    setIsSubmittingReply(true)
+    setIsSubmittingReply(true);
     try {
-      const response = await addComment(videoId, content, comment.id)
+      const response = await addComment(videoId, content, comment.id);
 
-      setReplies((prev) => [response.data.comment, ...prev])
-      setIsReplying(false)
-      setShowReplies(true)
+      setReplies((prev) => [response.data.comment, ...prev]);
+      setIsReplying(false);
+      setShowReplies(true);
 
-      form.setValue('content', '')
+      form.setValue("content", "");
 
-      onReplySuccess?.()
+      onReplySuccess?.();
     } catch {
-      toast.error('Failed to post reply.')
+      toast.error("Failed to post reply.");
     } finally {
-      setIsSubmittingReply(false)
+      setIsSubmittingReply(false);
     }
-  }
+  };
 
   const handleLike = async () => {
-    if (!user) return
+    if (!user) return;
 
     try {
       if (localComment.likedByMe) {
-        await unlikeComment(comment.id)
+        await unlikeComment(comment.id);
 
         setLocalComment((prev) => ({
           ...prev,
           likeCount: prev.likeCount - 1,
           likedByMe: false,
-        }))
+        }));
       } else {
-        await likeComment(comment.id)
+        await likeComment(comment.id);
 
         setLocalComment((prev) => ({
           ...prev,
           likeCount: prev.likeCount + 1,
           likedByMe: true,
-        }))
+        }));
       }
     } catch {
-      toast.error('Failed to update like.')
+      toast.error("Failed to update like.");
     }
-  }
+  };
 
   const fetchReplies = async () => {
     if (replies.length > 0) {
-      setShowReplies(!showReplies)
-      return
+      setShowReplies(!showReplies);
+      return;
     }
 
-    setIsLoadingReplies(true)
+    setIsLoadingReplies(true);
 
     try {
-      const response = await getCommentReplies(comment.id)
+      const response = await getCommentReplies(comment.id);
 
-      setReplies(response.data.replies)
-      setShowReplies(true)
+      setReplies(response.data.replies);
+      setShowReplies(true);
     } catch {
-      toast.error('Failed to load replies.')
+      toast.error("Failed to load replies.");
     } finally {
-      setIsLoadingReplies(false)
+      setIsLoadingReplies(false);
     }
-  }
+  };
 
   const handleDelete = async () => {
-    if (!canDelete || isDeleting) return
+    if (!canDelete || isDeleting) return;
 
-    setIsDeleting(true)
+    setIsDeleting(true);
     try {
-      const response = await deleteComment(localComment.id)
-      const message = response.data?.message ?? ''
-      const wasSoftDeleted = message.toLowerCase().includes('soft')
+      const response = await deleteComment(localComment.id);
+      const message = response.data?.message ?? "";
+      const wasSoftDeleted = message.toLowerCase().includes("soft");
 
       if (wasSoftDeleted || (localComment._count?.replies ?? 0) > 0) {
-        setLocalComment((prev) => ({ ...prev, content: '[deleted]' }))
-        return
+        setLocalComment((prev) => ({ ...prev, content: "[deleted]" }));
+        return;
       }
 
-      onDelete?.(localComment.id)
+      onDelete?.(localComment.id);
     } catch {
-      toast.error('Failed to delete comment.')
+      toast.error("Failed to delete comment.");
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
 
   const handleReplyDelete = (commentId: string) => {
-    setReplies((prev) => prev.filter((reply) => reply.id !== commentId))
+    setReplies((prev) => prev.filter((reply) => reply.id !== commentId));
     setLocalComment((prev) => {
-      if (typeof prev._count?.replies !== 'number') return prev
+      if (typeof prev._count?.replies !== "number") return prev;
       return {
         ...prev,
         _count: {
           ...prev._count,
           replies: Math.max(prev._count.replies - 1, 0),
         },
-      }
-    })
-  }
+      };
+    });
+  };
 
   return (
     <div className="flex gap-4">
       <UserAvatar user={localComment.user} size="lg" />
       <div className="flex flex-col gap-2 w-full">
-        <Link href={'/channel/' + localComment.user.username}>
+        <Link href={"/channel/" + localComment.user.username}>
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-foreground">
               {localComment.user.displayName || localComment.user.username}
@@ -197,7 +197,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
               className="rounded-full text-foreground hover:bg-accent"
               onClick={handleLike}
               disabled={!user}
-              aria-label={localComment.likedByMe ? 'Unlike comment' : 'Like comment'}
+              aria-label={localComment.likedByMe ? "Unlike comment" : "Like comment"}
             >
               {localComment.likedByMe ? <ThumbsUp className="fill-current" /> : <ThumbsUp />}
             </Button>
@@ -209,7 +209,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
             onClick={() => setIsReplying(!isReplying)}
             disabled={!user}
             className="flex items-center gap-2 rounded-full text-sm text-foreground hover:bg-accent"
-            aria-label={isReplying ? 'Cancel reply' : 'Reply to comment'}
+            aria-label={isReplying ? "Cancel reply" : "Reply to comment"}
           >
             <Reply /> Reply
           </Button>
@@ -234,7 +234,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
               <UserAvatar user={user} size="lg" />
               <div className="flex-1">
                 <Textarea
-                  {...form.register('content')}
+                  {...form.register("content")}
                   placeholder="Add a reply..."
                   className="min-h-16 text-sm"
                 />
@@ -259,7 +259,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
                     type="submit"
                     disabled={isSubmitting || !replyContent.trim()}
                   >
-                    {isSubmittingReply ? 'Replying...' : 'Reply'}
+                    {isSubmittingReply ? "Replying..." : "Reply"}
                   </Button>
                 </div>
               </div>
@@ -275,8 +275,8 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
               onClick={fetchReplies}
               className="text-xs hover:bg-accent"
             >
-              {showReplies ? 'Hide' : `View ${localComment._count?.replies}`}{' '}
-              {localComment._count?.replies === 1 ? 'Reply' : 'Replies'}
+              {showReplies ? "Hide" : `View ${localComment._count?.replies}`}{" "}
+              {localComment._count?.replies === 1 ? "Reply" : "Replies"}
             </Button>
           </div>
         )}
@@ -298,36 +298,36 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export function Comments({ videoId, initialComments, allowComments = true }: CommentsProps) {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
-  const [comments, setComments] = useState<CommentItem[]>(initialComments)
+  const [comments, setComments] = useState<CommentItem[]>(initialComments);
 
   const form = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
-    defaultValues: { content: '' },
-  })
+    defaultValues: { content: "" },
+  });
 
-  const isSubmitting = form.formState.isSubmitting
-  const commentContent = useWatch({ control: form.control, name: 'content' }) ?? ''
+  const isSubmitting = form.formState.isSubmitting;
+  const commentContent = useWatch({ control: form.control, name: "content" }) ?? "";
 
   const onSubmit = async (values: CommentForm) => {
     try {
-      const response = await addComment(videoId, values.content)
+      const response = await addComment(videoId, values.content);
 
-      setComments((prev) => [response.data.comment, ...prev])
-      form.reset()
+      setComments((prev) => [response.data.comment, ...prev]);
+      form.reset();
     } catch {
-      toast.error('Failed to post comment.')
+      toast.error("Failed to post comment.");
     }
-  }
+  };
 
   const handleCommentDelete = (commentId: string) => {
-    setComments((prev) => prev.filter((comment) => comment.id !== commentId))
-  }
+    setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+  };
 
   return (
     <div id="comments" className="mt-6 mb-6">
@@ -340,7 +340,7 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
         <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 flex gap-4">
           <UserAvatar user={user} size="lg" />
           <div className="flex-1">
-            <Textarea {...form.register('content')} placeholder="Add a comment..." />
+            <Textarea {...form.register("content")} placeholder="Add a comment..." />
             {form.formState.errors.content && (
               <p className="text-sm text-destructive">
                 {form.formState.errors.content.message as string}
@@ -363,7 +363,7 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
                 type="submit"
                 disabled={isSubmitting || !commentContent.trim()}
               >
-                {isSubmitting ? 'Posting...' : 'Comment'}
+                {isSubmitting ? "Posting..." : "Comment"}
               </Button>
             </div>
           </div>
@@ -371,7 +371,7 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
       ) : (
         <div className="mb-8 p-4 flex flex-col items-center gap-4">
           <p>Please login to comment</p>
-          <Link href={buildAuthHref('/login', `/video/${videoId}#comments`)}>
+          <Link href={buildAuthHref("/login", `/video/${videoId}#comments`)}>
             <Button variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold">
               Login
             </Button>
@@ -390,6 +390,5 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
         ))}
       </div>
     </div>
-  )
+  );
 }
-

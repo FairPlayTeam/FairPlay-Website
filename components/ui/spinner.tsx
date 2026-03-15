@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
 interface SpinnerProps {
-  className?: string
+  className?: string;
 }
 
 export function Spinner({ className }: SpinnerProps) {
   return (
-    <svg viewBox="0 0 100 100" className={cn('size-16', className)} fill="none">
+    <svg viewBox="0 0 100 100" className={cn("size-16", className)} fill="none">
       <style>{`
         @keyframes triangle-spin {
           to { stroke-dashoffset: -160; }
@@ -29,5 +29,5 @@ export function Spinner({ className }: SpinnerProps) {
         className="triangle-loader"
       />
     </svg>
-  )
+  );
 }

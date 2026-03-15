@@ -1,7 +1,7 @@
-﻿'use client'
+﻿"use client";
 
-import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Bell,
   Compass,
@@ -12,64 +12,64 @@ import {
   ShieldCheck,
   Menu,
   TrendingUp,
-} from 'lucide-react'
-import { SiDiscord, SiMatrix, SiKofi } from 'react-icons/si'
-import { cn } from '@/lib/utils'
-import { useSidebar } from '@/context/sidebar-context'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { useAuth } from '@/context/auth-context'
-import { useQueryClient } from '@tanstack/react-query'
-import { clearToken } from '@/lib/token'
-import { logoutCurrentSession } from '@/lib/users'
-import { useState } from 'react'
+} from "lucide-react";
+import { SiDiscord, SiMatrix, SiKofi } from "react-icons/si";
+import { cn } from "@/lib/utils";
+import { useSidebar } from "@/context/sidebar-context";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/auth-context";
+import { useQueryClient } from "@tanstack/react-query";
+import { clearToken } from "@/lib/token";
+import { logoutCurrentSession } from "@/lib/users";
+import { useState } from "react";
 
 const mainLinks = [
-  { icon: Compass, label: 'Explore', href: '/explore' },
-  { icon: Bell, label: 'Subscriptions', href: '/subscriptions' },
-  { icon: Upload, label: 'Upload', href: '/upload' },
-  { icon: Shield, label: 'Mods', href: '/moderator' },
-  { icon: ShieldCheck, label: 'Admin', href: '/admin' },
-]
+  { icon: Compass, label: "Explore", href: "/explore" },
+  { icon: Bell, label: "Subscriptions", href: "/subscriptions" },
+  { icon: Upload, label: "Upload", href: "/upload" },
+  { icon: Shield, label: "Mods", href: "/moderator" },
+  { icon: ShieldCheck, label: "Admin", href: "/admin" },
+];
 
 const categories = [
-  { icon: TrendingUp, label: 'Trending', href: '/search?q=trending' },
-  { icon: BookOpen, label: 'Learning', href: '/search?q=learning' },
-  { icon: Gamepad2, label: 'Gaming', href: '/search?q=gaming' },
-]
+  { icon: TrendingUp, label: "Trending", href: "/search?q=trending" },
+  { icon: BookOpen, label: "Learning", href: "/search?q=learning" },
+  { icon: Gamepad2, label: "Gaming", href: "/search?q=gaming" },
+];
 
 export default function AppSidebar() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const { isOpen, close, toggle } = useSidebar()
-  const queryClient = useQueryClient()
-  const { user, isReady } = useAuth()
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
-  const isVideoWatchPage = pathname?.startsWith('/video/') ?? false
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { isOpen, close, toggle } = useSidebar();
+  const queryClient = useQueryClient();
+  const { user, isReady } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const isVideoWatchPage = pathname?.startsWith("/video/") ?? false;
 
   const handleLogout = async () => {
-    if (isLoggingOut) return
+    if (isLoggingOut) return;
 
-    setIsLoggingOut(true)
+    setIsLoggingOut(true);
     try {
-      await logoutCurrentSession()
+      await logoutCurrentSession();
     } finally {
-      clearToken()
-      queryClient.setQueryData(['me'], null)
-      close()
-      router.replace('/login')
-      setIsLoggingOut(false)
+      clearToken();
+      queryClient.setQueryData(["me"], null);
+      close();
+      router.replace("/login");
+      setIsLoggingOut(false);
     }
-  }
+  };
 
   return (
     <>
       {isOpen && (
         <div
           className={cn(
-            'fixed inset-0 z-50 bg-background/50 cursor-pointer',
-            !isVideoWatchPage && 'lg:hidden',
+            "fixed inset-0 z-50 bg-background/50 cursor-pointer",
+            !isVideoWatchPage && "lg:hidden",
           )}
           onClick={close}
           aria-hidden="true"
@@ -78,25 +78,25 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          'fixed left-0 top-0 bottom-0 z-50 w-60 flex flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-3 py-4 transition-transform duration-300',
-          !isVideoWatchPage && 'lg:translate-x-0 lg:top-16 lg:bg-transparent lg:backdrop-blur-none',
-          isOpen ? 'translate-x-0' : '-translate-x-full',
+          "fixed left-0 top-0 bottom-0 z-50 w-60 flex flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-3 py-4 transition-transform duration-300",
+          !isVideoWatchPage && "lg:translate-x-0 lg:top-16 lg:bg-transparent lg:backdrop-blur-none",
+          isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <div
           className={cn(
-            'flex flex-1 flex-col gap-4 transition-opacity duration-200',
-            isReady ? 'opacity-100' : 'opacity-0 pointer-events-none',
+            "flex flex-1 flex-col gap-4 transition-opacity duration-200",
+            isReady ? "opacity-100" : "opacity-0 pointer-events-none",
           )}
         >
-          <div className={cn('mb-4 flex items-center gap-4', !isVideoWatchPage && 'lg:hidden')}>
+          <div className={cn("mb-4 flex items-center gap-4", !isVideoWatchPage && "lg:hidden")}>
             <Button
               onClick={toggle}
               size="icon"
               variant="ghost"
               className={cn(
-                'rounded-full text-foreground hover:bg-accent',
-                !isVideoWatchPage && 'lg:hidden',
+                "rounded-full text-foreground hover:bg-accent",
+                !isVideoWatchPage && "lg:hidden",
               )}
               aria-label="Close menu"
             >
@@ -110,17 +110,17 @@ export default function AppSidebar() {
 
           <div className="flex flex-col gap-1">
             {mainLinks.map((link) => {
-              const Icon = link.icon
-              const isActive = pathname === link.href
-              const isModsLink = link.label === 'Mods'
-              const isAdminLink = link.label === 'Admin'
-              const canShowMods = user?.role === 'admin' || user?.role === 'moderator'
-              const canShowAdmin = user?.role === 'admin'
-              const shouldRenderMods = !isModsLink || (isReady && canShowMods)
-              const shouldRenderAdmin = !isAdminLink || (isReady && canShowAdmin)
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              const isModsLink = link.label === "Mods";
+              const isAdminLink = link.label === "Admin";
+              const canShowMods = user?.role === "admin" || user?.role === "moderator";
+              const canShowAdmin = user?.role === "admin";
+              const shouldRenderMods = !isModsLink || (isReady && canShowMods);
+              const shouldRenderAdmin = !isAdminLink || (isReady && canShowAdmin);
 
               if (!shouldRenderMods || !shouldRenderAdmin) {
-                return null
+                return null;
               }
 
               return (
@@ -129,16 +129,16 @@ export default function AppSidebar() {
                   href={link.href}
                   onClick={close}
                   className={cn(
-                    'flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',
+                    "flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? 'bg-secondary text-foreground'
-                      : 'text-foreground hover:bg-secondary hover:text-foreground',
+                      ? "bg-secondary text-foreground"
+                      : "text-foreground hover:bg-secondary hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4" />
                   <span>{link.label}</span>
                 </Link>
-              )
+              );
             })}
           </div>
 
@@ -146,26 +146,26 @@ export default function AppSidebar() {
 
           <div className="flex flex-col gap-1">
             {categories.map((link) => {
-              const Icon = link.icon
-              const linkQuery = new URLSearchParams(link.href.split('?')[1] ?? '').get('q')
-              const currentQuery = searchParams.get('q')
-              const isActive = pathname === '/search' && currentQuery === linkQuery
+              const Icon = link.icon;
+              const linkQuery = new URLSearchParams(link.href.split("?")[1] ?? "").get("q");
+              const currentQuery = searchParams.get("q");
+              const isActive = pathname === "/search" && currentQuery === linkQuery;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={close}
                   className={cn(
-                    'flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200',
+                    "flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? 'bg-card text-foreground'
-                      : 'text-foreground hover:bg-card hover:text-foreground',
+                      ? "bg-card text-foreground"
+                      : "text-foreground hover:bg-card hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4" />
                   <span>{link.label}</span>
                 </Link>
-              )
+              );
             })}
           </div>
 
@@ -178,7 +178,7 @@ export default function AppSidebar() {
                 disabled={isLoggingOut}
                 className="lg:hidden flex w-full items-center gap-4 rounded-lg px-3 py-2 text-sm font-medium"
               >
-                {isLoggingOut ? 'Logging out...' : 'Logout'}
+                {isLoggingOut ? "Logging out..." : "Logout"}
               </Button>
             )}
             <div className="flex gap-2 text-muted-foreground">
@@ -219,5 +219,5 @@ export default function AppSidebar() {
         </div>
       </aside>
     </>
-  )
+  );
 }

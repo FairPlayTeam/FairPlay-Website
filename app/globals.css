@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -149,10 +149,26 @@ body {
 
 .background-gradient:before {
   background:
-    radial-gradient(circle at 70% 7%, color-mix(in srgb, var(--primary) 70%, transparent), transparent 10%),
-    radial-gradient(circle at 5% 30%, color-mix(in srgb, var(--primary) 70%, transparent), transparent 15%),
-    radial-gradient(circle at 90% 60%, color-mix(in srgb, var(--primary) 70%, transparent), transparent 10%),
-    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--primary) 70%, transparent), transparent 10%);
+    radial-gradient(
+      circle at 70% 7%,
+      color-mix(in srgb, var(--primary) 70%, transparent),
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at 5% 30%,
+      color-mix(in srgb, var(--primary) 70%, transparent),
+      transparent 15%
+    ),
+    radial-gradient(
+      circle at 90% 60%,
+      color-mix(in srgb, var(--primary) 70%, transparent),
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      color-mix(in srgb, var(--primary) 70%, transparent),
+      transparent 10%
+    );
   content: "";
   filter: blur(200px);
   inset: 0;

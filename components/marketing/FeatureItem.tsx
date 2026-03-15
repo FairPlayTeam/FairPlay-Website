@@ -8,10 +8,7 @@ interface SectionProps {
   className?: string;
 }
 
-export default function FeatureItem({
-  children,
-  className = "",
-}: SectionProps) {
+export default function FeatureItem({ children, className = "" }: SectionProps) {
   return (
     <div
       className={cn(
@@ -22,7 +19,7 @@ export default function FeatureItem({
         "hover:border-primary/30",
         "hover:-translate-y-1",
         "min-h-[300px]",
-        className
+        className,
       )}
     >
       {children}

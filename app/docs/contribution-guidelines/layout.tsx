@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import {
-  DEFAULT_OG_IMAGE,
-  DEFAULT_OPEN_GRAPH_IMAGE,
-  SITE_NAME,
-  TWITTER_HANDLE,
-} from "@/lib/seo";
+import { DEFAULT_OG_IMAGE, DEFAULT_OPEN_GRAPH_IMAGE, SITE_NAME, TWITTER_HANDLE } from "@/lib/seo";
 
 const title = "Contribution Guidelines";
-const description =
-  "Set up FairPlay locally and follow the contribution guidelines.";
+const description = "Set up FairPlay locally and follow the contribution guidelines.";
 
 export const metadata: Metadata = {
   title,
@@ -38,10 +32,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContributionGuidelinesLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ContributionGuidelinesLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

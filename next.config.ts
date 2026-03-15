@@ -1,14 +1,14 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-const isDev = process.env.NODE_ENV === 'development'
-const remoteImageHostnames = ['assets.fairplay.video']
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const isDev = process.env.NODE_ENV === "development";
+const remoteImageHostnames = ["assets.fairplay.video"];
 
 if (apiBaseUrl) {
   try {
-    const { hostname } = new URL(apiBaseUrl)
+    const { hostname } = new URL(apiBaseUrl);
     if (hostname && !remoteImageHostnames.includes(hostname)) {
-      remoteImageHostnames.push(hostname)
+      remoteImageHostnames.push(hostname);
     }
   } catch {
     // Ignore invalid env values to avoid crashing the config at build time.
@@ -16,27 +16,27 @@ if (apiBaseUrl) {
 }
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['ts', 'tsx'],
+  pageExtensions: ["ts", "tsx"],
   turbopack: {
     root: process.cwd(),
   },
   images: {
     remotePatterns: [
       ...remoteImageHostnames.map((hostname) => ({
-        protocol: 'https' as const,
+        protocol: "https" as const,
         hostname,
       })),
       ...(isDev
         ? [
             {
-              protocol: 'http' as const,
-              hostname: 'localhost',
+              protocol: "http" as const,
+              hostname: "localhost",
             },
           ]
         : []),
     ],
     unoptimized: isDev,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

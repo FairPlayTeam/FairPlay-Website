@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
-import { Suspense } from 'react'
-import { Spinner } from '@/components/ui/spinner'
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 export const metadata: Metadata = {
   robots: {
     index: false,
     follow: false,
   },
-}
+};
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,5 +20,5 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     >
       {children}
     </Suspense>
-  )
+  );
 }

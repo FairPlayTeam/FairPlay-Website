@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { useRouter } from "next/navigation"
-import type { ReactNode } from 'react'
-import { Badge } from '@/components/ui/badge'
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
+import { Badge } from "@/components/ui/badge";
 
 type VideoCardProps = {
-  thumbnailUrl: string | null
-  title: string
-  displayName?: string | null
-  meta?: string
-  tags?: string[] | null
-  href?: string
-  className?: string
-  variant?: 'grid' | 'list' | 'listLarge'
-  overlayTopRight?: ReactNode
-  overlayTopLeft?: ReactNode
-  overlayCenter?: ReactNode
-  overlayBottomLeft?: ReactNode
-}
+  thumbnailUrl: string | null;
+  title: string;
+  displayName?: string | null;
+  meta?: string;
+  tags?: string[] | null;
+  href?: string;
+  className?: string;
+  variant?: "grid" | "list" | "listLarge";
+  overlayTopRight?: ReactNode;
+  overlayTopLeft?: ReactNode;
+  overlayCenter?: ReactNode;
+  overlayBottomLeft?: ReactNode;
+};
 
 export function VideoCard({
   thumbnailUrl,
@@ -30,23 +30,24 @@ export function VideoCard({
   tags,
   href,
   className,
-  variant = 'grid',
+  variant = "grid",
   overlayCenter,
   overlayTopLeft,
   overlayTopRight,
   overlayBottomLeft,
 }: VideoCardProps) {
-  const isGrid = variant === 'grid'
-  const isLarge = variant === 'listLarge'
-  const imgSrc = thumbnailUrl ?? undefined
+  const isGrid = variant === "grid";
+  const isLarge = variant === "listLarge";
+  const imgSrc = thumbnailUrl ?? undefined;
 
   const router = useRouter();
 
-  const wrapperBase = 'group block cursor-pointer rounded-2xl transition-colors p-1 mb-2 outline-none'
-  const hoverStyle = 'hover:bg-accent/50'
+  const wrapperBase =
+    "group block cursor-pointer rounded-2xl transition-colors p-1 mb-2 outline-none";
+  const hoverStyle = "hover:bg-accent/50";
 
   const cardWrapper = (children: ReactNode, classes: string) => {
-    const resolvedHref = href?.trim()
+    const resolvedHref = href?.trim();
     if (resolvedHref) {
       return (
         // use div with click handler instead of Link to avoid nested anchors
@@ -61,10 +62,10 @@ export function VideoCard({
         >
           {children}
         </div>
-      )
+      );
     }
-    return <div className={classes}>{children}</div>
-  }
+    return <div className={classes}>{children}</div>;
+  };
 
   const ImageBlock = (
     <div className="relative w-full aspect-video overflow-hidden rounded-xl">
@@ -86,7 +87,7 @@ export function VideoCard({
         <div className="h-full w-full bg-muted" />
       )}
     </div>
-  )
+  );
 
   if (isGrid) {
     return cardWrapper(
@@ -108,8 +109,8 @@ export function VideoCard({
                 className="flex flex-nowrap gap-1 overflow-hidden min-w-0"
                 style={{
                   WebkitMaskImage:
-                    'linear-gradient(to right, black 0%, black 75%, transparent 100%)',
-                  maskImage: 'linear-gradient(to right, black 0%, black 75%, transparent 100%)',
+                    "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
+                  maskImage: "linear-gradient(to right, black 0%, black 75%, transparent 100%)",
                 }}
               >
                 {tags.map((tag) => (
@@ -119,7 +120,10 @@ export function VideoCard({
                     onClick={(e) => e.stopPropagation()}
                     className="group"
                   >
-                    <Badge variant="outline" className="py-2.5 cursor-pointer bg-secondary hover:bg-input">
+                    <Badge
+                      variant="outline"
+                      className="py-2.5 cursor-pointer bg-secondary hover:bg-input"
+                    >
                       {tag.toLowerCase()}
                     </Badge>
                   </Link>
@@ -129,8 +133,8 @@ export function VideoCard({
           )}
         </div>
       </>,
-      cn(wrapperBase, hoverStyle, 'overflow-hidden', className),
-    )
+      cn(wrapperBase, hoverStyle, "overflow-hidden", className),
+    );
   }
 
   if (isLarge) {
@@ -159,8 +163,8 @@ export function VideoCard({
           {meta && <p className="text-xs text-muted-foreground line-clamp-1">{meta}</p>}
         </div>
       </>,
-      cn(wrapperBase, hoverStyle, 'sm:flex sm:flex-row sm:gap-3 flex-col', className),
-    )
+      cn(wrapperBase, hoverStyle, "sm:flex sm:flex-row sm:gap-3 flex-col", className),
+    );
   }
 
   return cardWrapper(
@@ -186,6 +190,6 @@ export function VideoCard({
         {meta && <p className="text-xs text-muted-foreground line-clamp-1">{meta}</p>}
       </div>
     </>,
-    cn(wrapperBase, hoverStyle, 'sm:flex sm:flex-row sm:gap-3 flex-col sm:rounded-xl', className),
-  )
+    cn(wrapperBase, hoverStyle, "sm:flex sm:flex-row sm:gap-3 flex-col sm:rounded-xl", className),
+  );
 }
