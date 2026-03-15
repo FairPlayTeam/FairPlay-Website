@@ -22,7 +22,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -120,6 +119,10 @@ export default function AdminPage() {
     }
 
     run()
+
+    return () => {
+      requestSeq.current += 1
+    }
   }, [me, isAdmin, searchTerm, banFilter, page])
 
   const updateUser = (updatedUser: AdminViewUser) => {
@@ -227,7 +230,7 @@ export default function AdminPage() {
     )
   }
 
-  if (!me || state === 'idle' || state === 'loading') {
+  if (!me || state === 'idle') {
     return (
       <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
         <Spinner className="size-18" />
@@ -247,82 +250,75 @@ export default function AdminPage() {
   return (
     <div className="container px-5 py-10 md:px-10">
       <div className="mx-auto max-w-5xl">
-        {/* Header */}
         <div className="mb-8 flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold">Admin Panel</h1>
-          </div>
+          <h1 className="text-3xl font-bold">Admin Panel</h1>
           <p className="text-sm text-muted-foreground">
             {totalItems} {totalItems === 1 ? 'user' : 'users'} found
           </p>
         </div>
 
-        {/* Filters */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="grid gap-3 md:grid-cols-[2fr_1fr_auto] md:items-end"
-        >
-          <div className="space-y-1.5">
-            <Label htmlFor="admin-search" className="text-muted-foreground">
-              Search
-            </Label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-              <Input
-                id="admin-search"
-                placeholder="Search by username or email"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-9"
-              />
+        <form onSubmit={handleSearchSubmit} className="border-b border-border pb-4 mb-6">
+          <div className="flex flex-wrap gap-2">
+            <div className="flex-1 min-w-40">
+              <label className="text-xs text-muted-foreground mb-1 block">Search</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                <Input
+                  placeholder="Username or email..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="h-9 text-sm pl-9 w-full"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="ban-filter" className="text-muted-foreground">
-              Ban status
-            </Label>
-            <Select
-              value={banFilter}
-              onValueChange={(val) => {
-                setBanFilter(val as BanFilter)
-                setPage(1)
-              }}
-            >
-              <SelectTrigger id="ban-filter" className="mb-0">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All users</SelectItem>
-                <SelectItem value="unbanned">Not banned</SelectItem>
-                <SelectItem value="banned">Banned only</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">Ban status</label>
+              <Select
+                value={banFilter}
+                onValueChange={(val) => {
+                  setBanFilter(val as BanFilter)
+                  setPage(1)
+                }}
+              >
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All users</SelectItem>
+                  <SelectItem value="unbanned">Not banned</SelectItem>
+                  <SelectItem value="banned">Banned only</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="flex gap-2">
-            <Button type="submit" variant="default" className="px-5">
-              Search
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleClearSearch}
-              size="icon"
-              title="Clear search"
-              aria-label="Clear search"
-            >
-              <X className="size-4" />
-            </Button>
+            <div className="flex items-end gap-1">
+              <Button type="submit" size="sm" className="h-9 px-4 text-sm">
+                Search
+              </Button>
+              {(searchInput || searchTerm) && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleClearSearch}
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
+                >
+                  <X className="size-4" />
+                </Button>
+              )}
+            </div>
           </div>
         </form>
 
-        {/* User list */}
         <div className="mt-8">
-          {users.length === 0 ? (
-            <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
-              No users found.
+          {state === 'loading' ? (
+            <div className="h-64 grid place-items-center">
+              <Spinner className="size-14" />
             </div>
+          ) : users.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-16">No users found.</p>
           ) : (
             <Accordion type="multiple" className="flex flex-col gap-3">
               {users.map((user) => {
@@ -337,7 +333,6 @@ export default function AdminPage() {
                     value={user.id}
                     className="rounded-xl border border-border bg-card overflow-hidden data-[state=open]:border-primary/40 transition-colors"
                   >
-                    {/* Summary row - always visible */}
                     <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/40 transition-colors [&>svg]:text-muted-foreground group">
                       <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
                         <UserAvatar
@@ -384,12 +379,10 @@ export default function AdminPage() {
                       </div>
                     </AccordionTrigger>
 
-                    {/* Expanded details */}
                     <AccordionContent className="px-4 pb-4">
                       <Separator className="mb-4" />
 
                       <div className="grid gap-4 sm:grid-cols-2">
-                        {/* Info */}
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center gap-2">
                             <span className="text-muted-foreground w-24 shrink-0">Email</span>
@@ -400,9 +393,7 @@ export default function AdminPage() {
                             <span className="font-medium">@{user.username}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-24 shrink-0">
-                              Display name
-                            </span>
+                            <span className="text-muted-foreground w-24 shrink-0">Display name</span>
                             <span className="font-medium">{user.displayName || '-'}</span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -417,9 +408,7 @@ export default function AdminPage() {
                           </div>
                           {user.isBanned && user.banReasonPublic && (
                             <div className="flex items-start gap-2">
-                              <span className="text-muted-foreground w-24 shrink-0">
-                                Ban reason
-                              </span>
+                              <span className="text-muted-foreground w-24 shrink-0">Ban reason</span>
                               <span className="text-destructive font-medium">
                                 {user.banReasonPublic}
                               </span>
@@ -427,19 +416,13 @@ export default function AdminPage() {
                           )}
                         </div>
 
-                        {/* Actions */}
                         <div
                           className="flex flex-col gap-3"
                           onClick={(e) => e.stopPropagation()}
                           onKeyDown={(e) => e.stopPropagation()}
                         >
                           <div className="space-y-1.5">
-                            <Label
-                              htmlFor={`role-${user.id}`}
-                              className="text-xs uppercase tracking-wide text-muted-foreground"
-                            >
-                              Role
-                            </Label>
+                            <label className="text-xs text-muted-foreground block">Role</label>
                             <Select
                               value={user.role}
                               disabled={isRoleUpdating || isSelf}
@@ -447,7 +430,7 @@ export default function AdminPage() {
                                 handleRoleChange(user.id, val as AdminViewUser['role'])
                               }
                             >
-                              <SelectTrigger id={`role-${user.id}`} className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -506,7 +489,6 @@ export default function AdminPage() {
           )}
         </div>
 
-        {/* Pagination */}
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
             Page {currentPage} of {totalPages}
@@ -534,11 +516,12 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* Ban confirmation dialog */}
       <AlertDialog open={Boolean(banTarget)} onOpenChange={(open) => !open && setBanTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{banTarget?.isBanned ? 'Unban user?' : 'Ban user?'}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {banTarget?.isBanned ? 'Unban user?' : 'Ban user?'}
+            </AlertDialogTitle>
             <AlertDialogDescription>
               {banTarget
                 ? `Are you sure you want to ${banTarget.isBanned ? 'unban' : 'ban'} ${banTarget.username}?`
@@ -561,4 +544,3 @@ export default function AdminPage() {
     </div>
   )
 }
-

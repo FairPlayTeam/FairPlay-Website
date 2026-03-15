@@ -1,7 +1,8 @@
 ﻿'use client'
 
-import { useEffect, useRef, useState, useCallback, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, useCallback, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { Search, X } from 'lucide-react'
 
 import { toast } from 'sonner'
 import { Spinner } from '@/components/ui/spinner'
@@ -41,6 +42,7 @@ type Filters = {
   userId: string
   sort: string
 }
+
 const PAGE_SIZE = 20
 
 const DEFAULT_FILTERS: Filters = {
@@ -73,6 +75,7 @@ export default function ModerationPage() {
   const [videoToDelete, setVideoToDelete] = useState<ModVideoItem | null>(null)
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
   const [pendingSearch, setPendingSearch] = useState('')
+  const [pendingUserId, setPendingUserId] = useState('')
 
   const requestSeq = useRef(0)
 
@@ -133,15 +136,24 @@ export default function ModerationPage() {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }, [])
 
-  const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setFilter('search', pendingSearch)
-    }
+  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setFilters((prev) => ({
+      ...prev,
+      search: pendingSearch.trim(),
+      userId: pendingUserId.trim(),
+    }))
+  }
+
+  const handleClearSearch = () => {
+    setPendingSearch('')
+    setFilter('search', '')
   }
 
   const handleResetFilters = () => {
     setFilters(DEFAULT_FILTERS)
     setPendingSearch('')
+    setPendingUserId('')
   }
 
   useEffect(() => {
@@ -178,7 +190,6 @@ export default function ModerationPage() {
         setState('ready')
       } catch (error) {
         if (requestSeq.current !== seq) return
-
         setState('error')
         setError(error instanceof Error ? error.message : 'Failed to load videos')
       }
@@ -233,117 +244,141 @@ export default function ModerationPage() {
   return (
     <div className="w-full">
       <div className="container mx-auto p-4">
-        <div className="flex flex-wrap gap-2 items-end bg-muted/40 border rounded-xl p-4 mb-5">
-          <div className="flex-1 min-w-[180px]">
-            <label className="text-xs text-muted-foreground mb-1 block">Search title</label>
-            <Input
-              placeholder="Search..."
-              value={pendingSearch}
-              onChange={(e) => setPendingSearch(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
-              onBlur={() => setFilter('search', pendingSearch)}
-              className="h-9"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Moderation</label>
-            <Select
-              value={filters.moderationStatus || '_all'}
-              onValueChange={(value) =>
-                setFilter('moderationStatus', isModerationStatus(value) ? value : '')
-              }
-            >
-              <SelectTrigger className="h-9">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">All status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="approved">Approved</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Processing</label>
-            <Select
-              value={filters.processingStatus || '_all'}
-              onValueChange={(value) =>
-                setFilter('processingStatus', isProcessingStatus(value) ? value : '')
-              }
-            >
-              <SelectTrigger className="h-9">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">All</SelectItem>
-                <SelectItem value="uploading">Uploading</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="done">Done</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Visibility</label>
-            <Select
-              value={filters.visibility || '_all'}
-              onValueChange={(value) => setFilter('visibility', isVisibility(value) ? value : '')}
-            >
-              <SelectTrigger className="h-9">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">All</SelectItem>
-                <SelectItem value="public">Public</SelectItem>
-                <SelectItem value="unlisted">Unlisted</SelectItem>
-                <SelectItem value="private">Private</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">User (username / ID)</label>
-            <Input
-              placeholder="Filter by user..."
-              value={filters.userId}
-              onChange={(e) => setFilter('userId', e.target.value)}
-              className="h-9"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Sort</label>
-            <Select value={filters.sort} onValueChange={(v) => setFilter('sort', v)}>
-              <SelectTrigger className="h-9">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="createdAt:desc">Newest first</SelectItem>
-                <SelectItem value="createdAt:asc">Oldest first</SelectItem>
-                <SelectItem value="title:asc">Title A-Z</SelectItem>
-                <SelectItem value="title:desc">Title Z-A</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {isFiltered && (
-            <div className="self-end">
-              <Button variant="ghost" size="sm" onClick={handleResetFilters} className="h-9">
-                Reset filters
-              </Button>
+        <form onSubmit={handleSearchSubmit} className="border-b border-border pb-4 mb-6">
+          <div className="flex flex-wrap gap-2">
+            <div className="flex-1 min-w-40">
+              <label className="text-xs text-muted-foreground mb-1 block">Search title</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                <Input
+                  placeholder="Search..."
+                  value={pendingSearch}
+                  onChange={(e) => setPendingSearch(e.target.value)}
+                  className="h-9 text-sm w-full pl-9"
+                />
+              </div>
             </div>
-          )}
-        </div>
+
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">Moderation</label>
+              <Select
+                value={filters.moderationStatus || '_all'}
+                onValueChange={(value) =>
+                  setFilter('moderationStatus', isModerationStatus(value) ? value : '')
+                }
+              >
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">All</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">Processing</label>
+              <Select
+                value={filters.processingStatus || '_all'}
+                onValueChange={(value) =>
+                  setFilter('processingStatus', isProcessingStatus(value) ? value : '')
+                }
+              >
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">All</SelectItem>
+                  <SelectItem value="uploading">Uploading</SelectItem>
+                  <SelectItem value="processing">Processing</SelectItem>
+                  <SelectItem value="done">Done</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">Visibility</label>
+              <Select
+                value={filters.visibility || '_all'}
+                onValueChange={(value) => setFilter('visibility', isVisibility(value) ? value : '')}
+              >
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">All</SelectItem>
+                  <SelectItem value="public">Public</SelectItem>
+                  <SelectItem value="unlisted">Unlisted</SelectItem>
+                  <SelectItem value="private">Private</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">User</label>
+              <Input
+                placeholder="Username / ID..."
+                value={pendingUserId}
+                onChange={(e) => setPendingUserId(e.target.value)}
+                className="h-9 text-sm w-full"
+              />
+            </div>
+
+            <div className="flex-1 min-w-32">
+              <label className="text-xs text-muted-foreground mb-1 block">Sort</label>
+              <Select value={filters.sort} onValueChange={(v) => setFilter('sort', v)}>
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="createdAt:desc">Newest first</SelectItem>
+                  <SelectItem value="createdAt:asc">Oldest first</SelectItem>
+                  <SelectItem value="title:asc">Title A-Z</SelectItem>
+                  <SelectItem value="title:desc">Title Z-A</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-end gap-1">
+              <Button type="submit" size="sm" className="h-9 px-4 text-sm">
+                Search
+              </Button>
+              {(pendingSearch || filters.search) && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleClearSearch}
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
+                >
+                  <X className="size-4" />
+                </Button>
+              )}
+              {isFiltered && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="h-9 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Reset filters
+                </Button>
+              )}
+            </div>
+          </div>
+        </form>
 
         {state === 'loading' ? (
           <div className="h-64 grid place-items-center">
             <Spinner className="size-14" />
           </div>
         ) : videos.length === 0 ? (
-          <h1 className="text-2xl font-bold mb-6">No videos.</h1>
+          <p className="text-muted-foreground text-sm text-center py-16">No videos found.</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {videos.map((v) => (
@@ -360,7 +395,10 @@ export default function ModerationPage() {
         )}
       </div>
 
-      <AlertDialog open={Boolean(videoToDelete)} onOpenChange={(open) => !open && setVideoToDelete(null)}>
+      <AlertDialog
+        open={Boolean(videoToDelete)}
+        onOpenChange={(open) => !open && setVideoToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete video?</AlertDialogTitle>
@@ -385,4 +423,3 @@ export default function ModerationPage() {
     </div>
   )
 }
-

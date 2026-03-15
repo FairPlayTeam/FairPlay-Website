@@ -61,7 +61,6 @@ export function ModVideoCard({
           meta={createdAtLabel}
           variant="grid"
           href={isProcessing ? '' : `/video/${video.id}`}
-          className="group mb-0"
           overlayTopLeft={
             <StatusBadges
               visibility={video.visibility}
