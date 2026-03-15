@@ -51,8 +51,8 @@ export default function HomePageClient() {
         <FadeInSection>
           <Section id="about" className="mt-10 md:mt-25">
             <div className="intro-card mx-auto max-w-200 text-center">
-              <h2 className="text-[33px] mb-6.25 font-bold">Our Mission: Redefining Streaming</h2>
-              <p className="text-[18px] text-muted-foreground">
+              <h2 className="text-8 mb-6.25 font-bold">Our Mission: Redefining Streaming</h2>
+              <p className="text-5 text-muted-foreground">
                 The internet is in bad shape. <b>47%</b> of internet traffic comes from bots,{" "}
                 <b>52%</b> of internet content is AI-generated including <b>71%</b> of images on
                 social media like YouTube. Between all the deepfakes, misinformation, and the flood
@@ -67,7 +67,7 @@ export default function HomePageClient() {
 
         <FadeInSection>
           <Section id="values" variant="secondary" className="mt-10 md:mt-25">
-            <h2 className="text-[33px] font-bold mb-12.5">Why choose FairPlay?</h2>
+            <h2 className="text-8 font-bold mb-12.5">Why choose FairPlay?</h2>
             <FeatureGrid />
           </Section>
         </FadeInSection>
@@ -79,24 +79,24 @@ export default function HomePageClient() {
                 <ExtensionPreview />
               </div>
               <div className="flex-1 w-full">
-                <h2 className="text-[34px] font-bold mb-12.5 text-center lg:text-left">
+                <h2 className="text-8 font-bold mb-12.5 text-center lg:text-left">
                   Control Your Web experience with the FairPlay extension
                 </h2>
-                <p className="mb-12.5 text-center text-[16px] text-muted-foreground lg:text-left">
+                <p className="mb-12.5 text-center text-4 text-muted-foreground lg:text-left">
                   Tired of short, addictive, and useless content polluting your feed? Our browser
                   extension allows you to hide them and take back control.
                 </p>
                 <ul className="mb-12.5 flex flex-col items-start gap-3">
-                  <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-[18px] text-primary" />
+                  <li className="flex items-start text-4">
+                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-5 text-primary" />
                     Remove YouTube Shorts from your feed.
                   </li>
-                  <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-[18px] text-primary" />
+                  <li className="flex items-start text-4">
+                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-5 text-primary" />
                     Remove TikTok and Snapchat videos.
                   </li>
-                  <li className="flex items-start text-[16px]">
-                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-[18px] text-primary" />
+                  <li className="flex items-start text-4">
+                    <FaCheckCircle className="mr-2.5 mt-0.75 shrink-0 text-5 text-primary" />
                     Block custom domains.
                   </li>
                 </ul>
@@ -127,10 +127,10 @@ export default function HomePageClient() {
 
         <FadeInSection>
           <Section id="development" variant="secondary" className="mt-10 md:mt-25">
-            <h2 className="text-[33px] mb-6.25 font-bold">
+            <h2 className="text-8 mb-6.25 font-bold">
               FairPlay: An open and evolving project
             </h2>
-            <p className="m-10 text-[18px] text-muted-foreground">
+            <p className="m-10 text-5 text-muted-foreground">
               We believe in the power of collaboration. FairPlay is entirely Open Source, meaning
               its code is accessible and modifiable by everyone. Our public and free API encourages
               innovation and allows everyone to build on our platform.
@@ -167,8 +167,8 @@ export default function HomePageClient() {
           <Section id="community" className="mt-10 md:mt-25">
             <div className="flex flex-col lg:flex-row gap-12.5 text-left lg:items-center">
               <div className="flex flex-1 flex-col justify-center items-center lg:items-start text-center lg:text-left">
-                <h2 className="text-[33px] font-bold mb-6.25">Join our community</h2>
-                <p className="mb-6.25 max-w-lg text-[18px] text-muted-foreground">
+                <h2 className="text-8 font-bold mb-6.25">Join our community</h2>
+                <p className="mb-6.25 max-w-lg text-5 text-muted-foreground">
                   FairPlay is more than a platform, it&apos;s a movement. By joining our community,
                   you contribute to shaping the future of streaming and Internet. Share your
                   passions, discover new perspectives, and connect with others FairPlayers.
@@ -194,10 +194,10 @@ export default function HomePageClient() {
         <FadeInSection>
           <Section variant="secondary" className="mt-10 md:mt-25">
             <div className="intro-card mx-auto max-w-200 text-center">
-              <h2 className="text-[34px] mb-6.25 font-bold">
+              <h2 className="text-8 mb-6.25 font-bold">
                 Support FairPlay, Support Quality Content
               </h2>
-              <p className="mb-7.5 text-[19px] text-muted-foreground">
+              <p className="mb-7.5 text-5 text-muted-foreground">
                 FairPlay is 100% free and ad-free, and that will always be our commitment. If you
                 appreciate our mission and our platform, your donation directly helps us cover
                 infrastructure costs, improve features, and grow our community. Every contribution

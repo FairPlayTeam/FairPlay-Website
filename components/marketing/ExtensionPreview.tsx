@@ -2,7 +2,7 @@
 
 export default function ExtensionPreview() {
   return (
-    <div className="w-[320px] rounded-2xl border border-border bg-card/95 px-6 py-5 text-foreground shadow-xl">
+    <div className="w-80 rounded-2xl border border-border bg-card/95 px-6 py-5 text-foreground shadow-xl">
       <h1 className="mb-5 text-center text-3xl font-semibold text-foreground">FairPlay</h1>
 
       <div className="space-y-3 text-sm">

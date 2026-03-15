@@ -12,7 +12,7 @@ export default function ExploreButton({ onClick, className = "" }: ExploreButton
       onClick={onClick}
       className={cn(
         "relative z-10 flex items-center gap-2 overflow-hidden rounded-full border border-primary/30",
-        "bg-primary px-[17px] py-2 text-primary-foreground shadow-xl",
+        "bg-primary px-4 py-2 text-primary-foreground shadow-xl",
         "cursor-pointer backdrop-blur-md transition-colors duration-300 hover:bg-primary-400",
         "lg:font-semibold isolation-auto group",
         className,

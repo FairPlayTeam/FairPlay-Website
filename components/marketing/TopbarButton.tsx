@@ -21,11 +21,11 @@ export default function TopbarButton({
         "group",
         "relative inline-flex items-center justify-center",
         "cursor-pointer bg-transparent",
-        "text-[15px] font-medium text-foreground",
+        "text-4 font-medium text-foreground",
         "whitespace-nowrap",
         "transition-colors duration-200 ease-in-out",
         "hover:text-primary",
-        "after:content-[''] after:absolute after:bottom-[-3px] after:left-1/2",
+        "after:content-[''] after:absolute after:bottom-1 after:left-1/2",
         "after:h-0.5 after:w-full after:max-w-full after:-translate-x-1/2",
         "after:bg-primary",
         "after:origin-center after:scale-x-0 after:scale-y-0",
@@ -39,7 +39,7 @@ export default function TopbarButton({
       {variant === "secondary" && (
         <span
           className="
-            inline-block text-[0.9em] ml-[5px]
+            inline-block text-[0.9em] ml-1
             transition-transform duration-200 ease-in-out
             group-hover:translate-x-0.5
           "

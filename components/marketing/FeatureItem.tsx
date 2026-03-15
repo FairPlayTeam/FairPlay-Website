@@ -13,7 +13,7 @@ export default function FeatureItem({ children, className = "" }: SectionProps) 
     <div
       className={cn(
         "border border-border bg-card/80 shadow-sm backdrop-blur-sm",
-        "p-[30px]",
+        "p-7",
         "rounded-xl",
         "transition-all duration-300 ease-in-out",
         "hover:border-primary/30",

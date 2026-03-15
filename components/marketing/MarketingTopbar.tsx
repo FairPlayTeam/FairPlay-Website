@@ -96,7 +96,7 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.aside
-              className="fixed right-0 top-0 z-1000 flex h-full w-[80%] max-w-[320px] flex-col border-l border-border bg-card p-6 text-foreground shadow-2xl"
+              className="fixed right-0 top-0 z-1000 flex h-full w-[80%] max-w-80 flex-col border-l border-border bg-card p-6 text-foreground shadow-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}

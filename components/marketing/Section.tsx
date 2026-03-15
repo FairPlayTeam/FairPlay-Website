@@ -17,8 +17,8 @@ export default function Section({
 }: SectionProps) {
   const baseStyles =
     variant === "primary"
-      ? "relative rounded-2xl border border-border bg-card/90 p-[20px] shadow-xl backdrop-blur-sm md:p-[50px]"
-      : "py-[50px]";
+      ? "relative rounded-2xl border border-border bg-card/90 p-5 shadow-xl backdrop-blur-sm md:p-12"
+      : "py-12";
 
   return (
     <div id={id} className={cn("text-center", baseStyles, className)}>

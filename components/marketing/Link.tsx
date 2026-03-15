@@ -34,7 +34,7 @@ export default function Link({ href, children, className = "", variant = "primar
       {variant === "primary" && (
         <span
           className="
-            inline-block text-[0.9em] ml-[5px]
+            inline-block text-[0.9em] ml-1
             transition-transform duration-200 ease-in-out
             group-hover:translate-x-0.5
           "

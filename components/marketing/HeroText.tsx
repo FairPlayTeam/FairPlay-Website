@@ -21,7 +21,7 @@ export default function HeroText() {
     >
       <h1
         className={cn(
-          "text-[53px] leading-[1.1] mb-6.25 font-bold",
+          "text-14 leading-[1.1] mb-6.25 font-bold",
           "transition-all duration-800 ease-out",
           animate ? "opacity-100 translate-x-0 delay-100" : "opacity-0 -translate-x-12.5",
         )}
@@ -31,7 +31,7 @@ export default function HeroText() {
 
       <p
         className={cn(
-          "mb-8.75 max-w-150 text-[19px] text-muted-foreground",
+          "mb-8.75 max-w-150 text-5 text-muted-foreground",
           "transition-all duration-800 ease-out",
           animate ? "opacity-100 translate-x-0 delay-300" : "opacity-0 -translate-x-12.5",
         )}

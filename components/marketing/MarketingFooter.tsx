@@ -9,7 +9,7 @@ interface FooterProps {
 
 export default function MarketingFooter({ variant = "primary" }: FooterProps) {
   return (
-    <footer className="border-t border-border bg-card px-6 py-10 text-center text-[15px] text-foreground sm:px-10">
+    <footer className="border-t border-border bg-card px-6 py-10 text-center text-4 text-foreground sm:px-10">
       {variant === "primary" && (
         <section className="mx-auto mb-10 max-w-250 px-2 text-[0.95rem] leading-relaxed text-muted-foreground sm:px-0">
           <p className="mb-5">
@@ -67,7 +67,7 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
           </Link>
         </div>
 
-        <div className="flex justify-center gap-6 text-[22px]">
+        <div className="flex justify-center gap-6 text-6">
           <a
             href="https://github.com/FairPlayTeam/"
             target="_blank"

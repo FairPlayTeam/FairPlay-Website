@@ -9,7 +9,7 @@ export default function Logo({ className = "" }: ButtonProps) {
     <Link
       href="/"
       className={`
-    text-foreground text-[26px] font-[Montserrat,sans-serif] font-bold ${className}`}
+    text-foreground text-6 font-[Montserrat,sans-serif] font-bold ${className}`}
     >
       FairPlay
     </Link>

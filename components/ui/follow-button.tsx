@@ -51,8 +51,8 @@ export function FollowButton({
       disabled={acting}
       className={cn(
         acting ? "cursor-not-allowed" : "cursor-pointer",
-        "text-[15px] px-4 py-2 sm:px-6 sm:py-2.5",
-        "rounded-full h-[40px]",
+        "text-base px-4 py-2 sm:px-6 sm:py-2.5",
+        "rounded-full h-10",
         following ? "bg-secondary text-secondary-foreground" : "bg-primary text-primary-foreground",
       )}
     >
