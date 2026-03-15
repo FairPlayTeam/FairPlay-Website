@@ -1,14 +1,20 @@
 "use client";
 
-import Hls, { Level } from "hls.js";
+import Hls, { Level, Events } from "hls.js";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaArrowLeft } from "react-icons/fa";
+import {
+  FaRedo,
+  FaWindowRestore,
+  FaTv,
+  FaShareAlt,
+  FaChartLine,
+} from "react-icons/fa";
 import { Spinner } from "@/components/ui/spinner";
-import { Slider } from "@/components/ui/slider";
+import VideoStatsPanel from "@/components/app/video/video-stats-panel";
+import VideoSettingsPanel from "@/components/app/video/video-settings-panel";
 import { getToken } from "@/lib/token";
-import { cn } from "@/lib/utils";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
 import { VideoPlayerControls } from "./player/video-player-controls";
@@ -30,8 +36,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLCanvasElement>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const settingsPanelRef = useRef<HTMLDivElement>(null);
-  const resolutionSelectRef = useRef<HTMLSelectElement>(null);
 
   // Store Preferences
   const isMuted = usePreferenceStore((s) => s.isMuted);
@@ -39,11 +43,14 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const volume = usePreferenceStore((s) => s.volume);
   const setVolume = usePreferenceStore((s) => s.setVolume);
   
-  const playbackRate = usePreferenceStore((state) => state.playbackRate);
-  const setPlaybackRatePref = usePreferenceStore((state) => state.setPlaybackRate);
+  const playbackRate = usePreferenceStore((s) => s.playbackRate);
+  const setPlaybackRatePref = usePreferenceStore((s) => s.setPlaybackRate);
   
-  const loop = usePreferenceStore((state) => state.loop);
-  const setLoopPref = usePreferenceStore((state) => state.setLoop);
+  const loop = usePreferenceStore((s) => s.loop);
+  const setLoopPref = usePreferenceStore((s) => s.setLoop);
+
+  const preferredQuality = usePreferenceStore((s) => s.preferredQuality);
+  const setPreferredQuality = usePreferenceStore((s) => s.setPreferredQuality);
 
   // Player State
   const [isPlaying, setIsPlaying] = useState(true);
@@ -55,16 +62,20 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const [seekDelta, setSeekDelta] = useState<number>(0);
   const [animation, setAnimation] = useState<OverlayAnimation>(null);
 
-  // Settings State
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [activeSetting, setActiveSetting] = useState<"main" | "quality" | "speed">("main");
+  // Extracted Panels & Context Menu State
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [availableLevels, setAvailableLevels] = useState<Level[]>([]);
   const [autoLabel, setAutoLabel] = useState("Auto");
   const [levelIndexMap, setLevelIndexMap] = useState<number[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<number>(-1); // -1 = auto
   const [userSelectedLevel, setUserSelectedLevel] = useState(false);
 
+  // Mutable refs to prevent stale closures in event listeners
+  const availableLevelsRef = useRef<Level[]>([]);
+  const levelIndexMapRef = useRef<number[]>([]);
+  const userSelectedLevelRef = useRef(userSelectedLevel);
   const isPlayingRef = useRef(isPlaying);
   const isMutedRef = useRef(isMuted);
   const volumeRef = useRef(volume);
@@ -78,6 +89,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     blurPx: 80,
     opacity: 0.4,
   });
+
+  // Sync refs
+  useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
+  useEffect(() => { userSelectedLevelRef.current = userSelectedLevel; }, [userSelectedLevel]);
+  useEffect(() => { availableLevelsRef.current = availableLevels; }, [availableLevels]);
+  useEffect(() => { levelIndexMapRef.current = levelIndexMap; }, [levelIndexMap]);
 
   const clamp = useCallback(
     (value: number) => Math.max(0, Math.min(value, duration)),
@@ -94,10 +111,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     video.playbackRate = playbackRate;
     video.loop = loop;
   }, [playbackRate, loop]);
-
-  useEffect(() => {
-    isPlayingRef.current = isPlaying;
-  }, [isPlaying]);
 
   useEffect(() => {
     isMutedRef.current = isMuted;
@@ -228,14 +241,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     setContextMenu(null);
   }, []);
 
-  const handleContextMenu = useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      setContextMenu({ x: event.clientX, y: event.clientY });
-      setSettingsOpen(false);
-    },
-    []
-  );
+  const handleContextMenu = useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    setContextMenu({ x: event.clientX, y: event.clientY });
+  }, []);
 
   const handleToggleLoop = useCallback(() => {
     setLoopPref(!loop);
@@ -246,10 +255,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     const video = videoRef.current;
     if (!video) return;
 
-    if (
-      document.pictureInPictureElement === video &&
-      document.exitPictureInPicture
-    ) {
+    if (document.pictureInPictureElement === video && document.exitPictureInPicture) {
       await document.exitPictureInPicture();
       closeContextMenu();
       return;
@@ -262,7 +268,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         // ignore
       }
     }
-
     closeContextMenu();
   }, [closeContextMenu]);
 
@@ -271,9 +276,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       chrome?: {
         cast?: {
           framework: {
-            CastContext: {
-              getInstance: () => { requestSession: () => void };
-            };
+            CastContext: { getInstance: () => { requestSession: () => void } };
           };
         };
       };
@@ -304,27 +307,25 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         alert("Casting is not supported in this browser.");
       }
     }
-
     closeContextMenu();
   }, [closeContextMenu]);
 
   const handleShare = useCallback(async () => {
-    const url = window.location.href;
+    const currentUrl = window.location.href;
     if (navigator.share) {
       try {
-        await navigator.share({ title: document.title, url });
+        await navigator.share({ title: document.title, url: currentUrl });
       } catch {
         // ignore
       }
     } else {
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(currentUrl);
         alert("Link copied to clipboard.");
       } catch {
         // ignore
       }
     }
-
     closeContextMenu();
   }, [closeContextMenu]);
 
@@ -332,33 +333,19 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     const handleFullscreenChange = () => {
       setIsFullscreen(document.fullscreenElement === containerRef.current);
     };
-
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   useEffect(() => {
-    if (settingsOpen && resolutionSelectRef.current) {
-      resolutionSelectRef.current.focus();
-    }
-  }, [settingsOpen]);
-
-  useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (settingsOpen) {
-          setSettingsOpen(false);
-          setActiveSetting("main");
-        }
-        if (contextMenu) {
-          closeContextMenu();
-        }
+      if (e.key === "Escape" && contextMenu) {
+        closeContextMenu();
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [settingsOpen, contextMenu, closeContextMenu]);
+  }, [contextMenu, closeContextMenu]);
 
   useEffect(() => {
     if (!contextMenu) return;
@@ -367,12 +354,83 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     return () => window.removeEventListener("mousedown", handleClickAway);
   }, [contextMenu, closeContextMenu]);
 
-  // HLS Initialization
+  //  Auto-quality resolution calculation
+  const getVideoViewportHeight = useCallback(() => {
+    const el = containerRef.current ?? videoRef.current;
+    return el ? el.clientHeight : 0;
+  }, []);
+
+  const computeAutoLevelIndex = useCallback(
+    (levels: Level[]) => {
+      if (!levels.length) return -1;
+
+      const viewHeight = getVideoViewportHeight();
+      if (!viewHeight) return 0;
+
+      // Prefer smallest resolution >= view height (levels are sorted descending)
+      const desired = Math.max(1, Math.round(viewHeight));
+      for (let i = levels.length - 1; i >= 0; i -= 1) {
+        const lvl = levels[i];
+        if ((lvl.height ?? 0) >= desired) {
+          return i;
+        }
+      }
+      return 0; // Fallback highest
+    },
+    [getVideoViewportHeight]
+  );
+
+  const computeAutoLabel = useCallback((levels: Level[], idx: number) => {
+    if (idx < 0 || idx >= levels.length) return "Auto";
+    const lvl = levels[idx];
+    if (!lvl) return "Auto";
+    if (lvl.height) return `Auto (${lvl.height}p)`;
+    if (lvl.bitrate) return `Auto (${Math.round(lvl.bitrate / 1000)}kbps)`;
+    return "Auto";
+  }, []);
+
+  const applyAutoSelection = useCallback(
+    (levels: Level[], indexMap: number[]) => {
+      if (userSelectedLevelRef.current) return;
+      if (!hlsRef.current || !levels.length) return;
+
+      const idx = computeAutoLevelIndex(levels);
+      if (idx === -1) return;
+
+      const levelId = indexMap[idx] ?? -1;
+      hlsRef.current.nextLevel = levelId;
+      setSelectedLevel(-1);
+      setAutoLabel(computeAutoLabel(levels, idx));
+    },
+    [computeAutoLabel, computeAutoLevelIndex]
+  );
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      applyAutoSelection(availableLevelsRef.current, levelIndexMapRef.current);
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    const handleResize = () => {
+      applyAutoSelection(availableLevelsRef.current, levelIndexMapRef.current);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [applyAutoSelection]);
+
+  // HLS initialization
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // observe loop property changes (context menu toggle)
     const obs = new MutationObserver((mutations) => {
       for (const m of mutations) {
         if (m.type === "attributes" && m.attributeName === "loop") {
@@ -404,10 +462,9 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       hls.loadSource(url);
       hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      hls.on(Events.MANIFEST_PARSED, () => {
         applyPreferences();
-        
-        // populate quality options
+
         const raw = hls.levels || [];
         const paired = raw.map((lvl, idx) => ({ lvl, idx }));
         paired.sort((a, b) => {
@@ -417,18 +474,39 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         });
         
         const sorted = paired.map((p) => p.lvl);
+        const indexMap = paired.map((p) => p.idx);
+        
         setAvailableLevels(sorted);
-        setLevelIndexMap(paired.map((p) => p.idx));
+        setLevelIndexMap(indexMap);
+
+        const autoIndex = computeAutoLevelIndex(sorted);
+        setAutoLabel(computeAutoLabel(sorted, autoIndex));
+
+        const preferred = preferredQuality;
+        let initialSelected = -1;
         
-        if (sorted.length > 0) {
-          const top = sorted[0];
-          const h = top.height || 0;
-          setAutoLabel(`Auto (${h >= 1080 ? "HD" : "SD"})`);
-        } else {
-          setAutoLabel("Auto");
+        if (preferred !== "auto") {
+          const [type, value] = preferred.split(":");
+          initialSelected = sorted.findIndex((lvl) => {
+            if (type === "h") return lvl.height === Number(value);
+            if (type === "b") return lvl.bitrate === Number(value);
+            return false;
+          });
         }
-        
-        setSelectedLevel((prev) => (userSelectedLevel ? prev : -1));
+
+        if (initialSelected !== -1) {
+          const origIndex = indexMap[initialSelected] ?? -1;
+          if (hlsRef.current) hlsRef.current.nextLevel = origIndex;
+          setSelectedLevel(initialSelected);
+          setUserSelectedLevel(true);
+        } else {
+          setSelectedLevel(-1);
+          setUserSelectedLevel(false);
+          if (hlsRef.current) {
+            const best = indexMap[autoIndex] ?? -1;
+            hlsRef.current.nextLevel = best;
+          }
+        }
 
         if (isPlayingRef.current) {
           handlePlayPromise(video.play());
@@ -437,12 +515,12 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         }
       });
 
-      hls.on(Hls.Events.LEVEL_SWITCHED, () => {
-        if (!userSelectedLevel) {
-          const orig = hls.currentLevel;
-          const idx = levelIndexMap.findIndex((i) => i === orig);
-          setSelectedLevel(idx !== -1 ? idx : -1);
-        }
+      hls.on(Events.LEVEL_SWITCHED, () => {
+        // Use the ref to prevent stale closures overriding user preference
+        if (userSelectedLevelRef.current) return;
+        const orig = hls.currentLevel;
+        const idx = levelIndexMapRef.current.findIndex((i) => i === orig);
+        setSelectedLevel(idx !== -1 ? idx : -1);
       });
 
       return () => {
@@ -468,7 +546,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     } else {
       console.error("HLS is not supported in this browser.");
     }
-  }, [url]); // Excluded applyPreferences explicitly to avoid stream resets on preference change
+  }, [url]);
 
   useHotkeys(
     ["space", "k"],
@@ -487,12 +565,9 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   useHotkeys("l", () => handleSeek(10));
   useHotkeys("comma", () => jumpToFrame(-1));
   useHotkeys("period", () => jumpToFrame(1));
-
   useHotkeys(
     ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    (e) => {
-      handleJump(duration * (parseInt(e.key) / 10));
-    },
+    (e) => handleJump(duration * (parseInt(e.key) / 10)),
     { preventDefault: true }
   );
 
@@ -544,6 +619,32 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           </div>
         )}
 
+        <VideoStatsPanel
+          visible={statsVisible}
+          onClose={() => setStatsVisible(false)}
+          videoRef={videoRef}
+          containerRef={containerRef}
+          hlsRef={hlsRef}
+        />
+
+        <VideoSettingsPanel
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+          availableLevels={availableLevels}
+          autoLabel={autoLabel}
+          selectedLevel={selectedLevel}
+          setSelectedLevel={setSelectedLevel}
+          userSelectedLevel={userSelectedLevel}
+          setUserSelectedLevel={setUserSelectedLevel}
+          userSelectedLevelRef={userSelectedLevelRef}
+          levelIndexMap={levelIndexMap}
+          setPreferredQuality={setPreferredQuality}
+          playbackRate={playbackRate}
+          setPlaybackRatePref={setPlaybackRatePref}
+          hlsRef={hlsRef}
+          showControls={showControls}
+        />
+
         <VideoPlayerControls
           controlsVisible={controlsVisible}
           currentTime={currentTime}
@@ -557,11 +658,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           onToggleMute={handleToggleMute}
           onVolumeChange={handleVolumeChange}
           onToggleFullscreen={toggleFullscreen}
-          onToggleSettings={() => setSettingsOpen((prev) => {
-            const next = !prev;
-            if (!next) setActiveSetting("main");
-            return next;
-          })}
+          onToggleSettings={() => setSettingsOpen((prev) => !prev)}
         />
 
         <AnimatePresence>
@@ -584,181 +681,46 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
                 onClick={handleToggleLoop}
                 className="w-full px-3 py-2 flex items-center justify-between text-left text-sm hover:bg-white/10"
               >
-                <span>Loop</span>
+                <span className="flex items-center gap-2">
+                  <FaRedo className="size-4" />
+                  Loop
+                </span>
                 <span className="text-xs text-white/60">{loop ? "✓" : ""}</span>
               </button>
               <button
                 onClick={handlePictureInPicture}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-white/10"
+                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
+                <FaWindowRestore className="size-4" />
                 Picture-in-Picture
               </button>
               <button
                 onClick={handleCast}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-white/10"
+                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
+                <FaTv className="size-4" />
                 Cast
               </button>
               <button
                 onClick={handleShare}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-white/10"
+                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
+                <FaShareAlt className="size-4" />
                 Share
+              </button>
+              <button
+                onClick={() => {
+                  setStatsVisible((visible) => !visible);
+                  closeContextMenu();
+                }}
+                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10 border-t border-white/10 mt-1 pt-2"
+              >
+                <FaChartLine className="size-4" />
+                Stats for nerds
               </button>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {settingsOpen && (
-          <motion.div
-            ref={settingsPanelRef}
-            initial={{ opacity: 0, scale: 0.8, x: 12, y: 12 }}
-            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: 12, y: 12 }}
-            transition={{ type: "spring", stiffness: 450, damping: 30 }}
-            className="absolute bottom-14 right-2 bg-black/60 text-white p-2 rounded z-30 origin-bottom-right shadow-lg"
-            style={{ width: activeSetting === "main" ? 160 : 280 }}
-          >
-            <AnimatePresence mode="wait">
-              {activeSetting === "main" ? (
-                <motion.div
-                  key="main"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.16 }}
-                  className="space-y-2"
-                >
-                  <div className="text-xs uppercase tracking-wide text-white/70">
-                    Settings
-                  </div>
-                  <button
-                    onClick={() => setActiveSetting("quality")}
-                    className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
-                  >
-                    <span className="text-sm">Quality</span>
-                    <span className="text-xs text-white/70">
-                      {selectedLevel === -1
-                        ? autoLabel
-                        : availableLevels[selectedLevel]?.height
-                        ? `${availableLevels[selectedLevel].height}p`
-                        : `${Math.round(
-                            (availableLevels[selectedLevel]?.bitrate ?? 0) /
-                              1000
-                          )}kbps`}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setActiveSetting("speed")}
-                    className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
-                  >
-                    <span className="text-sm">Speed</span>
-                    <span className="text-xs text-white/70">
-                      {playbackRate.toFixed(2)}x
-                    </span>
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={activeSetting}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.16 }}
-                  className="space-y-3"
-                >
-                  <button
-                    onClick={() => setActiveSetting("main")}
-                    className="flex items-center gap-2 text-sm text-white/70 hover:text-white"
-                  >
-                    <FaArrowLeft className="size-4" />
-                    Back
-                  </button>
-
-                  {activeSetting === "quality" && (
-                    <div className="space-y-3">
-                      <div className="text-sm font-medium">Resolution</div>
-                      <div className="space-y-1">
-                        <button
-                          onClick={() => {
-                            if (hlsRef.current) {
-                              hlsRef.current.currentLevel = -1;
-                            }
-                            setSelectedLevel(-1);
-                            setUserSelectedLevel(true);
-                          }}
-                          className={cn(
-                            "w-full text-left px-2 py-2 rounded",
-                            selectedLevel === -1
-                              ? "bg-accent text-black"
-                              : "hover:bg-white/10"
-                          )}
-                        >
-                          {autoLabel}
-                        </button>
-                        {availableLevels.map((lvl, i) => (
-                          <button
-                            key={i}
-                            onClick={() => {
-                              if (hlsRef.current) {
-                                const orig = levelIndexMap[i] ?? -1;
-                                hlsRef.current.currentLevel = orig;
-                              }
-                              setSelectedLevel(i);
-                              setUserSelectedLevel(true);
-                            }}
-                            className={cn(
-                              "w-full text-left px-2 py-2 rounded",
-                              selectedLevel === i
-                                ? "bg-accent text-black"
-                                : "hover:bg-white/10"
-                            )}
-                          >
-                            {lvl.height
-                              ? `${lvl.height}p`
-                              : `${Math.round(lvl.bitrate / 1000)}kbps`}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activeSetting === "speed" && (
-                    <div className="space-y-3">
-                      <div className="text-sm font-medium">Playback speed</div>
-                      <div className="grid grid-cols-3 gap-2">
-                        {[0.5, 0.75, 1, 1.5, 2, 4].map((preset) => (
-                          <button
-                            key={preset}
-                            onClick={() => setPlaybackRatePref(preset)}
-                            className={cn(
-                              "text-xs px-2 py-2 rounded",
-                              playbackRate === preset
-                                ? "bg-accent text-black"
-                                : "bg-white/20 hover:bg-white/30"
-                            )}
-                          >
-                            {preset}x
-                          </button>
-                        ))}
-                      </div>
-                      <Slider
-                        min={0.1}
-                        max={4}
-                        step={0.05}
-                        value={[playbackRate]}
-                        onValueChange={(values) => setPlaybackRatePref(values[0])}
-                        trackClassName="bg-white/30 h-1"
-                        rangeClassName="bg-white"
-                        thumbClassName="bg-white"
-                      />
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        )}
       </div>
     </div>
   );

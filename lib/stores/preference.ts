@@ -8,6 +8,7 @@ export type PreferenceState = {
   isMuted: boolean;
   playbackRate: number;
   loop: boolean;
+  preferredQuality: string; // "auto" or "h:<height>" or "b:<bitrate>"
 };
 
 export type PreferenceActions = {
@@ -15,6 +16,7 @@ export type PreferenceActions = {
   toggleMute: () => void;
   setPlaybackRate: (rate: number) => void;
   setLoop: (loop: boolean) => void;
+  setPreferredQuality: (quality: string) => void;
 };
 
 export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
@@ -25,6 +27,7 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
         isMuted: false,
         playbackRate: 1,
         loop: false,
+        preferredQuality: "auto",
         setVolume: (volume) => {
           const nextVolume = Math.max(0, Math.min(1, volume));
           set({ volume: nextVolume, isMuted: nextVolume === 0 });
@@ -38,6 +41,9 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
         },
         setLoop: (loop) => {
           set({ loop });
+        },
+        setPreferredQuality: (quality) => {
+          set({ preferredQuality: quality });
         },
       }),
       {
