@@ -139,7 +139,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:pt-2 lg:px-16">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:pt-2 lg:px-16">
       <div className="lg:col-span-2 space-y-6">
         <VideoPlayer url={video.hls.master || ""} thumbnailUrl={video.thumbnailUrl} />
         <div className="px-4 lg:px-0">

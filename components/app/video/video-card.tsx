@@ -169,7 +169,7 @@ export function VideoCard({
 
   return cardWrapper(
     <>
-      <div className="relative w-full aspect-video sm:w-36 sm:h-20 overflow-hidden rounded-xl sm:rounded-lg shrink-0">
+      <div className="relative w-full aspect-video sm:w-45 sm:h-25 overflow-hidden rounded-xl sm:rounded-lg shrink-0">
         {imgSrc ? (
           <Image
             src={imgSrc}
