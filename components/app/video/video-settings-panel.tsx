@@ -14,7 +14,6 @@ interface VideoSettingsPanelProps {
   autoLabel: string;
   selectedLevel: number;
   setSelectedLevel: (n: number) => void;
-  userSelectedLevel: boolean;
   setUserSelectedLevel: (v: boolean) => void;
   userSelectedLevelRef: React.MutableRefObject<boolean>;
   levelIndexMap: number[];
@@ -32,7 +31,6 @@ export default function VideoSettingsPanel({
   autoLabel,
   selectedLevel,
   setSelectedLevel,
-  userSelectedLevel,
   setUserSelectedLevel,
   userSelectedLevelRef,
   levelIndexMap,

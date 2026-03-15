@@ -23,6 +23,7 @@ type VideoPlayerControlsProps = {
   isMuted: boolean;
   volume: number;
   isFullscreen: boolean;
+  settingsOpen: boolean;
   onSeek: (value: number) => void;
   onTogglePlay: () => void;
   onToggleMute: () => void;
@@ -39,6 +40,7 @@ export function VideoPlayerControls({
   isMuted,
   volume,
   isFullscreen,
+  settingsOpen,
   onSeek,
   onTogglePlay,
   onToggleMute,
@@ -103,7 +105,13 @@ export function VideoPlayerControls({
 
         <div className="flex items-center gap-2">
           {onToggleSettings ? (
-            <Button size="icon" variant="ghost" onClick={onToggleSettings} className="rounded-full">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onToggleSettings}
+              aria-expanded={settingsOpen}
+              className="rounded-full"
+            >
               <FaCog />
             </Button>
           ) : null}

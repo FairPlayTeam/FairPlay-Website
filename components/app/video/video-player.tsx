@@ -71,7 +71,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const [levelIndexMap, setLevelIndexMap] = useState<number[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<number>(-1); // -1 = auto
   const [userSelectedLevel, setUserSelectedLevel] = useState(false);
-
+  const settingsOpenRef = useRef(settingsOpen);
   // Mutable refs to prevent stale closures in event listeners
   const availableLevelsRef = useRef<Level[]>([]);
   const levelIndexMapRef = useRef<number[]>([]);
@@ -96,6 +96,8 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   // Sync refs
   useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
   useEffect(() => { userSelectedLevelRef.current = userSelectedLevel; }, [userSelectedLevel]);
+  useEffect(() => { settingsOpenRef.current = settingsOpen; }, [settingsOpen]);
+
   useEffect(() => { availableLevelsRef.current = availableLevels; }, [availableLevels]);
   useEffect(() => { levelIndexMapRef.current = levelIndexMap; }, [levelIndexMap]);
 
@@ -148,7 +150,8 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       setControlsVisible(true);
       clearControlsHideTimeout();
 
-      if (autoHide && isPlayingRef.current) {
+      // When settings panel is open, keep controls visible and avoid auto-hide
+      if (autoHide && isPlayingRef.current && !settingsOpenRef.current) {
         controlsHideTimeoutRef.current = window.setTimeout(
           () => setControlsVisible(false),
           CONTROLS_HIDE_DELAY_MS
@@ -157,6 +160,26 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     },
     [clearControlsHideTimeout]
   );
+
+  const openSettings = useCallback(() => {
+    settingsOpenRef.current = true;
+    setSettingsOpen(true);
+    showControls(false);
+  }, [showControls]);
+
+  const closeSettings = useCallback(() => {
+    settingsOpenRef.current = false;
+    setSettingsOpen(false);
+    showControls(true);
+  }, [showControls]);
+
+  const toggleSettings = useCallback(() => {
+    if (settingsOpenRef.current) {
+      closeSettings();
+    } else {
+      openSettings();
+    }
+  }, [closeSettings, openSettings]);
 
   const triggerAnimation = (type: Exclude<OverlayAnimation, null>) => {
     setAnimation(type);
@@ -685,12 +708,11 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
         <VideoSettingsPanel
           open={settingsOpen}
-          onClose={() => setSettingsOpen(false)}
+          onClose={closeSettings}
           availableLevels={availableLevels}
           autoLabel={autoLabel}
           selectedLevel={selectedLevel}
           setSelectedLevel={setSelectedLevel}
-          userSelectedLevel={userSelectedLevel}
           setUserSelectedLevel={setUserSelectedLevel}
           userSelectedLevelRef={userSelectedLevelRef}
           levelIndexMap={levelIndexMap}
@@ -709,12 +731,13 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           isMuted={isMuted}
           volume={volume}
           isFullscreen={isFullscreen}
+          settingsOpen={settingsOpen}
           onSeek={handleJump}
           onTogglePlay={togglePlay}
           onToggleMute={handleToggleMute}
           onVolumeChange={handleVolumeChange}
           onToggleFullscreen={toggleFullscreen}
-          onToggleSettings={() => setSettingsOpen((prev) => !prev)}
+          onToggleSettings={toggleSettings}
         />
 
         <AnimatePresence>
