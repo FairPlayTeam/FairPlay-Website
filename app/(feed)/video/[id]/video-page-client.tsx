@@ -154,7 +154,6 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
       <div className="lg:col-span-1">
         <RelatedVideos
           videos={relatedVideos}
-          currentVideoId={video.id}
           hasMore={relatedHasMore}
           isLoadingMore={relatedLoadingMore}
           onLoadMore={loadMoreRelated}

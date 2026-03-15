@@ -1,31 +1,23 @@
 ﻿"use client";
 
-import { useMemo } from "react";
-import { VideoDetails } from "@/lib/video";
+import { type VideoDetails } from "@/lib/video";
 import { VideoCard } from "./video-card";
 import { Spinner } from "@/components/ui/spinner";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
-interface RelatedVideosProps {
+type RelatedVideosProps = {
   videos: VideoDetails[];
-  currentVideoId: string;
   hasMore?: boolean;
   isLoadingMore?: boolean;
   onLoadMore?: () => void;
-}
+};
 
 export function RelatedVideos({
   videos,
-  currentVideoId,
   hasMore = false,
   isLoadingMore = false,
   onLoadMore,
 }: RelatedVideosProps) {
-  const filteredVideos = useMemo(
-    () => videos.filter((v) => v.id !== currentVideoId),
-    [videos, currentVideoId],
-  );
-
   const sentinelRef = useInfiniteScroll({
     hasMore: Boolean(onLoadMore) && hasMore,
     isLoading: isLoadingMore,
@@ -33,11 +25,11 @@ export function RelatedVideos({
   });
 
   return (
-    <div className="mx-4 space-y-4">
-      <h2 className="font-semibold text-2xl text-foreground">Related Videos</h2>
+    <>
+      <h2 className="font-semibold text-2xl text-foreground mb-3">Related Videos</h2>
 
       <div className="flex flex-col">
-        {filteredVideos.map((video) => (
+        {videos.map((video) => (
           <VideoCard
             key={video.id}
             thumbnailUrl={video.thumbnailUrl}
@@ -57,6 +49,6 @@ export function RelatedVideos({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
