@@ -135,6 +135,11 @@
   --sidebar-ring: #4564c0;
 }
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: var(--font-body);
   line-height: 1.6;
@@ -161,11 +166,6 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--input);
   border-radius: 100px;
-}
-
-html {
-  overflow-y: scroll;
-  scrollbar-gutter: stable;
 }
 
 @layer base {

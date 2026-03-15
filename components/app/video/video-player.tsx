@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 import { getToken } from '@/lib/token'
 import { usePreferenceStore } from '@/lib/stores/preference'
-import { AMBILIGHT_BACKGROUND, useVideoAmbilight } from './player/use-video-ambilight'
+import { useVideoAmbilight } from './player/use-video-ambilight'
 import { VideoPlayerControls } from './player/video-player-controls'
 import { VideoPlayerOverlays } from './player/video-player-overlays'
 
@@ -22,7 +22,7 @@ const CONTROLS_HIDE_DELAY_MS = 2500
 export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLCanvasElement>(null)
 
   const isMuted = usePreferenceStore((s) => s.isMuted)
   const toggleMute = usePreferenceStore((s) => s.toggleMute)
@@ -43,7 +43,14 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const volumeRef = useRef(volume)
   const controlsHideTimeoutRef = useRef<number | null>(null)
 
-  useVideoAmbilight({ videoRef, glowRef })
+  useVideoAmbilight({
+    videoRef,
+    glowRef,
+    enabled: true,
+    blendFactor: 0.1,
+    blurPx: 80,
+    opacity: 0.4,
+  })
 
   const applyPreferences = useCallback(() => {
     const video = videoRef.current
@@ -235,16 +242,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
   return (
     <div className="relative isolate">
-      <div
-        ref={glowRef}
-        aria-hidden
-        className="pointer-events-none absolute -inset-6 -z-10 blur-3xl transition-[opacity,transform] duration-700 ease-out"
-        style={{
-          opacity: isFullscreen ? 0 : 0.95,
-          transform: isPlaying ? 'scale(1)' : 'scale(0.98)',
-          background: AMBILIGHT_BACKGROUND,
-        }}
-      />
+      <canvas ref={glowRef} aria-hidden/>
 
       <div
         ref={containerRef}
