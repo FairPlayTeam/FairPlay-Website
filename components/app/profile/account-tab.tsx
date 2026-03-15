@@ -1,6 +1,5 @@
 'use client'
 
-import Bowser from 'bowser'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { Monitor, Smartphone, Trash2 } from 'lucide-react'
@@ -20,14 +19,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { getSessions, revokeSession, Session, User } from '@/lib/users'
 
-interface AccountTabProps {
-  user: User
-}
-
-const FALLBACK_UA =
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
-
-export default function AccountTab({ user }: AccountTabProps) {
+export default function AccountTab({ user }: { user: User }) {
   const [sessions, setSessions] = useState<Session[]>([])
   const [isLoadingSessions, setIsLoadingSessions] = useState(true)
   const [sessionToRevoke, setSessionToRevoke] = useState<Session | null>(null)

@@ -10,7 +10,7 @@ async function fetchInitialVideos(): Promise<{
   error?: string
 }> {
   try {
-    const { data, status } = await getVideosServer(1, pageSize, {
+    const { data } = await getVideosServer(1, pageSize, {
       next: { revalidate: 60 },
     })
 
@@ -40,4 +40,3 @@ export default async function ExplorePage() {
     <ExplorePageClient initialVideos={videos} initialTotalPages={totalPages} initialError={error} />
   )
 }
-
