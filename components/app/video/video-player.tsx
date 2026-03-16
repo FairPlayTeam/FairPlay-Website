@@ -11,8 +11,8 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 import { Spinner } from "@/components/ui/spinner";
-import VideoStatsPanel from "@/components/app/video/video-stats-panel";
-import VideoSettingsPanel from "@/components/app/video/video-settings-panel";
+import VideoStatsPanel from "@/components/app/video/player/video-stats-panel";
+import VideoSettingsPanel from "@/components/app/video/player/video-settings-panel";
 import { getToken } from "@/lib/token";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
