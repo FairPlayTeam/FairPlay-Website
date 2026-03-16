@@ -15,7 +15,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
 
-interface VideoPlayerProps {
+type VideoPlayerProps = {
   url: string;
   thumbnailUrl: string | null;
 }
