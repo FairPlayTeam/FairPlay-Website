@@ -14,10 +14,13 @@ import { useVideoAmbilight } from "./player/use-video-ambilight";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
+import { cn } from "@/lib/utils";
 
 type VideoPlayerProps = {
   url: string;
   thumbnailUrl: string | null;
+  isTheatreMode?: boolean;
+  onToggleTheatreMode?: () => void;
 }
 
 type OverlayAnimation = "play" | "pause" | "mute" | "unmute" | null;
@@ -25,8 +28,7 @@ type OverlayAnimation = "play" | "pause" | "mute" | "unmute" | null;
 const FPS = 30;
 const CONTROLS_HIDE_DELAY_MS = 2500;
 
-export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
-  // Refs
+export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggleTheatreMode }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLCanvasElement>(null);
@@ -618,6 +620,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   );
 
   useHotkeys("f", toggleFullscreen);
+  useHotkeys("t", () => onToggleTheatreMode?.(), { preventDefault: true });
   useHotkeys("m", handleToggleMute);
   useHotkeys("arrowleft", () => handleSeek(-5));
   useHotkeys("arrowright", () => handleSeek(5));
@@ -632,10 +635,23 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   );
 
   return (
-    <div className="relative isolate">
-      <canvas ref={glowRef} aria-hidden className="hidden md:block" />
+    <motion.div
+      layout
+      transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+      className={cn(
+        "relative isolate max-w-full",
+        isTheatreMode && "lg:mx-auto lg:w-full lg:max-w-[calc(80vh*16/9)]",
+      )}
+    >
+      <canvas
+        ref={glowRef}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[110%] w-[110%] -translate-x-1/2 -translate-y-1/2 md:block"
+      />
 
-      <div
+      <motion.div
+        layout
+        transition={{ type: "spring", bounce: 0, duration: 0.3 }}
         ref={containerRef}
         onPointerMove={() => showControls(true)}
         onPointerDown={() => showControls(true)}
@@ -719,12 +735,14 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           isMuted={isMuted}
           volume={volume}
           isFullscreen={isFullscreen}
+          isTheatreMode={isTheatreMode}
           settingsOpen={settingsOpen}
           onSeek={handleJump}
           onTogglePlay={togglePlay}
           onToggleMute={handleToggleMute}
           onVolumeChange={handleVolumeChange}
           onToggleFullscreen={toggleFullscreen}
+          onToggleTheatreMode={onToggleTheatreMode ?? (() => undefined)}
           onToggleSettings={toggleSettings}
         />
 
@@ -745,6 +763,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
               }}
             >
               <button
+                type="button"
                 onClick={handleToggleLoop}
                 className="w-full px-3 py-2 flex items-center justify-between text-left text-sm hover:bg-white/10"
               >
@@ -752,9 +771,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
                   <FaRedo className="size-4" />
                   Loop
                 </span>
-                <span className="text-xs text-white/60">{loop ? "✓" : ""}</span>
+                <span className="text-xs text-white/60">{loop ? '✓' : ''}</span>
               </button>
               <button
+                type="button"
                 onClick={handlePictureInPicture}
                 className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
@@ -762,6 +782,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
                 Picture-in-Picture
               </button>
               <button
+                type="button"
                 onClick={handleShare}
                 className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
@@ -769,6 +790,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
                 Share
               </button>
               <button
+                type="button"
                 onClick={handleShareAtTime}
                 className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
               >
@@ -776,9 +798,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
                 Share at current time
               </button>
               <button
+                type="button"
                 onClick={() => {
-                  setStatsVisible((visible) => !visible);
-                  closeContextMenu();
+                  setStatsVisible((visible) => !visible)
+                  closeContextMenu()
                 }}
                 className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10 border-t border-white/10 mt-1 pt-2"
               >
@@ -788,7 +811,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

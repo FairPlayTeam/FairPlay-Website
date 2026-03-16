@@ -6,6 +6,7 @@ import { devtools, persist } from "zustand/middleware";
 export type PreferenceState = {
   volume: number;
   isMuted: boolean;
+  isTheatreMode: boolean;
   playbackRate: number;
   loop: boolean;
   preferredQuality: string; // "auto" or "h:<height>" or "b:<bitrate>"
@@ -15,6 +16,7 @@ export type PreferenceState = {
 export type PreferenceActions = {
   setVolume: (volume: number) => void;
   toggleMute: () => void;
+  setTheatreMode: (value: boolean) => void;
   setPlaybackRate: (rate: number) => void;
   setLoop: (loop: boolean) => void;
   setPreferredQuality: (quality: string) => void;
@@ -27,6 +29,7 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
       (set, get) => ({
         volume: 0.5,
         isMuted: false,
+        isTheatreMode: false,
         playbackRate: 1,
         loop: false,
         preferredQuality: "auto",
@@ -39,6 +42,7 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
           const current = get();
           set({ isMuted: !current.isMuted });
         },
+        setTheatreMode: (value: boolean) => set({ isTheatreMode: value }),
         setPlaybackRate: (rate) => {
           set({ playbackRate: rate });
         },

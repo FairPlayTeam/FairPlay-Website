@@ -30,12 +30,6 @@ const CANVAS_W = 32;
 const CANVAS_H = 18;
 
 /**
- * How much the glow canvas is scaled up relative to the video element.
- * Values > 1 make the glow bleed outside the video bounds.
- */
-const DEFAULT_AMBILIGHT_SCALE = 1.1;
-
-/**
  * CSS blur radius applied to the glow canvas.
  * Increase for a softer / more diffused halo.
  */
@@ -51,7 +45,6 @@ export function useVideoAmbilight({
   glowRef,
   blendFactor = DEFAULT_AMBILIGHT_BLEND_FACTOR,
   sampleIntervalMs = DEFAULT_AMBILIGHT_SAMPLE_INTERVAL_MS,
-  scale = DEFAULT_AMBILIGHT_SCALE,
   blurPx = DEFAULT_AMBILIGHT_BLUR_PX,
   opacity = DEFAULT_AMBILIGHT_OPACITY,
   enabled = true,
@@ -91,19 +84,10 @@ export function useVideoAmbilight({
     const glow = glowRef.current;
     if (!glow) return;
 
-    // Position the glow canvas so it overflows symmetrically around the video.
-    const extra = (scale - 1) / 2;
-
-    glow.style.position = "absolute";
-    glow.style.inset = `${-extra * 100}%`;
-    glow.style.width = `${scale * 100}%`;
-    glow.style.height = `${scale * 100}%`;
     glow.style.filter = `blur(${blurPx}px)`;
     glow.style.opacity = "0";
     glow.style.transition = "opacity 1.2s ease";
-    glow.style.pointerEvents = "none";
-    glow.style.zIndex = "-1";
-  }, [glowRef, scale, blurPx]);
+  }, [glowRef, blurPx]);
 
   useEffect(() => {
     const glow = glowRef.current;
