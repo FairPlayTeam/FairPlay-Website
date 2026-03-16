@@ -225,8 +225,8 @@ export default function VideoSettingsPanel({
                       className={cn(
                         "text-xs px-2 py-2 rounded",
                         playbackRate === preset
-                          ? "bg-accent text-black"
-                          : "bg-white/20 hover:bg-white/30"
+                          ? "bg-primary"
+                          : "bg-accent/20 hover:bg-accent/30"
                       )}
                     >
                       {preset}x
@@ -240,8 +240,8 @@ export default function VideoSettingsPanel({
                   step={0.05}
                   value={[playbackRate]}
                   onValueChange={(values) => setPlaybackRatePref(values[0])}
-                  trackClassName="bg-white/30 h-1"
-                  rangeClassName="bg-white"
+                  trackClassName="bg-muted h-1"
+                  rangeClassName="bg-primary"
                   thumbClassName="bg-white"
                 />
               </div>
