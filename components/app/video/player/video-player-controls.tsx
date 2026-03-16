@@ -106,6 +106,7 @@ export function VideoPlayerControls({
         <div className="flex items-center gap-2">
           {onToggleSettings ? (
             <Button
+              data-settings-button
               size="icon"
               variant="ghost"
               onClick={onToggleSettings}

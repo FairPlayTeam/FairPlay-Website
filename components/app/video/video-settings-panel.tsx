@@ -61,6 +61,10 @@ export default function VideoSettingsPanel({
     const handleClickAway = (event: MouseEvent) => {
       const target = event.target as Node;
       if (panelRef.current?.contains(target)) return;
+
+      const settingsButton = document.querySelector('[data-settings-button]');
+      if (settingsButton && (settingsButton === target || settingsButton.contains(target))) return;
+
       setActiveSetting("main");
       showControls(true);
       onClose();
