@@ -10,9 +10,11 @@ import {
   FaVolumeUp,
 } from "react-icons/fa";
 import { FaArrowRotateRight } from "react-icons/fa6";
+import { RectangleHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { formatTime } from "@/lib/time";
+import { cn } from "@/lib/utils";
 
 type VideoPlayerControlsProps = {
   controlsVisible: boolean;
@@ -22,11 +24,13 @@ type VideoPlayerControlsProps = {
   isMuted: boolean;
   volume: number;
   isFullscreen: boolean;
+  isTheatreMode: boolean;
   onSeek: (value: number) => void;
   onTogglePlay: () => void;
   onToggleMute: () => void;
   onVolumeChange: (value: number) => void;
   onToggleFullscreen: () => void;
+  onToggleTheatreMode: () => void;
 };
 
 export function VideoPlayerControls({
@@ -37,11 +41,13 @@ export function VideoPlayerControls({
   isMuted,
   volume,
   isFullscreen,
+  isTheatreMode,
   onSeek,
   onTogglePlay,
   onToggleMute,
   onVolumeChange,
   onToggleFullscreen,
+  onToggleTheatreMode,
 }: VideoPlayerControlsProps) {
   return (
     <div
@@ -98,9 +104,20 @@ export function VideoPlayerControls({
           </div>
         </div>
 
-        <Button size="icon" variant="ghost" onClick={onToggleFullscreen} className="rounded-full">
-          {isFullscreen ? <FaCompress /> : <FaExpand />}
-        </Button>
+        <div className="flex items-center">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onToggleTheatreMode}
+            title={isTheatreMode ? "Exit theatre mode (t)" : "Theatre mode (t)"}
+            className={cn("rounded-full", isTheatreMode && "text-primary")}
+          >
+            <RectangleHorizontal />
+          </Button>
+          <Button size="icon" variant="ghost" onClick={onToggleFullscreen} className="rounded-full">
+            {isFullscreen ? <FaCompress /> : <FaExpand />}
+          </Button>
+        </div>
       </div>
     </div>
   );

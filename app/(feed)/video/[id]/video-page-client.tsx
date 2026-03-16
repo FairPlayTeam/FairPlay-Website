@@ -10,6 +10,8 @@ import { Comments } from "@/components/app/video/comments";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useSidebar } from "@/context/sidebar-context";
+import { cn } from "@/lib/utils";
+import { usePreferenceStore } from "@/lib/stores/preference";
 
 const RELATED_PAGE_SIZE = 10;
 
@@ -39,12 +41,16 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   const [relatedLoadingMore, setRelatedLoadingMore] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+  const isTheatreMode = usePreferenceStore((s) => s.isTheatreMode);
+  const setTheatreMode = usePreferenceStore((s) => s.setTheatreMode);
   const relatedSeqRef = useRef(0);
 
   const { close } = useSidebar();
   useEffect(() => {
     close();
   }, [close]);
+
+  const toggleTheatreMode = useCallback(() => setTheatreMode(!isTheatreMode), [isTheatreMode, setTheatreMode]);
 
   useEffect(() => {
     if (!videoId) return;
@@ -139,10 +145,40 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:pt-2 lg:px-16">
-      <div className="lg:col-span-2 space-y-6">
-        <VideoPlayer url={video.hls.master || ""} thumbnailUrl={video.thumbnailUrl} />
-        <div className="px-4 lg:px-0">
+    <div
+      className={cn(
+        "lg:pt-2 transition-[padding] duration-500 ease-in-out",
+        isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
+        isTheatreMode && "overflow-x-hidden",
+      )}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-3">
+        <div className={cn(isTheatreMode ? "lg:col-span-3" : "lg:col-span-2")}>
+          <VideoPlayer
+            url={video.hls.master || ""}
+            thumbnailUrl={video.thumbnailUrl}
+            isTheatreMode={isTheatreMode}
+            onToggleTheatreMode={toggleTheatreMode}
+          />
+        </div>
+        
+        <div
+          className={cn(
+            "hidden lg:block",
+            isTheatreMode 
+              ? "lg:col-start-3 lg:row-start-2" 
+              : "lg:col-start-3 lg:row-span-2 lg:row-start-1"
+          )}
+        >
+          <RelatedVideos
+            videos={relatedVideos}
+            hasMore={relatedHasMore}
+            isLoadingMore={relatedLoadingMore}
+            onLoadMore={loadMoreRelated}
+          />
+        </div>
+
+        <div className="lg:col-span-2 px-4 lg:px-0">
           <VideoInfo video={video} />
           <Comments
             videoId={video.id}
@@ -150,14 +186,15 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
             allowComments={video.allowComments}
           />
         </div>
-      </div>
-      <div className="lg:col-span-1">
-        <RelatedVideos
-          videos={relatedVideos}
-          hasMore={relatedHasMore}
-          isLoadingMore={relatedLoadingMore}
-          onLoadMore={loadMoreRelated}
-        />
+
+        <div className="lg:hidden px-4">
+          <RelatedVideos
+            videos={relatedVideos}
+            hasMore={relatedHasMore}
+            isLoadingMore={relatedLoadingMore}
+            onLoadMore={loadMoreRelated}
+          />
+        </div>
       </div>
     </div>
   );

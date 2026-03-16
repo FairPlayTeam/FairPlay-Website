@@ -10,17 +10,20 @@ import { useVideoAmbilight } from "./player/use-video-ambilight";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
+import { cn } from "@/lib/utils";
 
 interface VideoPlayerProps {
   url: string;
   thumbnailUrl: string | null;
+  isTheatreMode?: boolean;
+  onToggleTheatreMode?: () => void;
 }
 
 type OverlayAnimation = "play" | "pause" | "mute" | "unmute" | null;
 
 const CONTROLS_HIDE_DELAY_MS = 2500;
 
-export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
+export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggleTheatreMode }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLCanvasElement>(null);
@@ -205,6 +208,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
     { preventDefault: true },
   );
   useHotkeys("f", toggleFullscreen);
+  useHotkeys("t", () => onToggleTheatreMode?.(), { preventDefault: true });
   useHotkeys("m", handleToggleMute);
   useHotkeys("arrowleft", () => {
     if (videoRef.current) {
@@ -243,8 +247,13 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   );
 
   return (
-    <div className="relative isolate">
-      <canvas ref={glowRef} aria-hidden className="hidden md:block" />
+    <div
+      className={cn(
+        "relative isolate max-w-full",
+        isTheatreMode && "lg:mx-auto lg:w-full lg:max-w-[calc(80vh*16/9)]",
+      )}
+    >
+      <canvas ref={glowRef} aria-hidden className="hidden md:block w-full" />
 
       <div
         ref={containerRef}
@@ -297,11 +306,13 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           isMuted={isMuted}
           volume={volume}
           isFullscreen={isFullscreen}
+          isTheatreMode={isTheatreMode}
           onSeek={handleJump}
           onTogglePlay={togglePlay}
           onToggleMute={handleToggleMute}
           onVolumeChange={handleVolumeChange}
           onToggleFullscreen={toggleFullscreen}
+          onToggleTheatreMode={onToggleTheatreMode ?? (() => undefined)}
         />
       </div>
     </div>
