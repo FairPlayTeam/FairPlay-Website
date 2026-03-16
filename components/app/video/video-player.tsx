@@ -591,9 +591,17 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       hls.on(Events.LEVEL_SWITCHED, () => {
         // Use the ref to prevent stale closures overriding user preference
         if (userSelectedLevelRef.current) return;
+
         const orig = hls.currentLevel;
         const idx = levelIndexMapRef.current.findIndex((i) => i === orig);
-        setSelectedLevel(idx !== -1 ? idx : -1);
+
+        // Update auto label with the currently active level
+        if (idx !== -1) {
+          setSelectedLevel(-1);
+          setAutoLabel(computeAutoLabel(availableLevelsRef.current, idx));
+        } else {
+          setSelectedLevel(-1);
+        }
       });
 
       return () => {

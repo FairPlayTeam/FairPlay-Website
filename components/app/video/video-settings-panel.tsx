@@ -160,7 +160,7 @@ export default function VideoSettingsPanel({
 
             {activeSetting === "quality" && (
               <div className="space-y-3">
-                <div className="text-sm font-medium">Video Resolution:</div>
+                <div className="text-sm font-medium">Resolution:</div>
                 <div className="space-y-1 max-h-40 overflow-y-auto pr-1">
                   <button
                     onClick={() => {
@@ -175,8 +175,8 @@ export default function VideoSettingsPanel({
                     className={cn(
                       "w-full text-sm text-left px-2 py-2 rounded",
                       selectedLevel === -1
-                        ? "bg-accent text-black"
-                        : "hover:bg-white/10"
+                        ? "bg-primary"
+                        : "bg-accent/20 hover:bg-accent/60"
                     )}
                   >
                     {autoLabel}
@@ -202,8 +202,8 @@ export default function VideoSettingsPanel({
                         className={cn(
                           "w-full text-sm text-left px-2 py-2 rounded",
                           selectedLevel === i
-                            ? "bg-accent text-black"
-                            : "hover:bg-white/10"
+                            ? "bg-primary"
+                            : "bg-accent/20 hover:bg-accent/60"
                         )}
                       >
                         {lvl.height ? `${lvl.height}p` : `${Math.round(lvl.bitrate / 1000)}kbps`}
