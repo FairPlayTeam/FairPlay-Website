@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  FaCog,
   FaCompress,
   FaExpand,
   FaPause,
@@ -22,11 +23,13 @@ type VideoPlayerControlsProps = {
   isMuted: boolean;
   volume: number;
   isFullscreen: boolean;
+  settingsOpen: boolean;
   onSeek: (value: number) => void;
   onTogglePlay: () => void;
   onToggleMute: () => void;
   onVolumeChange: (value: number) => void;
   onToggleFullscreen: () => void;
+  onToggleSettings?: () => void;
 };
 
 export function VideoPlayerControls({
@@ -37,11 +40,13 @@ export function VideoPlayerControls({
   isMuted,
   volume,
   isFullscreen,
+  settingsOpen,
   onSeek,
   onTogglePlay,
   onToggleMute,
   onVolumeChange,
   onToggleFullscreen,
+  onToggleSettings,
 }: VideoPlayerControlsProps) {
   return (
     <div
@@ -98,9 +103,23 @@ export function VideoPlayerControls({
           </div>
         </div>
 
-        <Button size="icon" variant="ghost" onClick={onToggleFullscreen} className="rounded-full">
-          {isFullscreen ? <FaCompress /> : <FaExpand />}
-        </Button>
+        <div className="flex items-center gap-2">
+          {onToggleSettings ? (
+            <Button
+              data-settings-button
+              size="icon"
+              variant="ghost"
+              onClick={onToggleSettings}
+              aria-expanded={settingsOpen}
+              className="rounded-full"
+            >
+              <FaCog />
+            </Button>
+          ) : null}
+          <Button size="icon" variant="ghost" onClick={onToggleFullscreen} className="rounded-full">
+            {isFullscreen ? <FaCompress /> : <FaExpand />}
+          </Button>
+        </div>
       </div>
     </div>
   );
