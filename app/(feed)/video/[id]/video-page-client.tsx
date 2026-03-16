@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useSidebar } from "@/context/sidebar-context";
 import { cn } from "@/lib/utils";
 import { usePreferenceStore } from "@/lib/stores/preference";
+import { motion } from "framer-motion";
 
 const RELATED_PAGE_SIZE = 10;
 
@@ -147,22 +148,28 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   return (
     <div
       className={cn(
-        "lg:pt-2 transition-[padding] duration-500 ease-in-out",
+        "lg:pt-2 transition-[padding] duration-300 ease-out",
         isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
         isTheatreMode && "overflow-x-hidden",
       )}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-3">
-        <div className={cn(isTheatreMode ? "lg:col-span-3" : "lg:col-span-2")}>
+        <motion.div
+          layout
+          transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+          className={cn(isTheatreMode ? "lg:col-span-3" : "lg:col-span-2")}
+        >
           <VideoPlayer
             url={video.hls.master || ""}
             thumbnailUrl={video.thumbnailUrl}
             isTheatreMode={isTheatreMode}
             onToggleTheatreMode={toggleTheatreMode}
           />
-        </div>
+        </motion.div>
         
-        <div
+        <motion.div
+          layout="position"
+          transition={{ type: "spring", bounce: 0, duration: 0.3 }}
           className={cn(
             "hidden lg:block",
             isTheatreMode 
@@ -176,25 +183,33 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
             isLoadingMore={relatedLoadingMore}
             onLoadMore={loadMoreRelated}
           />
-        </div>
+        </motion.div>
 
-        <div className="lg:col-span-2 px-4 lg:px-0">
+        <motion.div
+          layout="position"
+          transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+          className="lg:col-span-2 px-4 lg:px-0"
+        >
           <VideoInfo video={video} />
           <Comments
             videoId={video.id}
             initialComments={comments}
             allowComments={video.allowComments}
           />
-        </div>
+        </motion.div>
 
-        <div className="lg:hidden px-4">
+        <motion.div
+          layout="position"
+          transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+          className="lg:hidden px-4"
+        >
           <RelatedVideos
             videos={relatedVideos}
             hasMore={relatedHasMore}
             isLoadingMore={relatedLoadingMore}
             onLoadMore={loadMoreRelated}
           />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

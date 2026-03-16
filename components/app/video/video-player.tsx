@@ -11,6 +11,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface VideoPlayerProps {
   url: string;
@@ -247,15 +248,23 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
   );
 
   return (
-    <div
+    <motion.div
+      layout
+      transition={{ type: "spring", bounce: 0, duration: 0.3 }}
       className={cn(
         "relative isolate max-w-full",
         isTheatreMode && "lg:mx-auto lg:w-full lg:max-w-[calc(80vh*16/9)]",
       )}
     >
-      <canvas ref={glowRef} aria-hidden className="hidden md:block w-full" />
+      <canvas
+        ref={glowRef}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[110%] w-[110%] -translate-x-1/2 -translate-y-1/2 md:block"
+      />
 
-      <div
+      <motion.div
+        layout
+        transition={{ type: "spring", bounce: 0, duration: 0.3 }}
         ref={containerRef}
         onPointerMove={() => showControls(true)}
         onPointerDown={() => showControls(true)}
@@ -314,7 +323,7 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
           onToggleFullscreen={toggleFullscreen}
           onToggleTheatreMode={onToggleTheatreMode ?? (() => undefined)}
         />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

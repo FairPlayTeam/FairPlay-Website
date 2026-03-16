@@ -51,7 +51,6 @@ export function useVideoAmbilight({
   glowRef,
   blendFactor = DEFAULT_AMBILIGHT_BLEND_FACTOR,
   sampleIntervalMs = DEFAULT_AMBILIGHT_SAMPLE_INTERVAL_MS,
-  scale = DEFAULT_AMBILIGHT_SCALE,
   blurPx = DEFAULT_AMBILIGHT_BLUR_PX,
   opacity = DEFAULT_AMBILIGHT_OPACITY,
   enabled = true,
@@ -91,19 +90,10 @@ export function useVideoAmbilight({
     const glow = glowRef.current;
     if (!glow) return;
 
-    // Position the glow canvas so it overflows symmetrically around the video.
-    const extra = (scale - 1) / 2;
-
-    glow.style.position = "absolute";
-    glow.style.inset = `${-extra * 100}%`;
-    glow.style.width = `${scale * 100}%`;
-    glow.style.height = `${scale * 100}%`;
     glow.style.filter = `blur(${blurPx}px)`;
     glow.style.opacity = "0";
     glow.style.transition = "opacity 1.2s ease";
-    glow.style.pointerEvents = "none";
-    glow.style.zIndex = "-1";
-  }, [glowRef, scale, blurPx]);
+  }, [glowRef, blurPx]);
 
   // Resize handling
   useEffect(() => {
