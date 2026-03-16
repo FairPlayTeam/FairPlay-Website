@@ -30,12 +30,6 @@ const CANVAS_W = 32;
 const CANVAS_H = 18;
 
 /**
- * How much the glow canvas is scaled up relative to the video element.
- * Values > 1 make the glow bleed outside the video bounds.
- */
-const DEFAULT_AMBILIGHT_SCALE = 1.1;
-
-/**
  * CSS blur radius applied to the glow canvas.
  * Increase for a softer / more diffused halo.
  */
