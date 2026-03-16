@@ -9,7 +9,7 @@ export type PreferenceState = {
   playbackRate: number;
   loop: boolean;
   preferredQuality: string; // "auto" or "h:<height>" or "b:<bitrate>"
-  ambilight: boolean;
+  ambilight?: boolean; // undefined = auto, true = on, false = off
 };
 
 export type PreferenceActions = {
@@ -30,7 +30,7 @@ export const usePreferenceStore = create<PreferenceState & PreferenceActions>()(
         playbackRate: 1,
         loop: false,
         preferredQuality: "auto",
-        ambilight: true,
+        ambilight: undefined,
         setVolume: (volume) => {
           const nextVolume = Math.max(0, Math.min(1, volume));
           set({ volume: nextVolume, isMuted: nextVolume === 0 });

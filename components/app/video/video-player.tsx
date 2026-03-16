@@ -16,6 +16,7 @@ import VideoSettingsPanel from "@/components/app/video/player/video-settings-pan
 import { getToken } from "@/lib/token";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { VideoPlayerControls } from "./player/video-player-controls";
 import { VideoPlayerOverlays } from "./player/video-player-overlays";
 
@@ -74,6 +75,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const [selectedLevel, setSelectedLevel] = useState<number>(-1); // -1 = auto
   const [userSelectedLevel, setUserSelectedLevel] = useState(false);
   const settingsOpenRef = useRef(settingsOpen);
+
   // Mutable refs to prevent stale closures in event listeners
   const availableLevelsRef = useRef<Level[]>([]);
   const levelIndexMapRef = useRef<number[]>([]);
@@ -86,10 +88,20 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   // Support share-at-time via ?t=<seconds> query param
   const initialTimeRef = useRef<number>(0);
 
+  // Determine if we're on desktop for default ambilight preference
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  // If the user hasn't explicitly selected an ambilight preference, default to off on mobile.
+  useEffect(() => {
+    if (ambilight === undefined) {
+      setAmbilight(isDesktop);
+    }
+  }, [ambilight, isDesktop, setAmbilight]);
+
   useVideoAmbilight({
     videoRef,
     glowRef,
-    enabled: ambilight,
+    enabled: !!ambilight,
     blendFactor: 0.1,
     blurPx: 80,
     opacity: 0.4,
@@ -618,7 +630,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
   return (
     <div className="relative isolate">
-      <canvas ref={glowRef} aria-hidden />
+      <canvas ref={glowRef} aria-hidden className="hidden md:block" />
 
       <div
         ref={containerRef}

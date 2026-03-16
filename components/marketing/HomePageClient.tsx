@@ -127,9 +127,7 @@ export default function HomePageClient() {
 
         <FadeInSection>
           <Section id="development" variant="secondary" className="mt-10 md:mt-25">
-            <h2 className="text-8 mb-6.25 font-bold">
-              FairPlay: An open and evolving project
-            </h2>
+            <h2 className="text-8 mb-6.25 font-bold">FairPlay: An open and evolving project</h2>
             <p className="m-10 text-5 text-muted-foreground">
               We believe in the power of collaboration. FairPlay is entirely Open Source, meaning
               its code is accessible and modifiable by everyone. Our public and free API encourages
