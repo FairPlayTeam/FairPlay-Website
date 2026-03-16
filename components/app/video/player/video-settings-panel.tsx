@@ -8,7 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
-interface VideoSettingsPanelProps {
+type VideoSettingsPanelProps = {
   open: boolean;
   onClose: () => void;
   availableLevels: Level[];
@@ -25,7 +25,7 @@ interface VideoSettingsPanelProps {
   setAmbilight: (enabled: boolean) => void;
   hlsRef: React.MutableRefObject<Hls | null>;
   showControls: (autoHide?: boolean) => void;
-}
+};
 
 export default function VideoSettingsPanel({
   open,
@@ -62,7 +62,7 @@ export default function VideoSettingsPanel({
       const target = event.target as Node;
       if (panelRef.current?.contains(target)) return;
 
-      const settingsButton = document.querySelector('[data-settings-button]');
+      const settingsButton = document.querySelector("[data-settings-button]");
       if (settingsButton && (settingsButton === target || settingsButton.contains(target))) return;
 
       setActiveSetting("main");
@@ -132,12 +132,10 @@ export default function VideoSettingsPanel({
               <span className="text-xs text-white/70">{playbackRate.toFixed(2)}x</span>
             </div>
 
-            <div
-              role="button"
-              tabIndex={0}
+            <button
+              type="button"
               ref={resolutionSelectRef}
               onClick={() => setActiveSetting("quality")}
-              onKeyDown={(e) => e.key === "Enter" && setActiveSetting("quality")}
               className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
             >
               <span className="text-sm">Quality</span>
@@ -145,10 +143,10 @@ export default function VideoSettingsPanel({
                 {selectedLevel === -1
                   ? autoLabel
                   : availableLevels[selectedLevel]?.height
-                  ? `${availableLevels[selectedLevel].height}p`
-                  : `${Math.round((availableLevels[selectedLevel]?.bitrate ?? 0) / 1000)}kbps`}
+                    ? `${availableLevels[selectedLevel].height}p`
+                    : `${Math.round((availableLevels[selectedLevel]?.bitrate ?? 0) / 1000)}kbps`}
               </span>
-            </div>
+            </button>
           </motion.div>
         ) : (
           <motion.div
@@ -183,17 +181,13 @@ export default function VideoSettingsPanel({
                     }}
                     className={cn(
                       "w-full text-sm text-left px-2 py-2 rounded",
-                      selectedLevel === -1
-                        ? "bg-primary"
-                        : "bg-accent/20 hover:bg-accent/60"
+                      selectedLevel === -1 ? "bg-primary" : "bg-accent/20 hover:bg-accent/60",
                     )}
                   >
                     {autoLabel}
                   </button>
                   {availableLevels.map((lvl, i) => {
-                    const qualityId = lvl.height
-                      ? `h:${lvl.height}`
-                      : `b:${lvl.bitrate}`;
+                    const qualityId = lvl.height ? `h:${lvl.height}` : `b:${lvl.bitrate}`;
 
                     return (
                       <button
@@ -210,9 +204,7 @@ export default function VideoSettingsPanel({
                         }}
                         className={cn(
                           "w-full text-sm text-left px-2 py-2 rounded",
-                          selectedLevel === i
-                            ? "bg-primary"
-                            : "bg-accent/20 hover:bg-accent/60"
+                          selectedLevel === i ? "bg-primary" : "bg-accent/20 hover:bg-accent/60",
                         )}
                       >
                         {lvl.height ? `${lvl.height}p` : `${Math.round(lvl.bitrate / 1000)}kbps`}
@@ -233,16 +225,16 @@ export default function VideoSettingsPanel({
                       onClick={() => setPlaybackRatePref(preset)}
                       className={cn(
                         "text-xs px-2 py-2 rounded",
-                        playbackRate === preset
-                          ? "bg-primary"
-                          : "bg-accent/20 hover:bg-accent/30"
+                        playbackRate === preset ? "bg-primary" : "bg-accent/20 hover:bg-accent/30",
                       )}
                     >
                       {preset}x
                     </button>
                   ))}
                 </div>
-                <div className="text-sm font-medium">Playback Speed: {playbackRate.toFixed(2)}x</div>
+                <div className="text-sm font-medium">
+                  Playback Speed: {playbackRate.toFixed(2)}x
+                </div>
                 <Slider
                   min={0.1}
                   max={4}
@@ -255,7 +247,6 @@ export default function VideoSettingsPanel({
                 />
               </div>
             )}
-
           </motion.div>
         )}
       </motion.div>

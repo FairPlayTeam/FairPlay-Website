@@ -4,12 +4,7 @@ import Hls, { Level, Events } from "hls.js";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  FaRedo,
-  FaWindowRestore,
-  FaShareAlt,
-  FaChartLine,
-} from "react-icons/fa";
+import { FaRedo, FaWindowRestore, FaShareAlt, FaChartLine } from "react-icons/fa";
 import { Spinner } from "@/components/ui/spinner";
 import VideoStatsPanel from "@/components/app/video/player/video-stats-panel";
 import VideoSettingsPanel from "@/components/app/video/player/video-settings-panel";
@@ -42,10 +37,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   const toggleMute = usePreferenceStore((s) => s.toggleMute);
   const volume = usePreferenceStore((s) => s.volume);
   const setVolume = usePreferenceStore((s) => s.setVolume);
-  
+
   const playbackRate = usePreferenceStore((s) => s.playbackRate);
   const setPlaybackRatePref = usePreferenceStore((s) => s.setPlaybackRate);
-  
+
   const loop = usePreferenceStore((s) => s.loop);
   const setLoopPref = usePreferenceStore((s) => s.setLoop);
 
@@ -108,17 +103,24 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   });
 
   // Sync refs
-  useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
-  useEffect(() => { userSelectedLevelRef.current = userSelectedLevel; }, [userSelectedLevel]);
-  useEffect(() => { settingsOpenRef.current = settingsOpen; }, [settingsOpen]);
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+  useEffect(() => {
+    userSelectedLevelRef.current = userSelectedLevel;
+  }, [userSelectedLevel]);
+  useEffect(() => {
+    settingsOpenRef.current = settingsOpen;
+  }, [settingsOpen]);
 
-  useEffect(() => { availableLevelsRef.current = availableLevels; }, [availableLevels]);
-  useEffect(() => { levelIndexMapRef.current = levelIndexMap; }, [levelIndexMap]);
+  useEffect(() => {
+    availableLevelsRef.current = availableLevels;
+  }, [availableLevels]);
+  useEffect(() => {
+    levelIndexMapRef.current = levelIndexMap;
+  }, [levelIndexMap]);
 
-  const clamp = useCallback(
-    (value: number) => Math.max(0, Math.min(value, duration)),
-    [duration]
-  );
+  const clamp = useCallback((value: number) => Math.max(0, Math.min(value, duration)), [duration]);
 
   const applyPreferences = useCallback(() => {
     const video = videoRef.current;
@@ -168,11 +170,11 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       if (autoHide && isPlayingRef.current && !settingsOpenRef.current) {
         controlsHideTimeoutRef.current = window.setTimeout(
           () => setControlsVisible(false),
-          CONTROLS_HIDE_DELAY_MS
+          CONTROLS_HIDE_DELAY_MS,
         );
       }
     },
-    [clearControlsHideTimeout]
+    [clearControlsHideTimeout],
   );
 
   const openSettings = useCallback(() => {
@@ -231,7 +233,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         setCurrentTime(videoRef.current.currentTime);
       }
     },
-    [clamp]
+    [clamp],
   );
 
   const handleSeek = useCallback(
@@ -242,7 +244,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       }
       setTimeout(() => setSeekDelta(0), 1000);
     },
-    [handleJump]
+    [handleJump],
   );
 
   const jumpToFrame = useCallback(
@@ -257,7 +259,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       video.currentTime = newTime;
       setCurrentTime(newTime);
     },
-    [clamp]
+    [clamp],
   );
 
   const handleVolumeChange = useCallback(
@@ -274,7 +276,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         video.muted = false;
       }
     },
-    [setVolume]
+    [setVolume],
   );
 
   const toggleFullscreen = useCallback(() => {
@@ -417,7 +419,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       }
       return 0; // Fallback highest
     },
-    [getVideoViewportHeight]
+    [getVideoViewportHeight],
   );
 
   const computeAutoLabel = useCallback((levels: Level[], idx: number) => {
@@ -442,7 +444,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       setSelectedLevel(-1);
       setAutoLabel(computeAutoLabel(levels, idx));
     },
-    [computeAutoLabel, computeAutoLevelIndex]
+    [computeAutoLabel, computeAutoLevelIndex],
   );
 
   useEffect(() => {
@@ -467,6 +469,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   }, [applyAutoSelection]);
 
   // HLS initialization
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally only re-runs on url change
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -517,10 +520,10 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           const hb = b.lvl.height || b.lvl.bitrate || 0;
           return hb - ha;
         });
-        
+
         const sorted = paired.map((p) => p.lvl);
         const indexMap = paired.map((p) => p.idx);
-        
+
         setAvailableLevels(sorted);
         setLevelIndexMap(indexMap);
 
@@ -529,7 +532,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
 
         const preferred = preferredQuality;
         let initialSelected = -1;
-        
+
         if (preferred !== "auto") {
           const [type, value] = preferred.split(":");
           initialSelected = sorted.findIndex((lvl) => {
@@ -611,7 +614,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
       togglePlay();
       triggerAnimation(isPlaying ? "pause" : "play");
     },
-    { preventDefault: true }
+    { preventDefault: true },
   );
 
   useHotkeys("f", toggleFullscreen);
@@ -625,7 +628,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
   useHotkeys(
     ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
     (e) => handleJump(duration * (parseInt(e.key) / 10)),
-    { preventDefault: true }
+    { preventDefault: true },
   );
 
   return (
@@ -702,7 +705,7 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
           setPreferredQuality={setPreferredQuality}
           playbackRate={playbackRate}
           setPlaybackRatePref={setPlaybackRatePref}
-          ambilight={ambilight}
+          ambilight={ambilight ?? false}
           setAmbilight={setAmbilight}
           hlsRef={hlsRef}
           showControls={showControls}

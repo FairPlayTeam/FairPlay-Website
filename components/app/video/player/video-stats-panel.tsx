@@ -2,6 +2,7 @@
 
 import Hls, { Events, FragLoadedData } from "hls.js";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { X } from 'lucide-react'
 
 export interface VideoStatsData {
   screen: { w: number; h: number };
@@ -129,11 +130,8 @@ export default function VideoStatsPanel({
     <div className="pointer-events-auto absolute left-2 top-2 z-40 w-72 rounded bg-black/70 p-2 text-xs text-white">
       <div className="flex items-center justify-between">
         <div className="font-medium">Debug Info:</div>
-        <button
-          className="text-white/60 hover:text-white"
-          onClick={onClose}
-        >
-          ✕
+        <button className="text-white/60 hover:text-white" onClick={onClose}>
+          <X className="size-4" />
         </button>
       </div>
 
