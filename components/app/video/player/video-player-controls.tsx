@@ -109,7 +109,7 @@ export function VideoPlayerControls({
           </div>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button
             size="icon"
             variant="ghost"
@@ -119,7 +119,6 @@ export function VideoPlayerControls({
           >
             <RectangleHorizontal />
           </Button>
-        <div className="flex items-center gap-2">
           {onToggleSettings ? (
             <Button
               data-settings-button
