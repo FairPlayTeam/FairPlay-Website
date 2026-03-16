@@ -105,9 +105,12 @@ export default function VideoSettingsPanel({
           >
             <div className="text-xs tracking-wide text-white/70">Settings</div>
 
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               onClick={() => setAmbilight(!ambilight)}
-              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
+              onKeyDown={(e) => e.key === "Enter" && setAmbilight(!ambilight)}
+              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
             >
               <span className="text-sm">Ambient Light</span>
               <Switch
@@ -116,20 +119,26 @@ export default function VideoSettingsPanel({
                 size="sm"
                 className="ml-2"
               />
-            </button>
+            </div>
 
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               onClick={() => setActiveSetting("speed")}
-              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
+              onKeyDown={(e) => e.key === "Enter" && setActiveSetting("speed")}
+              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
             >
               <span className="text-sm">Speed</span>
               <span className="text-xs text-white/70">{playbackRate.toFixed(2)}x</span>
-            </button>
+            </div>
 
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               ref={resolutionSelectRef}
               onClick={() => setActiveSetting("quality")}
-              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10"
+              onKeyDown={(e) => e.key === "Enter" && setActiveSetting("quality")}
+              className="flex items-center justify-between w-full px-2 py-2 rounded hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
             >
               <span className="text-sm">Quality</span>
               <span className="text-xs text-white/70">
@@ -139,7 +148,7 @@ export default function VideoSettingsPanel({
                   ? `${availableLevels[selectedLevel].height}p`
                   : `${Math.round((availableLevels[selectedLevel]?.bitrate ?? 0) / 1000)}kbps`}
               </span>
-            </button>
+            </div>
           </motion.div>
         ) : (
           <motion.div

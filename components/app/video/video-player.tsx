@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   FaRedo,
   FaWindowRestore,
-  FaTv,
   FaShareAlt,
   FaChartLine,
 } from "react-icons/fa";
@@ -306,45 +305,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
         await video.requestPictureInPicture();
       } catch {
         // ignore
-      }
-    }
-    closeContextMenu();
-  }, [closeContextMenu]);
-
-  const handleCast = useCallback(async () => {
-    type CastWindow = Window & {
-      chrome?: {
-        cast?: {
-          framework: {
-            CastContext: { getInstance: () => { requestSession: () => void } };
-          };
-        };
-      };
-    };
-
-    const win = window as CastWindow;
-    const castContext = win.chrome?.cast?.framework.CastContext;
-    if (castContext) {
-      try {
-        const context = castContext.getInstance();
-        context.requestSession();
-      } catch {
-        // ignore
-      }
-    } else {
-      type PresentationNavigator = Navigator & {
-        presentation?: { requestSession: (url: string) => Promise<void> };
-      };
-
-      const nav = navigator as PresentationNavigator;
-      if (nav.presentation?.requestSession) {
-        try {
-          await nav.presentation.requestSession(window.location.href);
-        } catch {
-          // ignore
-        }
-      } else {
-        alert("Casting is not supported in this browser.");
       }
     }
     closeContextMenu();
@@ -785,13 +745,6 @@ export function VideoPlayer({ url, thumbnailUrl }: VideoPlayerProps) {
               >
                 <FaWindowRestore className="size-4" />
                 Picture-in-Picture
-              </button>
-              <button
-                onClick={handleCast}
-                className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10"
-              >
-                <FaTv className="size-4" />
-                Cast
               </button>
               <button
                 onClick={handleShare}
