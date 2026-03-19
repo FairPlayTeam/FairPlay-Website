@@ -120,10 +120,7 @@ export function VideoCard({
                     onClick={(e) => e.stopPropagation()}
                     className="group"
                   >
-                    <Badge
-                      variant="outline"
-                      className="py-2.5 cursor-pointer bg-secondary hover:bg-input"
-                    >
+                    <Badge className="py-2.5 cursor-pointer text-foreground bg-secondary group-hover:border group-hover:border-border hover:bg-input">
                       {tag.toLowerCase()}
                     </Badge>
                   </Link>

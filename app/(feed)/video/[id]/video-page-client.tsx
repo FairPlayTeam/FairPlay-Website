@@ -148,7 +148,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   return (
     <div
       className={cn(
-        "lg:pt-2 transition-[padding] duration-300 ease-out",
+        "lg:pt-2",
         isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
       )}
     >
