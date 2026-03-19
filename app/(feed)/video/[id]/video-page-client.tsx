@@ -150,7 +150,6 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
       className={cn(
         "lg:pt-2 transition-[padding] duration-300 ease-out",
         isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
-        isTheatreMode && "overflow-x-hidden",
       )}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-3">
