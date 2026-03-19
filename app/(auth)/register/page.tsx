@@ -48,7 +48,7 @@ const registerFormSchema = z
       .trim()
       .email("Invalid email")
       .transform((value) => value.toLowerCase()),
-    username: z.string().trim().min(3, "Username is too short"),
+    username: z.string().trim().min(3, "Username is too short").toLowerCase(),
     password: passwordSchema,
     confirmPassword: z.string().min(1, "Password is required"),
   })
@@ -167,7 +167,12 @@ export default function RegisterPage() {
         type="text"
         placeholder="your_username"
         autoComplete="username"
-        registration={form.register("username", { onChange: clearError })}
+        registration={form.register("username", {
+          onChange: (e) => {
+            e.target.value = e.target.value.toLowerCase();
+            clearError();
+          },
+        })}
         error={form.formState.errors.username?.message}
       />
 
