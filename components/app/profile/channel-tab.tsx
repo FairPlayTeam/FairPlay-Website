@@ -182,8 +182,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
 
             <Button
               type="submit"
-              variant="secondary"
-              className="rounded-md block ml-auto"
+              className="block ml-auto"
               disabled={form.formState.isSubmitting}
               aria-busy={form.formState.isSubmitting}
             >
