@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import UserAvatar from "@/components/ui/user-avatar";
 import { useAuth } from "@/context/auth-context";
 import { buildAuthHref } from "@/lib/safe-redirect";
-import { ThumbsUp, Reply, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ThumbsUp, Reply, Trash2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import {
   addComment,
@@ -268,13 +269,19 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
         )}
 
         {(localComment._count?.replies || 0) > 0 && (
-          <div className="mt-2">
+          <div className="mt-1">
             <Button
               size="sm"
               variant="ghost"
               onClick={fetchReplies}
-              className="text-xs hover:bg-accent"
+              className="text-xs hover:bg-accent flex items-center gap-1"
             >
+              <ChevronDown
+                className={cn(
+                  "size-4 transition-transform duration-300",
+                  showReplies && "rotate-180"
+                )}
+              />
               {showReplies ? "Hide" : `View ${localComment._count?.replies}`}{" "}
               {localComment._count?.replies === 1 ? "Reply" : "Replies"}
             </Button>

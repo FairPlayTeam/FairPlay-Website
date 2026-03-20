@@ -36,6 +36,7 @@ function SearchBar({
         placeholder="Search..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && onSearch()}
         className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full pl-4 pr-10 border-input focus-visible:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors")}
       />
 
