@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { followUser, unfollowUser } from "@/lib/users";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBell } from "react-icons/fa";
+import { Bell } from 'lucide-react'
 
 type FollowButtonProps = {
   readonly username: string;
@@ -51,15 +51,16 @@ export function FollowButton({
       type="button"
       layout
       whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.02 }}
       onClick={onClick}
       disabled={acting}
       className={cn(
         "relative flex items-center justify-center gap-2",
         acting ? "cursor-not-allowed" : "cursor-pointer",
-        "text-[15px] px-4 py-2 sm:px-6 sm:py-2.5",
+        "text-sm px-4 py-2 sm:px-6 sm:py-2.5",
         "rounded-full transition-colors duration-200",
-        following ? "bg-(--gray-500)" : "bg-white"
+        following
+          ? "bg-secondary text-foreground"
+          : "bg-foreground text-background border border-border"
       )}
     >
       <AnimatePresence mode="popLayout">
@@ -76,7 +77,7 @@ export function FollowButton({
               animate={{ rotate: [0, -20, 20, -15, 15, -10, 10, 0] }}
               transition={{ duration: 0.9, ease: "easeInOut", delay: 0.1 }}
             >
-              <FaBell className="text-text" />
+              <Bell className="size-4" />
             </motion.div>
           </motion.div>
         )}
@@ -84,7 +85,7 @@ export function FollowButton({
 
       <motion.span
         layout="position"
-        className={cn(following ? "text-text" : "text-black", "font-semibold z-10")}
+        className="font-semibold z-10"
       >
         {following ? "Subscribed" : "Subscribe"}
       </motion.span>
