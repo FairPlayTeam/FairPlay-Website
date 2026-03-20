@@ -639,7 +639,7 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
       layout
       transition={{ type: "spring", bounce: 0, duration: 0.3 }}
       className={cn(
-        "relative isolate max-w-full",
+        "relative z-0 max-w-full overflow-visible",
         isTheatreMode && "lg:mx-auto lg:w-full lg:max-w-[calc(80vh*16/9)]",
       )}
     >

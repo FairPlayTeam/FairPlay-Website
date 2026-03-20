@@ -148,15 +148,15 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
   return (
     <div
       className={cn(
-        "lg:pt-2",
+        "relative isolate lg:pt-2",
         isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
       )}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-[auto_1fr] gap-3">
+      <div className="relative z-10 grid grid-cols-1 gap-3 lg:grid-cols-3 lg:grid-rows-[auto_1fr]">
         <motion.div
           layout
           transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-          className={cn(isTheatreMode ? "lg:col-span-3" : "lg:col-span-2")}
+          className={cn("relative z-0", isTheatreMode ? "lg:col-span-3" : "lg:col-span-2")}
         >
           <VideoPlayer
             url={video.hls.master || ""}
@@ -170,7 +170,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
           layout="position"
           transition={{ type: "spring", bounce: 0, duration: 0.3 }}
           className={cn(
-            "hidden lg:block",
+            "relative z-10 hidden lg:block",
             isTheatreMode 
               ? "lg:col-start-3 lg:row-start-2" 
               : "lg:col-start-3 lg:row-span-2 lg:row-start-1"
@@ -187,7 +187,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
         <motion.div
           layout="position"
           transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-          className="lg:col-span-2 px-4 lg:px-0"
+          className="relative z-10 px-4 lg:col-span-2 lg:px-0"
         >
           <VideoInfo video={video} />
           <Comments
@@ -200,7 +200,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
         <motion.div
           layout="position"
           transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-          className="lg:hidden px-4"
+          className="relative z-10 px-4 lg:hidden"
         >
           <RelatedVideos
             videos={relatedVideos}
