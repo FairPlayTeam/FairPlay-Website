@@ -30,14 +30,13 @@ function SearchBar({
   onSearch: () => void;
 }) {
   return (
-    <div className="flex flex-1 items-center overflow-hidden rounded-full">
+    <div className="relative flex flex-1 items-center">
       <Input
         type="search"
         placeholder="Search..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && onSearch()}
-        className={cn(TOPBAR_ITEM_HEIGHT, "rounded-l-full rounded-r-none border-r-0 px-4")}
+        className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full pl-4 pr-10 border-input focus-visible:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors")}
       />
 
       <Button
@@ -45,10 +44,7 @@ function SearchBar({
         size="icon"
         onClick={onSearch}
         aria-label="Search"
-        className={cn(
-          TOPBAR_ITEM_HEIGHT,
-          "w-9 shrink-0 rounded-l-none rounded-r-full border border-l-0 border-input bg-muted hover:bg-accent text-muted-foreground",
-        )}
+        className="absolute right-0 size-8 rounded-full bg-transparent hover:bg-accent/50 text-muted-foreground"
       >
         <Search className="size-4" />
       </Button>
@@ -124,7 +120,6 @@ export default function AppTopbar() {
         </div>
       ) : (
         <>
-          {/* Left */}
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -149,7 +144,6 @@ export default function AppTopbar() {
             <SearchBar value={searchTerm} onChange={setSearchTerm} onSearch={handleSearch} />
           </div>
 
-          {/* Right */}
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
