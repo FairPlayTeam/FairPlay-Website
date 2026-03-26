@@ -1,14 +1,14 @@
 import { useAuthStore } from "@/lib/stores/auth";
 
-export function getToken(): string | null {
+export function getSessionToken(): string | null {
   return useAuthStore.getState().token;
 }
 
-export function setToken(token: string): void {
+export function setSessionToken(token: string): void {
   const normalizedToken = token.trim();
   useAuthStore.getState().setToken(normalizedToken.length > 0 ? normalizedToken : null);
 }
 
-export function clearToken(): void {
+export function clearSessionToken(): void {
   useAuthStore.getState().clearToken();
 }

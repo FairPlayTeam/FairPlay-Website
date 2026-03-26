@@ -1,53 +1,33 @@
-﻿"use client";
+"use client";
 
-import { useCallback, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { AuthPageShell } from "@/components/app/auth/auth-page-shell";
 import { AuthPasswordField } from "@/components/app/auth/auth-password-field";
 import { AuthTextField } from "@/components/app/auth/auth-text-field";
-import { useAuth } from "@/context/auth-context";
+import { login } from "@/lib/auth/api";
+import { loginFormSchema, type LoginFormValues } from "@/lib/auth/forms";
+import { setSessionToken } from "@/lib/auth/session";
+import { useRedirectAuthenticatedUser } from "@/hooks/use-redirect-authenticated-user";
 import { useAuthSubmit } from "@/hooks/use-auth-submit";
-import { api } from "@/lib/api";
 import { buildAuthHref, getSafeCallbackUrl } from "@/lib/safe-redirect";
-import { setToken } from "@/lib/token";
-
-const loginFormSchema = z.object({
-  identifier: z
-    .string()
-    .trim()
-    .min(1, "Email or username is required")
-    .transform((value) => (value.includes("@") ? value.toLowerCase() : value)),
-  password: z.string().min(1, "Password is required"),
-});
-
-type LoginFormValues = z.infer<typeof loginFormSchema>;
-
-const LOGIN_FORM_ID = "login-form";
-const LOGIN_FORM_ERROR_ID = "login-form-error";
 
 export default function LoginPage() {
   const router = useRouter();
   const params = useSearchParams();
   const callbackUrl = getSafeCallbackUrl(params.get("callbackUrl"));
-  const { user, isLoading, refetchUser } = useAuth();
-
-  useEffect(() => {
-    if (!isLoading && user) {
-      router.replace(callbackUrl);
-    }
-  }, [callbackUrl, isLoading, router, user]);
+  const { refetchUser } = useRedirectAuthenticatedUser(callbackUrl);
 
   const submitLogin = useCallback(
     async (values: LoginFormValues) => {
-      const response = await api.post("/auth/login", {
+      const response = await login({
         emailOrUsername: values.identifier,
         password: values.password,
       });
 
-      setToken(response.data.sessionKey);
+      setSessionToken(response.data.sessionKey);
       await refetchUser();
       router.replace(callbackUrl);
     },
@@ -59,24 +39,29 @@ export default function LoginPage() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     shouldFocusError: true,
-    defaultValues: {
-      identifier: "",
-      password: "",
-    },
+    defaultValues: { identifier: "", password: "" },
   });
+
+  const identifierValue = useWatch({
+    control: form.control,
+    name: "identifier",
+    defaultValue: "",
+  });
+  const isUnverifiedError = error?.includes("Please verify your email address before logging in.");
+  const emailForResend = identifierValue.includes("@") ? identifierValue : undefined;
 
   return (
     <AuthPageShell
       title="Login"
       switchHref={buildAuthHref("/register", callbackUrl)}
       switchLabel="Sign Up"
-      formId={LOGIN_FORM_ID}
+      formId="login-form"
       onSubmit={form.handleSubmit(onSubmit)}
       submitLabel="Login"
       submitPendingLabel="Signing in..."
       isSubmitting={isSubmitting}
-      error={error}
-      errorId={LOGIN_FORM_ERROR_ID}
+      error={isUnverifiedError ? null : error}
+      errorId="login-form-error"
     >
       <AuthTextField
         id="identifier"
@@ -88,7 +73,6 @@ export default function LoginPage() {
         registration={form.register("identifier", { onChange: clearError })}
         error={form.formState.errors.identifier?.message}
       />
-
       <AuthPasswordField
         id="password"
         label="Password"
@@ -97,6 +81,22 @@ export default function LoginPage() {
         registration={form.register("password", { onChange: clearError })}
         error={form.formState.errors.password?.message}
       />
+
+      {isUnverifiedError && (
+        <p className="text-sm text-destructive">
+          Your email address has not been verified.{" "}
+          <a
+            href={
+              emailForResend
+                ? `/register/verify?email=${encodeURIComponent(emailForResend)}`
+                : "/register/verify"
+            }
+            className="underline underline-offset-2"
+          >
+            Resend verification email
+          </a>
+        </p>
+      )}
     </AuthPageShell>
   );
 }

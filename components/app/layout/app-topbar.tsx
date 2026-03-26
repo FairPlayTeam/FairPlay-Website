@@ -1,22 +1,17 @@
-﻿"use client";
+"use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft, Menu, Search } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
-
 import { cn } from "@/lib/utils";
-import { clearToken } from "@/lib/token";
-import { logoutCurrentSession } from "@/lib/users";
-
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import UserAvatar from "@/components/ui/user-avatar";
-
 import { useAuth } from "@/context/auth-context";
 import { useSidebar } from "@/context/sidebar-context";
+import { useLogout } from "@/hooks/use-logout";
 
 const TOPBAR_ITEM_HEIGHT = "h-8";
 
@@ -35,9 +30,12 @@ function SearchBar({
         type="search"
         placeholder="Search..."
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-        className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full pl-4 pr-10 border-input focus-visible:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors")}
+        onChange={(event) => onChange(event.target.value)}
+        onKeyDown={(event) => event.key === "Enter" && onSearch()}
+        className={cn(
+          TOPBAR_ITEM_HEIGHT,
+          "rounded-full border-input pl-4 pr-10 transition-colors focus-visible:border-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+        )}
       />
 
       <Button
@@ -45,7 +43,7 @@ function SearchBar({
         size="icon"
         onClick={onSearch}
         aria-label="Search"
-        className="absolute right-0 size-8 rounded-full bg-transparent hover:bg-accent/50 text-muted-foreground"
+        className="absolute right-0 size-8 rounded-full bg-transparent text-muted-foreground hover:bg-accent/50"
       >
         <Search className="size-4" />
       </Button>
@@ -56,15 +54,13 @@ function SearchBar({
 export default function AppTopbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const queryClient = useQueryClient();
-
   const { toggle, close } = useSidebar();
   const { user, isReady } = useAuth();
+  const { logout, isLoggingOut } = useLogout({ onLoggedOut: close });
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const isVideoWatchPage = pathname?.startsWith("/video/") ?? false;
 
   useEffect(() => {
@@ -77,32 +73,24 @@ export default function AppTopbar() {
 
   const handleSearch = useCallback(() => {
     const q = searchTerm.trim();
-    if (!q) return;
+
+    if (!q) {
+      return;
+    }
 
     router.push(`/search?q=${encodeURIComponent(q)}`);
     setIsSearchOpen(false);
   }, [router, searchTerm]);
 
   const handleLogout = useCallback(async () => {
-    if (isLoggingOut) return;
-
-    setIsLoggingOut(true);
-    try {
-      await logoutCurrentSession();
-    } finally {
-      clearToken();
-      queryClient.setQueryData(["me"], null);
-      close();
-      router.replace("/login");
-      setIsLoggingOut(false);
-    }
-  }, [close, isLoggingOut, queryClient, router]);
+    await logout();
+  }, [logout]);
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 flex h-15 items-center justify-between px-4 transition-colors duration-300",
-        isScrolled ? "bg-background/90 backdrop-blur-lg shadow-sm" : "bg-transparent",
+        isScrolled ? "bg-background/90 shadow-sm backdrop-blur-lg" : "bg-transparent",
       )}
     >
       {isSearchOpen ? (
@@ -141,7 +129,7 @@ export default function AppTopbar() {
             </Link>
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 hidden w-full max-w-md items-center sm:flex">
+          <div className="absolute left-1/2 hidden w-full max-w-md -translate-x-1/2 items-center sm:flex">
             <SearchBar value={searchTerm} onChange={setSearchTerm} onSearch={handleSearch} />
           </div>
 
@@ -163,7 +151,7 @@ export default function AppTopbar() {
             <Button
               asChild
               variant="secondary"
-              className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full px-4 hidden md:inline-flex")}
+              className={cn(TOPBAR_ITEM_HEIGHT, "hidden rounded-full px-4 md:inline-flex")}
             >
               <Link href="https://ko-fi.com/fairplay_" target="_blank" rel="noopener noreferrer">
                 Donate
@@ -174,7 +162,7 @@ export default function AppTopbar() {
               <div className="flex items-center gap-3">
                 <Button
                   variant="destructive"
-                  className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full px-4 hidden lg:inline-flex")}
+                  className={cn(TOPBAR_ITEM_HEIGHT, "hidden rounded-full px-4 lg:inline-flex")}
                   onClick={handleLogout}
                   disabled={isLoggingOut}
                 >
@@ -195,7 +183,7 @@ export default function AppTopbar() {
             ) : null}
 
             {isReady && !user ? (
-              <div className="hidden lg:flex gap-2">
+              <div className="hidden gap-2 lg:flex">
                 <Separator orientation="vertical" />
                 <Button
                   variant="secondary"
@@ -209,7 +197,7 @@ export default function AppTopbar() {
                   variant="secondary"
                   className={cn(
                     TOPBAR_ITEM_HEIGHT,
-                    "rounded-full px-4 bg-foreground text-background hover:bg-foreground-muted hover:text-background-muted",
+                    "rounded-full bg-foreground px-4 text-background hover:bg-foreground-muted hover:text-background-muted",
                   )}
                   onClick={() => router.push("/register")}
                 >

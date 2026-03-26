@@ -1,28 +1,25 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Bell,
+  BookOpen,
   Compass,
   Gamepad2,
-  BookOpen,
-  Upload,
+  Menu,
   Shield,
   ShieldCheck,
-  Menu,
   TrendingUp,
+  Upload,
 } from "lucide-react";
-import { SiDiscord, SiMatrix, SiKofi } from "react-icons/si";
+import { SiDiscord, SiKofi, SiMatrix } from "react-icons/si";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/context/sidebar-context";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
-import { useQueryClient } from "@tanstack/react-query";
-import { clearToken } from "@/lib/token";
-import { logoutCurrentSession } from "@/lib/users";
-import { useState } from "react";
+import { useLogout } from "@/hooks/use-logout";
 
 const mainLinks = [
   { icon: Compass, label: "Explore", href: "/explore" },
@@ -39,28 +36,15 @@ const categories = [
 ];
 
 export default function AppSidebar() {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { isOpen, close, toggle } = useSidebar();
-  const queryClient = useQueryClient();
   const { user, isReady } = useAuth();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { logout, isLoggingOut } = useLogout({ onLoggedOut: close });
   const isVideoWatchPage = pathname?.startsWith("/video/") ?? false;
 
   const handleLogout = async () => {
-    if (isLoggingOut) return;
-
-    setIsLoggingOut(true);
-    try {
-      await logoutCurrentSession();
-    } finally {
-      clearToken();
-      queryClient.setQueryData(["me"], null);
-      close();
-      router.replace("/login");
-      setIsLoggingOut(false);
-    }
+    await logout();
   };
 
   return (
@@ -68,7 +52,7 @@ export default function AppSidebar() {
       {isOpen && (
         <div
           className={cn(
-            "fixed inset-0 z-50 bg-background/50 cursor-pointer",
+            "fixed inset-0 z-50 cursor-pointer bg-background/50",
             !isVideoWatchPage && "lg:hidden",
           )}
           onClick={close}
@@ -78,7 +62,7 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          "fixed left-0 top-0 bottom-0 z-50 w-60 flex flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-3 py-4 transition-transform duration-300",
+          "fixed left-0 top-0 bottom-0 z-50 flex w-60 flex-col overflow-y-auto bg-background/95 px-3 py-4 backdrop-blur-md transition-transform duration-300",
           !isVideoWatchPage && "lg:translate-x-0 lg:top-16 lg:bg-transparent lg:backdrop-blur-none",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
@@ -86,7 +70,7 @@ export default function AppSidebar() {
         <div
           className={cn(
             "flex flex-1 flex-col gap-4 transition-opacity duration-200",
-            isReady ? "opacity-100" : "opacity-0 pointer-events-none",
+            isReady ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         >
           <div className={cn("mb-4 flex items-center gap-4", !isVideoWatchPage && "lg:hidden")}>
@@ -150,6 +134,7 @@ export default function AppSidebar() {
               const linkQuery = new URLSearchParams(link.href.split("?")[1] ?? "").get("q");
               const currentQuery = searchParams.get("q");
               const isActive = pathname === "/search" && currentQuery === linkQuery;
+
               return (
                 <Link
                   key={link.href}
@@ -169,14 +154,14 @@ export default function AppSidebar() {
             })}
           </div>
 
-          <div className="flex flex-col gap-4 mt-auto pt-4">
+          <div className="mt-auto flex flex-col gap-4 pt-4">
             {isReady && !!user && (
               <Button
                 type="button"
                 variant="destructive"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="lg:hidden flex w-full items-center gap-4 rounded-lg px-3 py-2 text-sm font-medium"
+                className="flex w-full items-center gap-4 rounded-lg px-3 py-2 text-sm font-medium lg:hidden"
               >
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </Button>

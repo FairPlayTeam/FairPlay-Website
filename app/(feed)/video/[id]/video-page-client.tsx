@@ -51,7 +51,10 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
     close();
   }, [close]);
 
-  const toggleTheatreMode = useCallback(() => setTheatreMode(!isTheatreMode), [isTheatreMode, setTheatreMode]);
+  const toggleTheatreMode = useCallback(
+    () => setTheatreMode(!isTheatreMode),
+    [isTheatreMode, setTheatreMode],
+  );
 
   useEffect(() => {
     if (!videoId) return;
@@ -147,10 +150,7 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
 
   return (
     <div
-      className={cn(
-        "relative isolate lg:pt-2",
-        isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16",
-      )}
+      className={cn("relative isolate lg:pt-2", isTheatreMode ? "lg:px-6 xl:px-10" : "lg:px-16")}
     >
       <div className="relative z-10 grid grid-cols-1 gap-3 lg:grid-cols-3 lg:grid-rows-[auto_1fr]">
         <motion.div
@@ -165,15 +165,15 @@ export default function VideoPageClient({ videoId }: { videoId: string }) {
             onToggleTheatreMode={toggleTheatreMode}
           />
         </motion.div>
-        
+
         <motion.div
           layout="position"
           transition={{ type: "spring", bounce: 0, duration: 0.3 }}
           className={cn(
             "relative z-10 hidden lg:block",
-            isTheatreMode 
-              ? "lg:col-start-3 lg:row-start-2" 
-              : "lg:col-start-3 lg:row-span-2 lg:row-start-1"
+            isTheatreMode
+              ? "lg:col-start-3 lg:row-start-2"
+              : "lg:col-start-3 lg:row-span-2 lg:row-start-1",
           )}
         >
           <RelatedVideos

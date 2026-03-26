@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { followUser, unfollowUser } from "@/lib/users";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell } from 'lucide-react'
+import { Bell } from "lucide-react";
 
 type FollowButtonProps = {
   readonly username: string;
@@ -60,7 +60,7 @@ export function FollowButton({
         "rounded-full transition-colors duration-200",
         following
           ? "bg-secondary text-foreground"
-          : "bg-foreground text-background border border-border"
+          : "bg-foreground text-background border border-border",
       )}
     >
       <AnimatePresence mode="popLayout">
@@ -83,10 +83,7 @@ export function FollowButton({
         )}
       </AnimatePresence>
 
-      <motion.span
-        layout="position"
-        className="font-semibold z-10"
-      >
+      <motion.span layout="position" className="font-semibold z-10">
         {following ? "Subscribed" : "Subscribe"}
       </motion.span>
     </motion.button>

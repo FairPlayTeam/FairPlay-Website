@@ -21,9 +21,15 @@ async function fetchVideosPage(apiBase: string, page: number): Promise<VideosRes
     page: String(page),
     limit: String(VIDEO_PAGE_SIZE),
   }).toString();
-  const res = await fetch(`${apiBase}/videos?${qs}`, {
-    next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
-  });
+  let res: Response;
+
+  try {
+    res = await fetch(`${apiBase}/videos?${qs}`, {
+      next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
+    });
+  } catch {
+    return null;
+  }
 
   if (!res.ok) {
     return null;

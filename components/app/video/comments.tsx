@@ -279,7 +279,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
               <ChevronDown
                 className={cn(
                   "size-4 transition-transform duration-300",
-                  showReplies && "rotate-180"
+                  showReplies && "rotate-180",
                 )}
               />
               {showReplies ? "Hide" : `View ${localComment._count?.replies}`}{" "}

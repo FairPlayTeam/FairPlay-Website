@@ -8,7 +8,7 @@ import { FaRedo, FaWindowRestore, FaShareAlt, FaChartLine } from "react-icons/fa
 import { Spinner } from "@/components/ui/spinner";
 import VideoStatsPanel from "@/components/app/video/player/video-stats-panel";
 import VideoSettingsPanel from "@/components/app/video/player/video-settings-panel";
-import { getToken } from "@/lib/token";
+import { getSessionToken } from "@/lib/auth/session";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -21,14 +21,19 @@ type VideoPlayerProps = {
   thumbnailUrl: string | null;
   isTheatreMode?: boolean;
   onToggleTheatreMode?: () => void;
-}
+};
 
 type OverlayAnimation = "play" | "pause" | "mute" | "unmute" | null;
 
 const FPS = 30;
 const CONTROLS_HIDE_DELAY_MS = 2500;
 
-export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggleTheatreMode }: VideoPlayerProps) {
+export function VideoPlayer({
+  url,
+  thumbnailUrl,
+  isTheatreMode = false,
+  onToggleTheatreMode,
+}: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLCanvasElement>(null);
@@ -493,7 +498,7 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
     };
 
     if (Hls.isSupported()) {
-      const token = getToken();
+      const token = getSessionToken();
       const hls = new Hls({
         xhrSetup: (xhr) => {
           xhr.withCredentials = true;
@@ -771,7 +776,7 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
                   <FaRedo className="size-4" />
                   Loop
                 </span>
-                <span className="text-xs text-white/60">{loop ? '✓' : ''}</span>
+                <span className="text-xs text-white/60">{loop ? "✓" : ""}</span>
               </button>
               <button
                 type="button"
@@ -800,8 +805,8 @@ export function VideoPlayer({ url, thumbnailUrl, isTheatreMode = false, onToggle
               <button
                 type="button"
                 onClick={() => {
-                  setStatsVisible((visible) => !visible)
-                  closeContextMenu()
+                  setStatsVisible((visible) => !visible);
+                  closeContextMenu();
                 }}
                 className="w-full px-3 py-2 flex items-center gap-2 text-left text-sm hover:bg-white/10 border-t border-white/10 mt-1 pt-2"
               >

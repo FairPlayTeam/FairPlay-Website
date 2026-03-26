@@ -3,8 +3,10 @@
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { getCurrentUser } from "@/lib/auth/api";
+import { authQueryKeys } from "@/lib/auth/query";
+import { clearSessionToken } from "@/lib/auth/session";
 import { User } from "@/lib/users";
-import { api } from "@/lib/api";
 import { useAuthStore } from "@/lib/stores/auth";
 
 interface AuthContextType {
@@ -24,21 +26,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     refetch,
   } = useQuery<User | null>({
-    queryKey: ["me"],
+    queryKey: authQueryKeys.currentUser,
     queryFn: async () => {
       try {
-        const res = await api.get<User>("/auth/me");
+        const res = await getCurrentUser();
         return res.data;
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 401) {
-          useAuthStore.getState().clearToken();
+          clearSessionToken();
           return null;
         }
+
         throw error;
       }
     },
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnReconnect: true,
     enabled: hasHydrated,
     retry: false,
   });
@@ -64,6 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+
+  if (!ctx) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
   return ctx;
 }

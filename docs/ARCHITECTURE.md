@@ -109,6 +109,7 @@ Protected pages perform client-side guard checks:
 
 API modules are separated by domain:
 
+- `lib/auth/`
 - `lib/users.ts`
 - `lib/videos.ts`
 - `lib/comments.ts`
@@ -142,8 +143,10 @@ This balances performance, SEO metadata quality, and interactive behavior.
 
 ### 9.1 Auth
 
+- Auth API calls, form schemas, query keys, and session helpers live in `lib/auth/`
 - Login/register forms with Zod validation
 - Shared auth page shell and reusable auth field components
+- Redirect/logout flows are encapsulated in dedicated auth hooks
 - Error handling through `useAuthSubmit`
 
 ### 9.2 Explore and Search
