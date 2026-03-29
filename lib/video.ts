@@ -35,9 +35,33 @@ export type Pagination = {
 };
 
 export type SearchVideosResponse = {
+  results: SearchResultItem[];
   videos: VideoDetails[];
-  pagination: Pagination;
+  creators: SearchCreator[];
+  pagination: SearchPagination;
   query: { q: string };
+};
+
+export type SearchCreator = BaseUser & {
+  followerCount: number;
+  videoCount: number;
+  createdAt: string;
+};
+
+export type SearchResultItem =
+  | {
+      type: "video";
+      video: VideoDetails;
+    }
+  | {
+      type: "creator";
+      creator: SearchCreator;
+    };
+
+export type SearchPagination = {
+  videos: Pagination;
+  creators: Pagination;
+  results: Pagination;
 };
 
 export type VideosResponse = {

@@ -1,34 +1,37 @@
-﻿"use client";
+"use client";
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { searchVideos, VideoDetails } from "@/lib/video";
-import { VideoCard } from "@/components/app/video/video-card";
-import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { SearchResultsList } from "@/components/app/search/search-results-list";
+import { Spinner } from "@/components/ui/spinner";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
-
-// Constants
+import { searchVideos, type SearchResultItem, type SearchVideosResponse } from "@/lib/video";
 
 const PAGE_SIZE = 10;
-
-// Helpers
 
 function resolveHasMore(itemsCount: number, pageLoaded: number, totalPages?: number): boolean {
   if (typeof totalPages === "number") {
     return pageLoaded < totalPages && itemsCount > 0;
   }
+
   return itemsCount === PAGE_SIZE;
 }
 
-function mergeUniqueById(prev: VideoDetails[], next: VideoDetails[]) {
+function getResultKey(result: SearchResultItem): string {
+  return result.type === "video" ? `video:${result.video.id}` : `creator:${result.creator.id}`;
+}
+
+function mergeUniqueResults(prev: SearchResultItem[], next: SearchResultItem[]) {
   if (next.length === 0) return prev;
-  const seen = new Set(prev.map((item) => item.id));
+
+  const seen = new Set(prev.map(getResultKey));
   const merged = [...prev];
 
   for (const item of next) {
-    if (!seen.has(item.id)) {
-      seen.add(item.id);
+    const key = getResultKey(item);
+    if (!seen.has(key)) {
+      seen.add(key);
       merged.push(item);
     }
   }
@@ -36,12 +39,21 @@ function mergeUniqueById(prev: VideoDetails[], next: VideoDetails[]) {
   return merged;
 }
 
-// Reducer
+function normalizeResults(data: SearchVideosResponse): SearchResultItem[] {
+  if (Array.isArray(data.results) && data.results.length > 0) {
+    return data.results;
+  }
+
+  return (data.videos ?? []).map((video) => ({
+    type: "video" as const,
+    video,
+  }));
+}
 
 type Status = "idle" | "loading" | "loadingMore" | "ready" | "error";
 
 interface SearchState {
-  results: VideoDetails[];
+  results: SearchResultItem[];
   status: Status;
   errorMessage: string | null;
   page: number;
@@ -53,7 +65,7 @@ type SearchAction =
   | {
       type: "FETCH_SUCCESS";
       mode: "initial" | "more";
-      videos: VideoDetails[];
+      results: SearchResultItem[];
       page: number;
       hasMore: boolean;
     }
@@ -81,7 +93,9 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
         ...state,
         status: "ready",
         results:
-          action.mode === "initial" ? action.videos : mergeUniqueById(state.results, action.videos),
+          action.mode === "initial"
+            ? action.results
+            : mergeUniqueResults(state.results, action.results),
         page: action.page,
         hasMore: action.hasMore,
         errorMessage: null,
@@ -95,6 +109,7 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
           errorMessage: null,
         };
       }
+
       return {
         ...state,
         status: "error",
@@ -108,8 +123,6 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
       return state;
   }
 }
-
-// Component
 
 export default function SearchClient() {
   const searchParams = useSearchParams();
@@ -135,15 +148,15 @@ export default function SearchClient() {
 
         if (queryRef.current !== query) return;
 
-        const videos = res.data.videos ?? [];
-        const totalPages = res.data.pagination?.totalPages;
+        const nextResults = normalizeResults(res.data);
+        const totalPages = res.data.pagination?.results?.totalPages;
 
         dispatch({
           type: "FETCH_SUCCESS",
           mode,
-          videos,
+          results: nextResults,
           page: pageToLoad,
-          hasMore: resolveHasMore(videos.length, pageToLoad, totalPages),
+          hasMore: resolveHasMore(nextResults.length, pageToLoad, totalPages),
         });
       } catch (err: unknown) {
         if (queryRef.current !== query) return;
@@ -153,7 +166,6 @@ export default function SearchClient() {
           (err instanceof Error ? err.message : "Error while searching.");
 
         dispatch({ type: "FETCH_ERROR", mode, message });
-
         toast.error("Search failed");
       }
     },
@@ -165,13 +177,14 @@ export default function SearchClient() {
       dispatch({ type: "RESET" });
       return;
     }
+
     fetchResults(1, "initial");
   }, [fetchResults, normalizedQuery]);
 
   const loadMore = useCallback(() => {
     if (status === "loading" || status === "loadingMore" || !hasMore) return;
     fetchResults(page + 1, "more");
-  }, [fetchResults, hasMore, status, page]);
+  }, [fetchResults, hasMore, page, status]);
 
   const sentinelRef = useInfiniteScroll({
     hasMore,
@@ -184,8 +197,8 @@ export default function SearchClient() {
   const isEmpty = status === "ready" && results.length === 0;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="mx-auto max-w-4xl p-4">
+      <h1 className="mb-4 text-2xl font-bold">
         {normalizedQuery ? `Results for "${normalizedQuery}"` : "Search"}
       </h1>
 
@@ -196,13 +209,13 @@ export default function SearchClient() {
       </div>
 
       {isLoading && (
-        <div className="h-[calc(100vh-5rem)] w-full grid place-items-center">
+        <div className="grid h-[calc(100vh-5rem)] w-full place-items-center">
           <Spinner className="size-18" />
         </div>
       )}
 
       {!isLoading && !normalizedQuery && (
-        <p className="text-muted-foreground">Enter a search term to find videos.</p>
+        <p className="text-muted-foreground">Enter a search term to find videos and creators.</p>
       )}
 
       {status === "error" && errorMessage && <p className="text-destructive">{errorMessage}</p>}
@@ -211,26 +224,12 @@ export default function SearchClient() {
         <p className="text-muted-foreground">No results found for &quot;{normalizedQuery}&quot;.</p>
       )}
 
-      {!isLoading && results.length > 0 && (
-        <div className="flex flex-col gap-1">
-          {results.map((video) => (
-            <VideoCard
-              key={video.id}
-              thumbnailUrl={video.thumbnailUrl}
-              title={video.title}
-              displayName={video.user?.displayName || video.user?.username}
-              meta={`${video.viewCount} views - ${new Date(video.createdAt).toLocaleDateString()}`}
-              href={`/video/${video.id}`}
-              variant="listLarge"
-            />
-          ))}
-        </div>
-      )}
+      {!isLoading && results.length > 0 && <SearchResultsList results={results} />}
 
       <div ref={sentinelRef} className="h-1" />
 
       {isLoadingMore && (
-        <div className="w-full grid place-items-center py-6">
+        <div className="grid w-full place-items-center py-6">
           <Spinner className="size-14" />
         </div>
       )}
