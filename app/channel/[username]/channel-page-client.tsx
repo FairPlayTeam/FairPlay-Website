@@ -371,7 +371,7 @@ export default function ChannelPageClient({
         {videos.length === 0 ? (
           <p className="flex justify-center pt-16 text-sm text-muted-foreground">No videos yet.</p>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {videos.map((v) => {
               const createdAtLabel = new Date(v.createdAt).toLocaleDateString();
               const meta = `${v.viewCount} views - ${createdAtLabel}`;

@@ -19,10 +19,9 @@ export default function Link({ href, children, className = "", variant = "primar
       className={cn(
         "relative inline-block",
         "border-b border-dotted border-primary/40",
-        "rounded-xs",
         "text-primary",
         "no-underline",
-        "leading-[1.1]",
+        "leading-tight",
         "pb-px",
         "transition-colors duration-200 ease-in-out",
         "hover:border-primary-200/50 hover:text-primary-200",
@@ -32,13 +31,7 @@ export default function Link({ href, children, className = "", variant = "primar
     >
       <span>{children}</span>
       {variant === "primary" && (
-        <span
-          className="
-            inline-block text-[0.9em] ml-1
-            transition-transform duration-200 ease-in-out
-            group-hover:translate-x-0.5
-          "
-        >
+        <span className="ml-1 inline-block text-sm transition-transform duration-200 group-hover:translate-x-1">
           <MdArrowOutward />
         </span>
       )}

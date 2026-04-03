@@ -12,6 +12,8 @@ import UserAvatar from "@/components/ui/user-avatar";
 import { useAuth } from "@/context/auth-context";
 import { useSidebar } from "@/context/sidebar-context";
 import { useLogout } from "@/hooks/use-logout";
+import Logo from "@/components/marketing/ui/Logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const TOPBAR_ITEM_HEIGHT = "h-8";
 
@@ -124,9 +126,7 @@ export default function AppTopbar() {
               <Menu className="size-4" />
             </Button>
 
-            <Link href="/explore" className="text-xl font-bold leading-none text-foreground">
-              Rewind
-            </Link>
+            <Logo />
           </div>
 
           <div className="absolute left-1/2 hidden w-full max-w-md -translate-x-1/2 items-center sm:flex">
@@ -134,6 +134,11 @@ export default function AppTopbar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle
+              variant="ghost"
+              className={cn(TOPBAR_ITEM_HEIGHT, "w-9 rounded-full text-foreground hover:bg-accent")}
+            />
+
             <Button
               variant="ghost"
               size="icon"

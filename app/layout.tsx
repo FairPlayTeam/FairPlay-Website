@@ -34,10 +34,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const darkmode = true;
-
   return (
-    <html lang="en" className={darkmode ? "dark" : ""}>
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased">
         <Providers>{children}</Providers>
         <Toaster />

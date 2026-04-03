@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
 import { useLogout } from "@/hooks/use-logout";
+import Logo from "@/components/marketing/ui/Logo";
 
 const mainLinks = [
   { icon: Compass, label: "Explore", href: "/explore" },
@@ -87,9 +88,7 @@ export default function AppSidebar() {
               <Menu />
             </Button>
 
-            <Link href="/" className="text-xl font-bold text-foreground">
-              Rewind
-            </Link>
+            <Logo />
           </div>
 
           <div className="flex flex-col gap-1">

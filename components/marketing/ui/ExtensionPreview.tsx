@@ -2,7 +2,7 @@
 
 export default function ExtensionPreview() {
   return (
-    <div className="w-80 rounded-2xl border border-border bg-card/95 px-6 py-5 text-foreground shadow-xl">
+    <div className="w-full max-w-80 rounded-2xl border border-border bg-card/95 px-4 py-5 text-foreground shadow-xl sm:px-6">
       <h1 className="mb-5 text-center text-3xl font-semibold text-foreground">FairPlay</h1>
 
       <div className="space-y-3 text-sm">
@@ -49,8 +49,8 @@ export default function ExtensionPreview() {
             <span className="cursor-default text-muted-foreground">x</span>
           </div>
 
-          <div className="flex items-center justify-between rounded-md border border-border bg-muted/60 px-3 py-2 text-sm">
-            <span className="text-foreground">twitter.com</span>
+          <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/60 px-3 py-2 text-sm">
+            <span className="min-w-0 truncate text-foreground">twitter.com</span>
             <span className="cursor-default text-muted-foreground">x</span>
           </div>
 

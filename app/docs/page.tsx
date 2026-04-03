@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MarketingTopbar from "@/components/marketing/MarketingTopbar";
-import MarketingFooter from "@/components/marketing/MarketingFooter";
+import MarketingTopbar from "@/components/marketing/layout/MarketingTopbar";
+import MarketingFooter from "@/components/marketing/layout/MarketingFooter";
 import DocsSection from "@/components/marketing/docs/DocsSection";
 import DocsSidebar from "@/components/marketing/docs/DocsSidebar";
-import Link from "@/components/marketing/Link";
+import Link from "@/components/marketing/ui/Link";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaLightbulb, FaCogs, FaPalette, FaDatabase, FaUsers } from "react-icons/fa";

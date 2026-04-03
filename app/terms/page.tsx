@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MarketingTopbar from "@/components/marketing/MarketingTopbar";
-import MarketingFooter from "@/components/marketing/MarketingFooter";
+import MarketingTopbar from "@/components/marketing/layout/MarketingTopbar";
+import MarketingFooter from "@/components/marketing/layout/MarketingFooter";
 import DocsSection from "@/components/marketing/docs/DocsSection";
 import DocsSidebar from "@/components/marketing/docs/DocsSidebar";
 import { FaLightbulb } from "react-icons/fa";
