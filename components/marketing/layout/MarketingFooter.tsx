@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaDiscord, FaGithub, FaTwitter } from "react-icons/fa";
+import Logo from "@/components/marketing/ui/Logo";
 import { cn } from "@/lib/utils";
-import Logo from "../ui/Logo";
 
 interface FooterProps {
   variant?: "primary" | "secondary";
@@ -12,7 +12,7 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
     <footer className="border-t border-border bg-card px-6 py-10 text-base text-foreground sm:px-10">
       {variant === "primary" && (
         <section
-          aria-label="À propos de FairPlay"
+          aria-label="About FairPlay"
           className="mx-auto mb-10 max-w-3xl text-center text-sm leading-relaxed text-muted-foreground"
         >
           <p className="mb-4">
@@ -36,7 +36,7 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
         <Logo />
 
-        <nav aria-label="Liens légaux">
+        <nav aria-label="Legal links">
           <ul className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {[
               { label: "Terms of Use", href: "/terms" },
@@ -49,8 +49,8 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
                   href={href}
                   className={cn(
                     "text-muted-foreground underline-offset-4",
-                    "hover:text-primary hover:underline hover:decoration-primary/40",
                     "transition-all duration-200",
+                    "hover:text-primary hover:underline hover:decoration-primary/40",
                   )}
                 >
                   {label}
@@ -60,7 +60,7 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
           </ul>
         </nav>
 
-        <nav aria-label="Réseaux sociaux">
+        <nav aria-label="Social links">
           <ul className="flex gap-5 text-2xl">
             {[
               { href: "https://github.com/FairPlayTeam/", icon: FaGithub, label: "GitHub" },
@@ -75,8 +75,8 @@ export default function MarketingFooter({ variant = "primary" }: FooterProps) {
                   aria-label={label}
                   className={cn(
                     "text-muted-foreground",
-                    "hover:text-primary",
                     "transition-colors duration-200",
+                    "hover:text-primary",
                   )}
                 >
                   <Icon />

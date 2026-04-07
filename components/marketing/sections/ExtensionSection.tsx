@@ -1,9 +1,9 @@
 import Section from "@/components/marketing/layout/Section";
+import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import ExtensionPreview from "@/components/marketing/ui/ExtensionPreview";
+import SectionIntro from "@/components/marketing/ui/SectionIntro";
 import { Button } from "@/components/ui/button";
 import { FaCheckCircle } from "react-icons/fa";
-import FadeInSection from "./FadeInSection";
-import SectionIntro from "@/components/marketing/ui/SectionIntro";
 
 export default function ExtensionSection() {
   return (
@@ -39,24 +39,23 @@ export default function ExtensionSection() {
             </ul>
 
             <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-              <Button
-                onClick={() =>
-                  (window.location.href =
-                    "https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb")
-                }
-                className="h-11 w-full px-5 sm:w-auto"
-              >
-                Install for Edge / Chrome
+              <Button asChild className="h-11 w-full px-5 sm:w-auto">
+                <a
+                  href="https://microsoftedge.microsoft.com/addons/detail/antivertical-content/aafojaecolkacnnbkmodafapbcbcapkb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Install for Edge / Chrome
+                </a>
               </Button>
-              <Button
-                onClick={() =>
-                  (window.location.href =
-                    "https://addons.mozilla.org/fr/firefox/addon/fairplay-anti-vertical-content/")
-                }
-                variant="outline"
-                className="h-11 w-full px-5 sm:w-auto"
-              >
-                Install for Firefox
+              <Button asChild variant="outline" className="h-11 w-full px-5 sm:w-auto">
+                <a
+                  href="https://addons.mozilla.org/fr/firefox/addon/fairplay-anti-vertical-content/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Install for Firefox
+                </a>
               </Button>
             </div>
           </div>

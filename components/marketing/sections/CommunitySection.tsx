@@ -1,7 +1,7 @@
 import Section from "@/components/marketing/layout/Section";
-import { Button } from "@/components/ui/button";
-import FadeInSection from "./FadeInSection";
+import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
+import { Button } from "@/components/ui/button";
 
 export default function CommunitySection() {
   return (
@@ -18,11 +18,10 @@ export default function CommunitySection() {
               descriptionClassName="max-w-lg"
             />
 
-            <Button
-              className="h-11 px-5"
-              onClick={() => window.open("https://discord.gg/6g5cBUVra9", "_blank")}
-            >
-              Join our Discord
+            <Button asChild className="h-11 px-5">
+              <a href="https://discord.gg/6g5cBUVra9" target="_blank" rel="noopener noreferrer">
+                Join our Discord
+              </a>
             </Button>
           </div>
 

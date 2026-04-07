@@ -476,7 +476,6 @@ export function VideoPlayer({
   }, [applyAutoSelection]);
 
   // HLS initialization
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally only re-runs on url change
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -613,7 +612,14 @@ export function VideoPlayer({
     } else {
       console.error("HLS is not supported in this browser.");
     }
-  }, [url]);
+  }, [
+    applyPreferences,
+    computeAutoLabel,
+    computeAutoLevelIndex,
+    preferredQuality,
+    setLoopPref,
+    url,
+  ]);
 
   useHotkeys(
     ["space", "k"],

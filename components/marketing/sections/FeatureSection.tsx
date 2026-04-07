@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Section from "@/components/marketing/layout/Section";
 import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import BrowserFrame from "@/components/marketing/ui/BrowserFrame";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const features = [
@@ -79,7 +79,7 @@ function FeatureRow({
 export default function FeaturesSection() {
   return (
     <FadeInSection>
-      <Section variant="plain">
+      <Section id="features" variant="plain">
         <div className="relative mx-auto max-w-5xl">
           <SectionIntro
             title="Built around"

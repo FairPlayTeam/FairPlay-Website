@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes, FaDiscord } from "react-icons/fa";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaBars, FaDiscord, FaTimes } from "react-icons/fa";
 import Logo from "@/components/marketing/ui/Logo";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -16,18 +16,25 @@ interface NavLinkProps {
   href: string;
   onClick?: () => void;
   variant?: "default" | "secondary";
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
+function getExternalLinkProps(href: string) {
+  return href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {};
+}
+
 function NavLink({ href, onClick, variant = "default", children, className }: NavLinkProps) {
+  const externalProps = getExternalLinkProps(href);
+
   return (
     <a
       href={href}
       onClick={onClick}
+      {...externalProps}
       className={cn(
         "text-sm font-medium transition-colors duration-200",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm",
+        "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         variant === "default" && "text-muted-foreground hover:text-foreground",
         variant === "secondary" && "text-primary hover:text-primary-400",
         className,
@@ -40,19 +47,18 @@ function NavLink({ href, onClick, variant = "default", children, className }: Na
 
 function DiscordButton({ className }: { className?: string }) {
   return (
-    <Button
-      onClick={() => (window.location.href = "https://discord.gg/fairplay")}
-      className={cn("rounded-full px-5 py-2", className)}
-    >
-      Join Discord
-      <FaDiscord />
+    <Button asChild className={cn("rounded-full px-5 py-2", className)}>
+      <a href="https://discord.gg/fairplay" target="_blank" rel="noopener noreferrer">
+        Join Discord
+        <FaDiscord />
+      </a>
     </Button>
   );
 }
 
 const NAV_LINKS: { label: string; href: string; variant?: "default" | "secondary" }[] = [
-  { label: "About Us", href: ".#about" },
-  { label: "Our Values", href: ".#values" },
+  { label: "Our Mission", href: ".#mission" },
+  { label: "Features", href: ".#features" },
   { label: "Extension", href: ".#extension" },
   { label: "Development", href: ".#development" },
   { label: "Community", href: ".#community" },
@@ -89,7 +95,7 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
 
           <nav
             className="absolute left-1/2 hidden -translate-x-1/2 lg:block"
-            aria-label="Navigation principale"
+            aria-label="Primary navigation"
           >
             <ul className="flex items-center gap-6">
               {NAV_LINKS.map(({ label, href, variant }) => (
@@ -105,18 +111,20 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
           <div className="flex items-center gap-3">
             <ThemeToggle variant="ghost" />
             <Button
-              onClick={() => (window.location.href = "https://ko-fi.com/fairplay_")}
+              asChild
               variant="outline"
               className="hidden lg:inline-flex rounded-full px-4 py-2 text-sm font-semibold"
             >
-              Donate
+              <a href="https://ko-fi.com/fairplay_" target="_blank" rel="noopener noreferrer">
+                Donate
+              </a>
             </Button>
             <DiscordButton className="hidden lg:inline-flex" />
 
             <button
               onClick={() => setIsMenuOpen(true)}
               className="cursor-pointer text-foreground focus:outline-none lg:hidden"
-              aria-label="Ouvrir le menu"
+              aria-label="Open menu"
             >
               <FaBars size={24} />
             </button>
@@ -146,14 +154,14 @@ export default function MarketingTopbar({ animateOnLoad = true }: TopbarProps) {
                 <Logo />
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  aria-label="Fermer le menu"
+                  aria-label="Close menu"
                   className="cursor-pointer text-foreground transition-colors"
                 >
                   <FaTimes size={24} />
                 </button>
               </div>
 
-              <nav aria-label="Menu mobile">
+              <nav aria-label="Mobile menu">
                 <ul className="flex flex-col gap-5 text-left">
                   {NAV_LINKS.map(({ label, href, variant }) => (
                     <li key={label}>

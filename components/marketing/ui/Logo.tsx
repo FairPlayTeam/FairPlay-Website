@@ -8,10 +8,10 @@ interface LogoProps {
 export default function Logo({ className }: LogoProps) {
   return (
     <Link
-      href="/"
+      href="/explore"
       className={cn(
         "text-xl font-extrabold tracking-tight text-foreground sm:text-2xl",
-        "transition-opacity duration-200 hover:opacity-80",
+        "transition-opacity duration-200 hover:opacity-90",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm",
         "inline-block scale-y-90",
         className,

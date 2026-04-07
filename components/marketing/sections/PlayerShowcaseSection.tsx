@@ -1,7 +1,7 @@
+import Image from "next/image";
 import Section from "@/components/marketing/layout/Section";
 import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import BrowserFrame from "@/components/marketing/ui/BrowserFrame";
-import Image from "next/image";
 
 export default function PlayerShowcaseSection() {
   return (

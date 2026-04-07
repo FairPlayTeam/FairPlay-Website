@@ -1,8 +1,8 @@
 import Section from "@/components/marketing/layout/Section";
+import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import MarqueeDonors from "@/components/marketing/ui/MarqueeDonators";
-import { Button } from "@/components/ui/button";
-import FadeInSection from "./FadeInSection";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
+import { Button } from "@/components/ui/button";
 
 export default function SupportSection() {
   return (
@@ -16,11 +16,10 @@ export default function SupportSection() {
             className="mb-8"
           />
 
-          <Button
-            className="h-11 rounded-full px-6"
-            onClick={() => window.open("https://ko-fi.com/fairplay_", "_blank")}
-          >
-            Donate on Ko-fi
+          <Button asChild className="h-11 rounded-full px-6">
+            <a href="https://ko-fi.com/fairplay_" target="_blank" rel="noopener noreferrer">
+              Donate on Ko-fi
+            </a>
           </Button>
 
           <MarqueeDonors />

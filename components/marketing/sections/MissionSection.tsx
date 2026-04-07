@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import Section from "@/components/marketing/layout/Section";
-import FadeInSection from "./FadeInSection";
+import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
 
 interface SourceProps {
   href: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PLAY_PATH =
@@ -49,21 +50,21 @@ function Source({ href, children }: SourceProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Source: ${children}`}
-      className="ml-1 align-super text-[0.7em] font-semibold text-primary/80 underline underline-offset-2 decoration-primary/40 hover:text-primary hover:decoration-primary transition-colors duration-200"
+      className="ml-1 align-super text-[0.7em] font-semibold text-primary/80 underline decoration-primary/40 underline-offset-2 transition-colors duration-200 hover:text-primary hover:decoration-primary"
     >
       [{children}]
     </a>
   );
 }
 
-function Stat({ children }: { children: React.ReactNode }) {
+function Stat({ children }: { children: ReactNode }) {
   return <strong className="font-extrabold text-primary/80">{children}</strong>;
 }
 
 export default function MissionSection() {
   return (
     <FadeInSection>
-      <Section className="overflow-hidden">
+      <Section id="mission" variant="plain" className="overflow-hidden">
         <div className="relative mx-auto text-center">
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"

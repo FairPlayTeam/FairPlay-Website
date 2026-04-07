@@ -1,8 +1,8 @@
 import { Github, Code, BookOpen } from "lucide-react";
 import Section from "@/components/marketing/layout/Section";
-import { Button } from "@/components/ui/button";
-import FadeInSection from "./FadeInSection";
+import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
+import { Button } from "@/components/ui/button";
 
 const LINKS = [
   {
@@ -22,6 +22,10 @@ const LINKS = [
   },
 ] as const;
 
+function getExternalLinkProps(href: string) {
+  return href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {};
+}
+
 export default function OpenSourceSection() {
   return (
     <FadeInSection>
@@ -36,14 +40,11 @@ export default function OpenSourceSection() {
 
           <div className="flex w-full flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
             {LINKS.map(({ icon: Icon, label, href }) => (
-              <Button
-                key={label}
-                variant="outline"
-                className="h-11 w-full px-5 sm:w-auto"
-                onClick={() => window.open(href, "_blank")}
-              >
-                <Icon className="size-4" strokeWidth={1.5} />
-                {label}
+              <Button asChild key={label} variant="outline" className="h-11 w-full px-5 sm:w-auto">
+                <a href={href} {...getExternalLinkProps(href)}>
+                  <Icon className="size-4" strokeWidth={1.5} />
+                  {label}
+                </a>
               </Button>
             ))}
           </div>
