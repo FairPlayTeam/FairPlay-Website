@@ -11,7 +11,7 @@ export type AdminViewUser = {
   isActive: boolean;
   isVerified: boolean;
   isBanned: boolean;
-  banReasonPublic: string | null;
+  banReasonPrivate: string | null;
   createdAt: string;
   followerCount?: number;
   followingCount?: number;
@@ -51,12 +51,10 @@ export async function adminUpdateRole(id: string, role: "user" | "moderator" | "
 export async function adminUpdateBan(
   id: string,
   isBanned: boolean,
-  publicReason?: string,
   privateReason?: string,
 ) {
   return api.patch<{ message: string; user: AdminViewUser }>(`/admin/users/${id}/ban`, {
     isBanned,
-    publicReason,
     privateReason,
   });
 }

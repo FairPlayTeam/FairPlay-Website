@@ -8,6 +8,7 @@ import { AuthPageShell } from "@/components/app/auth/auth-page-shell";
 import { AuthPasswordField } from "@/components/app/auth/auth-password-field";
 import { AuthTextField } from "@/components/app/auth/auth-text-field";
 import { login } from "@/lib/auth/api";
+import { syncRoleCookie } from "@/lib/auth/cookies";
 import { loginFormSchema, type LoginFormValues } from "@/lib/auth/forms";
 import { setSessionToken } from "@/lib/auth/session";
 import { useRedirectAuthenticatedUser } from "@/hooks/use-redirect-authenticated-user";
@@ -28,7 +29,8 @@ export default function LoginPage() {
       });
 
       setSessionToken(response.data.sessionKey);
-      await refetchUser();
+      const authenticatedUser = await refetchUser();
+      syncRoleCookie(authenticatedUser?.role ?? null);
       router.replace(callbackUrl);
     },
     [callbackUrl, refetchUser, router],

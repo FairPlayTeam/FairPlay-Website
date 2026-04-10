@@ -1,4 +1,4 @@
-import { Github, Code, BookOpen } from "lucide-react";
+import { Github, Code } from "lucide-react";
 import Section from "@/components/marketing/layout/Section";
 import FadeInSection from "@/components/marketing/sections/FadeInSection";
 import SectionIntro from "@/components/marketing/ui/SectionIntro";
@@ -14,11 +14,6 @@ const LINKS = [
     icon: Code,
     label: "API Documentation",
     href: "https://apiv2.fairplay.video/docs/",
-  },
-  {
-    icon: BookOpen,
-    label: "Contribution guide",
-    href: "/docs/contribution-guidelines",
   },
 ] as const;
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getCurrentUser } from "@/lib/auth/api";
+import { syncRoleCookie, syncSessionCookie } from "@/lib/auth/cookies";
 import { authQueryKeys } from "@/lib/auth/query";
 import { clearSessionToken } from "@/lib/auth/session";
 import { User } from "@/lib/users";
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
+  const token = useAuthStore((state) => state.token);
 
   const {
     data: user,
@@ -45,6 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     enabled: hasHydrated,
     retry: false,
   });
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    syncSessionCookie(token);
+    syncRoleCookie(user?.role ?? null);
+  }, [hasHydrated, token, user?.role]);
 
   const isReady = hasHydrated && !isLoading;
   const refetchUser = useCallback(async () => {

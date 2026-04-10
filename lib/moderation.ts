@@ -10,11 +10,6 @@ export type ModVideoItem = {
   visibility: "public" | "unlisted" | "private";
   user: { id: string; username: string; displayName: string | null };
   createdAt: string;
-
-  description: string | null;
-  viewCount: string;
-  avgRating: number;
-  ratingsCount: number;
 };
 
 export type ModVideosResponse = {

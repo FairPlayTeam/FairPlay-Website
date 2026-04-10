@@ -11,18 +11,18 @@ export interface User {
   bannerUrl?: string | null;
   bio?: string | null;
   role: UserRole;
-  isActive: boolean;
+  isActive?: boolean;
   isVerified: boolean;
-  isBanned: boolean;
+  isBanned?: boolean;
   banReasonPrivate?: string | null;
   bannedAt?: string | null;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   lastLogin?: string | null;
 
   followerCount: number;
   followingCount: number;
-  videoCount: number;
+  videoCount?: number;
   totalViews: string;
 }
 

@@ -5,6 +5,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaRedo, FaWindowRestore, FaShareAlt, FaChartLine } from "react-icons/fa";
+import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import VideoStatsPanel from "@/components/app/video/player/video-stats-panel";
 import VideoSettingsPanel from "@/components/app/video/player/video-settings-panel";
@@ -342,7 +343,7 @@ export function VideoPlayer({
     } else {
       try {
         await navigator.clipboard.writeText(currentUrl);
-        alert("Link copied to clipboard.");
+        toast.success("Link copied to clipboard.");
       } catch {
         // ignore
       }
@@ -369,7 +370,7 @@ export function VideoPlayer({
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl);
-        alert("Link copied to clipboard.");
+        toast.success("Link copied to clipboard.");
       } catch {
         // ignore
       }

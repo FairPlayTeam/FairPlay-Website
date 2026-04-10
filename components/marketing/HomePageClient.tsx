@@ -44,22 +44,21 @@ export default function HomePageClient() {
       <main className="mx-auto w-full">
         <HeroSection />
         <PlayerShowcaseSection />
-      </main>
+        <MissionSection />
 
-      <MissionSection />
+        <div className={PAGE_SHELL}>
+          <FeatureGrid />
+          <ExtensionSection />
+        </div>
 
-      <main className={PAGE_SHELL}>
-        <FeatureGrid />
-        <ExtensionSection />
-      </main>
+        <FadeInSection>
+          <OpenSourceSection />
+        </FadeInSection>
 
-      <FadeInSection>
-        <OpenSourceSection />
-      </FadeInSection>
-
-      <main className={PAGE_SHELL}>
-        <CommunitySection />
-        <SupportSection />
+        <div className={PAGE_SHELL}>
+          <CommunitySection />
+          <SupportSection />
+        </div>
       </main>
 
       <MarketingFooter variant="primary" />

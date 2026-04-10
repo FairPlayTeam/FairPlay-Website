@@ -173,8 +173,7 @@ export default function ExplorePageClient({
           <AlertDialogHeader>
             <AlertDialogTitle>Hang on a sec...</AlertDialogTitle>
             <AlertDialogDescription>
-              This part of the website is currently under development. By clicking Continue, you
-              will be redirected to the live build version. This environment is for development
+              This part of the website is currently under development. This environment is for development
               purposes only.
             </AlertDialogDescription>
           </AlertDialogHeader>

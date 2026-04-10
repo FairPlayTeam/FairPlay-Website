@@ -408,13 +408,13 @@ export default function AdminPage() {
                               })}
                             </span>
                           </div>
-                          {user.isBanned && user.banReasonPublic && (
+                          {user.isBanned && user.banReasonPrivate && (
                             <div className="flex items-start gap-2">
                               <span className="text-muted-foreground w-24 shrink-0">
-                                Ban reason
+                                Internal note
                               </span>
                               <span className="text-destructive font-medium">
-                                {user.banReasonPublic}
+                                {user.banReasonPrivate}
                               </span>
                             </div>
                           )}
