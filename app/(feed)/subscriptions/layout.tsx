@@ -16,11 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function SubscriptionsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function SubscriptionsLayout({ children }: { children: React.ReactNode }) {
   await requireAuthenticatedUser("/subscriptions");
 
   return children;

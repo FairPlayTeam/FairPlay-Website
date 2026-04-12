@@ -38,3 +38,9 @@ export function buildAuthHref(path: AuthPath, callbackUrl?: string | null): stri
 
   return `${path}?callbackUrl=${encodeURIComponent(safeCallbackUrl)}`;
 }
+
+export function buildServiceUnavailableHref(callbackUrl?: string | null): string {
+  const safeCallbackUrl = getSafeCallbackUrl(callbackUrl);
+
+  return `/service-unavailable?from=${encodeURIComponent(safeCallbackUrl)}`;
+}

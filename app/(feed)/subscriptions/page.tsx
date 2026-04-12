@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AuthUnavailableNotice } from "@/components/app/auth/auth-unavailable-notice";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/ui/user-avatar";
 import { toast } from "sonner";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import { useAuth } from "@/context/auth-context";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import { getFollowing, unfollowUser, type BaseUser } from "@/lib/users";
 
 type FetchMode = "initial" | "more";
@@ -32,7 +33,7 @@ function mergeUniqueUsers(prev: BaseUser[], next: BaseUser[]) {
 
 export default function SubscriptionsPage() {
   const router = useRouter();
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isLoading: isAuthLoading, isUnavailable, errorMessage } = useAuth();
 
   const [following, setFollowing] = useState<BaseUser[]>([]);
   const [isLoading, setLoading] = useState(true);
@@ -41,12 +42,6 @@ export default function SubscriptionsPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [unfollowingIds, setUnfollowingIds] = useState<Set<string>>(() => new Set());
-
-  useEffect(() => {
-    if (!isAuthLoading && !user) {
-      router.replace(buildAuthHref("/login", "/subscriptions"));
-    }
-  }, [isAuthLoading, router, user]);
 
   const resolveHasMore = (itemsCount: number, pageToLoad: number, totalPages?: number) => {
     if (typeof totalPages === "number") {
@@ -136,6 +131,18 @@ export default function SubscriptionsPage() {
       });
     }
   };
+
+  if (isUnavailable && !user) {
+    return (
+      <AuthUnavailableNotice
+        description={
+          errorMessage ??
+          "FairPlay could not confirm your session right now, so subscriptions are temporarily unavailable."
+        }
+        actionHref={buildServiceUnavailableHref("/subscriptions")}
+      />
+    );
+  }
 
   if (isAuthLoading || !user || isLoading) {
     return (

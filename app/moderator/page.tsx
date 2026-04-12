@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 
 import { toast } from "sonner";
+import { AuthUnavailableNotice } from "@/components/app/auth/auth-unavailable-notice";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,7 @@ import {
 import { ModVideoCard } from "@/components/app/video/mod-video-card";
 
 import { listModeratorVideos, type ModVideoItem, updateModeration } from "@/lib/moderation";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import { deleteVideo } from "@/lib/video";
 import { useAuth } from "@/context/auth-context";
 
@@ -65,7 +66,7 @@ const isVisibility = (value: string): value is NonNullable<Filters["visibility"]
 
 export default function ModerationPage() {
   const router = useRouter();
-  const { user: me, isLoading } = useAuth();
+  const { user: me, isLoading, isUnavailable, errorMessage } = useAuth();
   const isModerator = me?.role === "admin" || me?.role === "moderator";
 
   const [videos, setVideos] = useState<ModVideoItem[]>([]);
@@ -157,12 +158,6 @@ export default function ModerationPage() {
   };
 
   useEffect(() => {
-    if (!isLoading && !me) {
-      router.replace(buildAuthHref("/login", "/moderator"));
-    }
-  }, [me, isLoading, router]);
-
-  useEffect(() => {
     const seq = ++requestSeq.current;
 
     if (!me || !isModerator) return;
@@ -201,6 +196,18 @@ export default function ModerationPage() {
       requestSeq.current += 1;
     };
   }, [me, isModerator, filters]);
+
+  if (isUnavailable && !me) {
+    return (
+      <AuthUnavailableNotice
+        description={
+          errorMessage ??
+          "FairPlay could not confirm your session right now, so moderation tools are temporarily unavailable."
+        }
+        actionHref={buildServiceUnavailableHref("/moderator")}
+      />
+    );
+  }
 
   if (!isLoading && me && !isModerator) {
     return (

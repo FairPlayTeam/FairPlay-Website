@@ -1,9 +1,9 @@
 ﻿"use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
+import { AuthUnavailableNotice } from "@/components/app/auth/auth-unavailable-notice";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -11,18 +11,23 @@ import ChannelTab from "@/components/app/profile/channel-tab";
 import VideosTab from "@/components/app/profile/videos-tab";
 import AccountTab from "@/components/app/profile/account-tab";
 import { useAuth } from "@/context/auth-context";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 
 export default function ProfilePage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isUnavailable, errorMessage } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace(buildAuthHref("/login", "/profile"));
-    }
-  }, [user, isLoading, router]);
+  if (isUnavailable && !user) {
+    return (
+      <AuthUnavailableNotice
+        description={
+          errorMessage ??
+          "FairPlay could not confirm your session right now, so profile data is temporarily unavailable."
+        }
+        actionHref={buildServiceUnavailableHref("/profile")}
+      />
+    );
+  }
 
   if (isLoading || !user) {
     return (

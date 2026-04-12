@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import UserAvatar from "@/components/ui/user-avatar";
 import { useAuth } from "@/context/auth-context";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildAuthHref, buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import { cn } from "@/lib/utils";
 import { ThumbsUp, Reply, Trash2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
@@ -141,10 +141,9 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
     setIsDeleting(true);
     try {
       const response = await deleteComment(localComment.id);
-      const message = response.data?.message ?? "";
-      const wasSoftDeleted = message.toLowerCase().includes("soft");
+      const wasSoftDeleted = response.data?.deletionMode === "soft";
 
-      if (wasSoftDeleted || (localComment._count?.replies ?? 0) > 0) {
+      if (wasSoftDeleted) {
         setLocalComment((prev) => ({ ...prev, content: "[deleted]" }));
         return;
       }
@@ -309,7 +308,7 @@ function Comment({ comment, videoId, onReplySuccess, onDelete }: CommentProps) {
 }
 
 export function Comments({ videoId, initialComments, allowComments = true }: CommentsProps) {
-  const { user } = useAuth();
+  const { user, isUnavailable, errorMessage } = useAuth();
 
   const [comments, setComments] = useState<CommentItem[]>(initialComments);
 
@@ -342,6 +341,17 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
       {!allowComments ? (
         <div className="mb-8 p-4 flex flex-col items-center gap-4 text-muted-foreground text-sm">
           <p>Comments are disabled for this video.</p>
+        </div>
+      ) : isUnavailable && !user ? (
+        <div className="mb-8 flex flex-col items-center gap-4 p-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            {errorMessage ?? "Authentication is temporarily unavailable, so posting comments is disabled."}
+          </p>
+          <Link href={buildServiceUnavailableHref(`/video/${videoId}#comments`)}>
+            <Button variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold">
+              Auth unavailable
+            </Button>
+          </Link>
         </div>
       ) : user ? (
         <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 flex gap-4">

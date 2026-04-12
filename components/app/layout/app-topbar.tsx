@@ -12,6 +12,7 @@ import UserAvatar from "@/components/ui/user-avatar";
 import { useAuth } from "@/context/auth-context";
 import { useSidebar } from "@/context/sidebar-context";
 import { useLogout } from "@/hooks/use-logout";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import Logo from "@/components/marketing/ui/Logo";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
@@ -57,13 +58,15 @@ export default function AppTopbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { toggle, close } = useSidebar();
-  const { user, isReady } = useAuth();
+  const { user, isReady, isUnavailable, errorMessage } = useAuth();
   const { logout, isLoggingOut } = useLogout({ onLoggedOut: close });
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const isVideoWatchPage = pathname?.startsWith("/video/") ?? false;
+  const serviceUnavailableHref = buildServiceUnavailableHref(pathname ?? "/explore");
+  const shouldShowUnavailableAuthState = isReady && isUnavailable && !user;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -187,7 +190,18 @@ export default function AppTopbar() {
               </div>
             ) : null}
 
-            {isReady && !user ? (
+            {shouldShowUnavailableAuthState ? (
+              <Button
+                asChild
+                variant="outline"
+                className={cn(TOPBAR_ITEM_HEIGHT, "hidden rounded-full px-4 lg:inline-flex")}
+                title={errorMessage ?? undefined}
+              >
+                <Link href={serviceUnavailableHref}>Auth unavailable</Link>
+              </Button>
+            ) : null}
+
+            {isReady && !user && !isUnavailable ? (
               <div className="hidden gap-2 lg:flex">
                 <Separator orientation="vertical" />
                 <Button

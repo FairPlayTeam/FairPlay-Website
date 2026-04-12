@@ -44,7 +44,7 @@ Client components handle interactive and session-aware behavior:
 - infinite scroll
 - mutations such as follow, rate, comment, upload, moderation actions, and admin actions
 - local UI state
-- persisted preferences and session token management
+- persisted preferences and session-aware behavior
 
 ## 3. Route Topology
 
@@ -53,7 +53,6 @@ The routing model is organized around user-facing areas.
 ### Public-facing routes
 
 - `/` renders the marketing homepage
-- `/docs` redirects to repository-hosted documentation on GitHub
 - `/terms` contains terms content
 - `/channel/[username]` exposes public creator pages
 - `/video/[id]` exposes public watch pages
@@ -122,17 +121,16 @@ The marketing routes use a separate top-level presentation layer centered around
 
 `lib/api.ts` exports a shared Axios instance configured with:
 
-- `baseURL` from `NEXT_PUBLIC_API_BASE_URL`
-- request-time bearer token injection
-- no cookie-based session transport
+- a same-origin `/api/proxy` base URL
+- `withCredentials: true`
 
-The app remains API-token based. The cookies introduced by the frontend are only lightweight route-gating hints for Next.js layouts, not an authoritative backend session mechanism.
+Authenticated browser requests flow through Next.js route handlers. Those handlers read the session key from an `HttpOnly` cookie and attach the backend bearer token server-side before forwarding the request upstream.
 
 If the environment variable is missing, the app throws early.
 
 ### Domain modules
 
-The API surface is organized by domain module rather than by route folder:
+The API surface is organized by domain module:
 
 - `lib/auth/api.ts`
 - `lib/video.ts`
@@ -162,31 +160,37 @@ This keeps SEO-relevant routes functional without depending on client-only state
 
 ## 6. Authentication and Session Flow
 
-Authentication is entirely token-based on the frontend.
+Authentication is session-based from the frontend's point of view, while the backend still receives bearer-token authorization.
 
-### Token storage
+### Session storage
 
-- the bearer token is stored in a persisted Zustand store in `lib/stores/auth.ts`
-- helper functions in `lib/auth/session.ts` read, set, and clear the token
-- the Axios client reads the token synchronously before each request
+- the backend session key is stored in a server-managed `HttpOnly` cookie
+- login and email-verification flows are mediated by Next.js route handlers under `app/api/auth/`
+- client-side JavaScript never reads or writes the session key directly
 
-### Auth hint cookies
+### Auth proxy layer
 
-To reduce flashes of protected UI during server rendering, the frontend mirrors a minimal auth state into client-set cookies in `lib/auth/cookies.ts`:
+The frontend uses a lightweight BFF-style layer:
 
-- `fairplay_session_hint`
-- `fairplay_role_hint`
+- `app/api/auth/login/route.ts` exchanges credentials for a backend session key and stores it in the `HttpOnly` cookie
+- `app/api/auth/verify-email/route.ts` does the same after email verification
+- `app/api/auth/logout/route.ts` revokes the current backend session before clearing the cookie, so client logout success stays aligned with backend revocation
+- `app/api/proxy/[...path]/route.ts` forwards authenticated API calls and injects the bearer token server-side
+- `app/api/media/[...path]/route.ts` proxies authenticated media requests such as HLS manifests and segments when the media URL originates from the configured API base
 
-These cookies are synchronized when the session changes and are consumed by `lib/auth/server-guard.ts` inside protected Next.js layouts. They help the frontend decide whether to redirect early, but backend authorization still remains the source of truth.
+The auth session-creation handlers also forward client metadata headers such as `user-agent`, `x-forwarded-for`, and `x-real-ip` to the backend. This keeps backend rate limiting and session device/IP history accurate even though login and verification are mediated by the frontend.
 
 ### Auth hydration
 
-`AuthProvider` in `context/auth-context.tsx` waits for Zustand persistence hydration before enabling the current-user query.
+`AuthProvider` in `context/auth-context.tsx` resolves the current user with React Query.
 
-Once hydrated:
+Once mounted:
 
 - it fetches `/auth/me`
-- a `401` clears the token and resolves to an unauthenticated state
+- a `401` clears the server-side session cookie and resolves to an unauthenticated state
+- transport failures and `5xx` responses are treated as auth-service outages, not as user logout
+- the backend auth middleware preserves that distinction by returning `503` when session validation itself is temporarily unavailable, instead of collapsing those failures into `401`
+- the client auth context exposes that outage as a dedicated `unavailable` state, allowing the UI to avoid misleading login prompts or infinite loading states
 - authenticated sections can safely wait on `isReady`
 
 ### Redirect safety
@@ -199,13 +203,15 @@ This logic is used across:
 - auth guard flows
 - upload and protected page access checks
 
-Protected route layouts now combine that redirect safety with server-side gating:
+Protected route layouts combine that redirect safety with server-side gating:
 
 - `app/profile/layout.tsx`
 - `app/upload/layout.tsx`
 - `app/(feed)/subscriptions/layout.tsx`
 - `app/moderator/layout.tsx`
 - `app/admin/layout.tsx`
+
+If the backend cannot validate the current session because it is unavailable, protected routes redirect to `/service-unavailable` instead of redirecting users to `/login`.
 
 ## 7. State Management
 
@@ -222,11 +228,8 @@ The shared query client lives in `lib/query-client.ts`.
 
 ### Zustand
 
-Two persisted stores are currently central:
+One persisted store is currently central:
 
-- `auth-store`
-  - session token
-  - hydration readiness
 - `preference-storage`
   - volume
   - mute state
@@ -258,8 +261,6 @@ Notable characteristics:
 - custom section composition
 - theme toggle support
 - integrated screenshots and static media from `public/`
-
-Repository documentation now lives in markdown under `docs/`, while the application-level `/docs` routes simply redirect to the GitHub-hosted documentation entry points.
 
 ### Explore
 
@@ -293,6 +294,12 @@ The watch experience is centered on the player and supporting engagement surface
 - player preferences stored in Zustand
 
 The route resolves metadata server-side before hydrating the interactive page client.
+
+Comment deletion follows an explicit contract:
+
+- comments without replies are hard-deleted
+- comments with replies are soft-deleted and kept as `[deleted]` placeholders
+- the delete response exposes a `deletionMode` field so the client does not have to infer behavior from a free-form message
 
 ### Channel
 
@@ -331,7 +338,7 @@ Internal tools use dedicated domain modules:
 - moderators work with video review queues and moderation actions
 - admins manage users, roles, and ban state
 
-These pages are present in the frontend, and protected layouts now prefilter access during server rendering using auth hint cookies. Final authorization still depends on the backend enforcing roles and permissions.
+These pages are present in the frontend, and protected layouts verify the current session server-side through `lib/auth/server-session.ts`. Final authorization still depends on the backend enforcing roles and permissions.
 
 ### Hook conventions per feature
 
@@ -412,6 +419,7 @@ Current conventions reflected in the codebase:
 - path aliases use `@/*`
 - most shared UI state uses explicit status values like `idle`, `loading`, `ready`, and `error`
 - API shapes are typed close to their request modules
+- backend admin and moderation routes validate dynamic sort fields against allow-lists instead of passing arbitrary values through to Prisma
 - public routes favor server-side bootstrapping when that benefits metadata or first paint
 - interactive flows favor small hooks and feature helpers over large monolithic utilities
 
@@ -423,25 +431,38 @@ Naming tends to follow:
 
 ## 12. Tests
 
-The project does not currently have an automated test suite. When adding logic that would benefit from unit or integration tests, structure it so tests can be attached later, small pure functions, explicit dependencies, and minimal side effects at the module boundary are good foundations.
+The project includes a lightweight automated test suite powered by TypeScript compilation plus Node's built-in test runner.
+
+Current coverage focuses on small, critical, pure modules such as:
+
+- auth session resolution logic
+- safe redirect handling
+
+Run the suite with:
+
+```bash
+npm run test
+```
+
+This is small for now, but it establishes a real regression net and CI entry point for the most failure-prone control-flow code.
 
 ## 13. Security Considerations
 
 Important security-related behaviors already present:
 
 - unsafe callback URLs are rejected
-- authenticated requests only attach a token when one exists
+- authenticated browser requests are forwarded through same-origin Next.js handlers that attach the bearer token server-side
 - protected screens redirect unauthenticated users toward login, including in sensitive server-rendered layouts
 - non-public surfaces are flagged as non-indexable
-- role-sensitive layouts can reject unauthorized users before client hydration by reading auth hint cookies
+- role-sensitive layouts can reject unauthorized users before client hydration by verifying the current backend session
 
 Important tradeoff to understand:
 
-- the bearer token is persisted client-side, which is simple and explicit, but means frontend code must remain careful about storage, logout behavior, and session invalidation semantics
-- auth hint cookies improve UX for route gating, but they are frontend-managed hints and must never be treated as a replacement for backend authorization
+- the backend session format is still token-based, so the Next.js auth proxy must remain aligned with the backend contract
+- server-side proxying adds a small amount of infrastructure complexity, but it removes the need to expose the session key to client-side JavaScript
 
 Recommended practices when working in this area:
 
-- always call the logout helper rather than clearing state directly, so token removal and query cache invalidation happen together
-- avoid reading the token outside of `lib/auth/session.ts` and the Axios interceptor
+- always call the logout helper rather than clearing cache state directly, so backend revocation and cookie cleanup happen together
+- keep authenticated browser requests on the same-origin proxy layer instead of calling the backend directly from client code
 - ensure new protected routes both redirect unauthenticated users and are marked as non-indexable in route metadata

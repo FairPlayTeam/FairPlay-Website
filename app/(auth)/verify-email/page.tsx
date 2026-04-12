@@ -5,8 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { MailCheck, XCircle } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { resendVerificationEmail, verifyEmail } from "@/lib/auth/api";
-import { syncRoleCookie } from "@/lib/auth/cookies";
-import { setSessionToken } from "@/lib/auth/session";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
@@ -34,10 +32,8 @@ export default function VerifyEmailPage() {
 
     void (async () => {
       try {
-        const res = await verifyEmail(token);
-        setSessionToken(res.data.sessionKey);
-        const authenticatedUser = await refetchUser();
-        syncRoleCookie(authenticatedUser?.role ?? null);
+        await verifyEmail(token);
+        await refetchUser();
         if (!isMounted) return;
         setStatus("success");
         redirectTimeout = setTimeout(() => router.replace("/explore"), 2500);

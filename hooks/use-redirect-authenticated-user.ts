@@ -9,10 +9,10 @@ export function useRedirectAuthenticatedUser(destination: string) {
   const auth = useAuth();
 
   useEffect(() => {
-    if (!auth.isLoading && auth.user) {
+    if (auth.status === "authenticated" && auth.user) {
       router.replace(destination);
     }
-  }, [auth.isLoading, auth.user, destination, router]);
+  }, [auth.status, auth.user, destination, router]);
 
   return auth;
 }

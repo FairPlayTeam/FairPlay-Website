@@ -173,8 +173,8 @@ export default function ExplorePageClient({
           <AlertDialogHeader>
             <AlertDialogTitle>Hang on a sec...</AlertDialogTitle>
             <AlertDialogDescription>
-              This part of the website is currently under development. This environment is for development
-              purposes only.
+              This part of the website is currently under development. This environment is for
+              development purposes only.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

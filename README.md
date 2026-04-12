@@ -58,6 +58,8 @@ This variable is required. The app throws at startup if `NEXT_PUBLIC_API_BASE_UR
 
 You can also point the frontend to a local or custom backend implementation. The current documentation references the TypeScript backend at [FairPlayTeam/ts-backend](https://github.com/FairPlayTeam/ts-backend).
 
+You can start from the included `.env.example`.
+
 ### Run the Development Server
 
 ```bash
@@ -72,6 +74,8 @@ Then open `http://localhost:3000`.
 - `npm run build` creates a production build
 - `npm run start` serves the production build
 - `npm run lint` runs ESLint
+- `npm run test` runs the automated unit test suite
+- `npm run typecheck` runs the TypeScript checker without emitting files
 - `npm run format` formats the repository with Prettier
 
 ## Recommended Local Checks
@@ -80,7 +84,8 @@ Before opening a pull request, run:
 
 ```bash
 npm run lint
-npx tsc --noEmit
+npm run test
+npm run typecheck
 ```
 
 If you want to normalize formatting before committing:
@@ -105,11 +110,13 @@ docs/         Repository-level technical documentation
 
 - The app uses the Next.js App Router with a hybrid rendering model.
 - Marketing pages are public and SEO-oriented.
-- The in-app `/docs` routes now redirect to the repository documentation on GitHub.
 - Product pages mix server-side bootstrapping with client-side interactivity.
-- Authentication is handled with bearer tokens persisted in a Zustand store.
-- The API client attaches the session token automatically on each request.
-- Sensitive areas are prefiltered server-side with auth hint cookies and reinforced client-side with sanitized callback URLs.
+- Authentication is mediated by Next.js route handlers that store the backend session key in an `HttpOnly` cookie.
+- Login and verification handlers forward client IP and user-agent metadata to the backend so auth rate limiting and session history stay accurate behind the frontend BFF.
+- Client-side API requests are proxied through same-origin Next.js routes that attach the bearer token server-side.
+- Sensitive areas are checked server-side against the backend session and reinforced client-side with sanitized callback URLs.
+- Protected routes distinguish between an expired session and a temporarily unavailable auth backend, redirecting the latter to a dedicated recovery screen instead of treating it as a logout.
+- Client-side auth hydration preserves a distinct "service unavailable" state so public surfaces do not misleadingly fall back to login prompts when the auth backend is down.
 - Uploads are sent as multipart form data to the backend.
 
 For a more detailed technical walkthrough, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
@@ -126,14 +133,14 @@ For a more detailed technical walkthrough, see [docs/ARCHITECTURE.md](docs/ARCHI
 ## Security Notes
 
 - The frontend expects a public API base URL via `NEXT_PUBLIC_API_BASE_URL`
-- Authenticated requests use a bearer token stored in persisted client state
-- Lightweight session and role hint cookies are mirrored client-side to support route gating in Next.js layouts
+- Authenticated requests flow through same-origin Next.js proxy routes
+- The backend session key is stored only in an `HttpOnly` cookie
 - Redirect targets are sanitized to reduce open redirect risk
 - Admin and moderator routes are excluded from indexing through metadata and `robots.ts`
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on branching, conventions, and the pull request process.
+Contributions are welcome. See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines on branching, conventions, and the pull request process.
 
 ## License
 

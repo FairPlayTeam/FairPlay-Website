@@ -45,7 +45,7 @@ Branch names should reflect the change. Prefix with `feat/`, `fix/`, `chore/`, o
 
 ## Making Changes
 
-Follow the conventions described in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). A few things worth keeping in mind:
+Follow the conventions described in [docs/ARCHITECTURE.md](ARCHITECTURE.md). A few things worth keeping in mind:
 
 - New client components belong under `components/app/` or `components/marketing/` depending on context.
 - New shared UI primitives belong under `components/ui/`.
@@ -57,11 +57,12 @@ Follow the conventions described in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ## Before Opening a Pull Request
 
-Run linting and type checking locally:
+Run linting, tests, and type checking locally:
 
 ```bash
 npm run lint
-npx tsc --noEmit
+npm run test
+npm run typecheck
 ```
 
 If you want to normalize formatting:
@@ -70,7 +71,7 @@ If you want to normalize formatting:
 npm run format
 ```
 
-Both checks must pass cleanly before submitting.
+All three checks must pass cleanly before submitting.
 
 ## Pull Request Guidelines
 
@@ -82,7 +83,13 @@ Both checks must pass cleanly before submitting.
 
 ## Tests
 
-The project does not currently have an automated test suite. If you add testable logic, consider structuring it so tests can be added later.
+The repository includes a small automated test suite for critical pure logic such as auth session handling and redirect sanitization.
+
+When you add behavior with meaningful branching or failure handling:
+
+- prefer extracting the logic into small pure helpers
+- add or extend tests under `tests/`
+- keep `npm run test` green alongside lint and typecheck
 
 ## Commit Style
 

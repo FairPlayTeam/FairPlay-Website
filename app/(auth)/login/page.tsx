@@ -8,9 +8,7 @@ import { AuthPageShell } from "@/components/app/auth/auth-page-shell";
 import { AuthPasswordField } from "@/components/app/auth/auth-password-field";
 import { AuthTextField } from "@/components/app/auth/auth-text-field";
 import { login } from "@/lib/auth/api";
-import { syncRoleCookie } from "@/lib/auth/cookies";
 import { loginFormSchema, type LoginFormValues } from "@/lib/auth/forms";
-import { setSessionToken } from "@/lib/auth/session";
 import { useRedirectAuthenticatedUser } from "@/hooks/use-redirect-authenticated-user";
 import { useAuthSubmit } from "@/hooks/use-auth-submit";
 import { buildAuthHref, getSafeCallbackUrl } from "@/lib/safe-redirect";
@@ -23,14 +21,12 @@ export default function LoginPage() {
 
   const submitLogin = useCallback(
     async (values: LoginFormValues) => {
-      const response = await login({
+      await login({
         emailOrUsername: values.identifier,
         password: values.password,
       });
 
-      setSessionToken(response.data.sessionKey);
-      const authenticatedUser = await refetchUser();
-      syncRoleCookie(authenticatedUser?.role ?? null);
+      await refetchUser();
       router.replace(callbackUrl);
     },
     [callbackUrl, refetchUser, router],

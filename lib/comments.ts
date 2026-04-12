@@ -23,6 +23,12 @@ export type CommentsResponse = {
   pagination: Pagination;
 };
 
+export type DeleteCommentResponse = {
+  message: string;
+  deletionMode: "soft" | "hard";
+  commentId: string;
+};
+
 export async function getVideoComments(
   videoId: string,
   params?: {
@@ -76,5 +82,5 @@ export async function getCommentReplies(commentId: string, page = 1, limit = 20)
 }
 
 export async function deleteComment(commentId: string) {
-  return api.delete<{ message: string }>(`/comments/${encodeURIComponent(commentId)}`);
+  return api.delete<DeleteCommentResponse>(`/comments/${encodeURIComponent(commentId)}`);
 }

@@ -1,14 +1,15 @@
 ﻿"use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthUnavailableNotice } from "@/components/app/auth/auth-unavailable-notice";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/context/auth-context";
-import { buildAuthHref } from "@/lib/safe-redirect";
 import { toast } from "sonner";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import UploadDropzone from "./components/video-dropzone";
 import ThumbnailDropzone from "./components/thumbnail-dropzone";
 import UploadProgress from "./components/upload-progress";
@@ -39,7 +40,7 @@ const STEP_META: Record<UploadStep, { title: string; subtitle?: string }> = {
 
 export default function UploadPage() {
   const router = useRouter();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isUnavailable, errorMessage } = useAuth();
 
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -49,12 +50,6 @@ export default function UploadPage() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<UploadStep>(1);
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace(buildAuthHref("/login", "/upload"));
-    }
-  }, [user, isLoading, router]);
 
   const {
     register,
@@ -168,6 +163,18 @@ export default function UploadPage() {
   const combinedUpload = getCombinedUploadState({ video: videoRequest });
 
   const { title, subtitle } = STEP_META[currentStep];
+
+  if (isUnavailable && !user) {
+    return (
+      <AuthUnavailableNotice
+        description={
+          errorMessage ??
+          "FairPlay could not confirm your session right now, so uploads are temporarily unavailable."
+        }
+        actionHref={buildServiceUnavailableHref("/upload")}
+      />
+    );
+  }
 
   if (isLoading || !user) {
     return (

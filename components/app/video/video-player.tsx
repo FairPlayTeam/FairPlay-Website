@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import VideoStatsPanel from "@/components/app/video/player/video-stats-panel";
 import VideoSettingsPanel from "@/components/app/video/player/video-settings-panel";
-import { getSessionToken } from "@/lib/auth/session";
 import { usePreferenceStore } from "@/lib/stores/preference";
 import { useVideoAmbilight } from "./player/use-video-ambilight";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -28,6 +27,33 @@ type OverlayAnimation = "play" | "pause" | "mute" | "unmute" | null;
 
 const FPS = 30;
 const CONTROLS_HIDE_DELAY_MS = 2500;
+
+function getProxiedMediaUrl(url: string) {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!apiBaseUrl) return url;
+
+  try {
+    const normalizedApiBaseUrl = apiBaseUrl.replace(/\/$/, "");
+    const targetUrl = new URL(url);
+    const apiUrl = new URL(normalizedApiBaseUrl);
+
+    if (targetUrl.origin !== apiUrl.origin) {
+      return url;
+    }
+
+    const apiPathPrefix = `${apiUrl.pathname.replace(/\/$/, "")}/`;
+    if (!targetUrl.pathname.startsWith(apiPathPrefix)) {
+      return url;
+    }
+
+    const relativePath = targetUrl.pathname.slice(apiPathPrefix.length);
+    const proxiedPath = relativePath.split("/").filter(Boolean).map(encodeURIComponent).join("/");
+
+    return `/api/media/${proxiedPath}${targetUrl.search}`;
+  } catch {
+    return url;
+  }
+}
 
 export function VideoPlayer({
   url,
@@ -90,6 +116,7 @@ export function VideoPlayer({
 
   // Support share-at-time via ?t=<seconds> query param
   const initialTimeRef = useRef<number>(0);
+  const mediaUrl = getProxiedMediaUrl(url);
 
   // Determine if we're on desktop for default ambilight preference
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -498,18 +525,14 @@ export function VideoPlayer({
     };
 
     if (Hls.isSupported()) {
-      const token = getSessionToken();
       const hls = new Hls({
         xhrSetup: (xhr) => {
           xhr.withCredentials = true;
-          if (token) {
-            xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-          }
         },
       });
 
       hlsRef.current = hls;
-      hls.loadSource(url);
+      hls.loadSource(mediaUrl);
       hls.attachMedia(video);
 
       hls.on(Events.MANIFEST_PARSED, () => {
@@ -604,7 +627,7 @@ export function VideoPlayer({
         }
       };
 
-      video.src = url;
+      video.src = mediaUrl;
       video.addEventListener("loadedmetadata", onLoadedMetadata);
       return () => {
         video.removeEventListener("loadedmetadata", onLoadedMetadata);
@@ -619,7 +642,7 @@ export function VideoPlayer({
     computeAutoLevelIndex,
     preferredQuality,
     setLoopPref,
-    url,
+    mediaUrl,
   ]);
 
   useHotkeys(

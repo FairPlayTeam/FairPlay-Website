@@ -17,11 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function ModerationLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function ModerationLayout({ children }: { children: React.ReactNode }) {
   await requireAuthorizedRole(["admin", "moderator"], "/moderator");
 
   return <AppShell>{children}</AppShell>;

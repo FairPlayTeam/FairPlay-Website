@@ -10,7 +10,7 @@ type SearchResultsListProps = {
 
 export function SearchResultsList({ results }: SearchResultsListProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-3">
       {results.map((result) => {
         if (result.type === "creator") {
           return <SearchUserCard key={`creator-${result.creator.id}`} creator={result.creator} />;
@@ -27,6 +27,7 @@ export function SearchResultsList({ results }: SearchResultsListProps) {
             meta={`${video.viewCount} views - ${new Date(video.createdAt).toLocaleDateString()}`}
             href={`/video/${video.id}`}
             variant="listLarge"
+            className="mb-0"
           />
         );
       })}

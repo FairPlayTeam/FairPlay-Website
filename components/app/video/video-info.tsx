@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FollowButton } from "@/components/ui/follow-button";
 import { getUser, type PublicUser } from "@/lib/users";
 import { type VideoDetails, rateVideo } from "@/lib/video";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildAuthHref, buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import { useAuth } from "@/context/auth-context";
 import UserAvatar from "@/components/ui/user-avatar";
 import { toast } from "sonner";
@@ -25,12 +25,13 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
   const [ratingsCount, setRatingsCount] = useState(video.ratingsCount);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { user } = useAuth();
+  const { user, isUnavailable, errorMessage } = useAuth();
   const isOwner = user?.id === video.userId;
   const callbackUrl = useMemo(() => {
     const query = searchParams.toString();
     return query ? `${pathname}?${query}` : pathname;
   }, [pathname, searchParams]);
+  const serviceUnavailableHref = buildServiceUnavailableHref(callbackUrl);
 
   const isStarActive = (star: number) => {
     if (hoverRating !== null) return star <= hoverRating;
@@ -93,7 +94,16 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
           </div>
 
           <div className="flex gap-2 sm:gap-4">
-            {!user ? (
+            {isUnavailable && !user ? (
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full px-5 py-2 text-sm font-semibold"
+                title={errorMessage ?? undefined}
+              >
+                <Link href={serviceUnavailableHref}>Auth unavailable</Link>
+              </Button>
+            ) : !user ? (
               <Link href={buildAuthHref("/login", callbackUrl)}>
                 <Button variant="outline" className="rounded-full px-5 py-2 text-sm font-semibold">
                   Login to Subscribe
@@ -120,7 +130,7 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
                 key={star}
                 type="button"
                 aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
-                disabled={!user || isOwner}
+                disabled={!user || isOwner || isUnavailable}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(null)}
                 onClick={() => handleRate(star)}

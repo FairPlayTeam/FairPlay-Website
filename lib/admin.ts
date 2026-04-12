@@ -48,11 +48,7 @@ export async function adminUpdateRole(id: string, role: "user" | "moderator" | "
   return api.patch<{ message: string; user: AdminViewUser }>(`/admin/users/${id}/role`, { role });
 }
 
-export async function adminUpdateBan(
-  id: string,
-  isBanned: boolean,
-  privateReason?: string,
-) {
+export async function adminUpdateBan(id: string, isBanned: boolean, privateReason?: string) {
   return api.patch<{ message: string; user: AdminViewUser }>(`/admin/users/${id}/ban`, {
     isBanned,
     privateReason,

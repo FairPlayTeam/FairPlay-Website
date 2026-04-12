@@ -16,7 +16,7 @@ import { useAuth } from "@/context/auth-context";
 import UserAvatar from "@/components/ui/user-avatar";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import UserListModal from "@/components/ui/user-list-modal";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildAuthHref, buildServiceUnavailableHref } from "@/lib/safe-redirect";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
 
@@ -60,7 +60,7 @@ export default function ChannelPageClient({
   initialError,
 }: ChannelPageClientProps) {
   const router = useRouter();
-  const { user: me } = useAuth();
+  const { user: me, isUnavailable, errorMessage } = useAuth();
   const pathname = usePathname();
 
   const [user, setUser] = useState<PublicUser | null>(initialUser);
@@ -345,6 +345,16 @@ export default function ChannelPageClient({
                     <Pencil className="size-4" />
                     <span>Edit Channel</span>
                   </Button>
+                ) : isUnavailable && !me ? (
+                  <Link href={buildServiceUnavailableHref(pathname || "/")}>
+                    <Button
+                      variant="outline"
+                      className="rounded-full px-4 py-2 text-sm font-semibold"
+                      title={errorMessage ?? undefined}
+                    >
+                      Auth unavailable
+                    </Button>
+                  </Link>
                 ) : !me ? (
                   <Link href={buildAuthHref("/login", pathname || "/")}>
                     <Button

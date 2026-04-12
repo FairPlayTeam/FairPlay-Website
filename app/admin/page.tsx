@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ComponentProps, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Ban, UserCheck, Search, X } from "lucide-react";
+import { AuthUnavailableNotice } from "@/components/app/auth/auth-unavailable-notice";
 import { Spinner } from "@/components/ui/spinner";
 
 import {
@@ -33,7 +34,6 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import UserAvatar from "@/components/ui/user-avatar";
 import { useAuth } from "@/context/auth-context";
-import { buildAuthHref } from "@/lib/safe-redirect";
 import {
   adminListUsers,
   adminUpdateBan,
@@ -41,6 +41,7 @@ import {
   type AdminViewUser,
   type AdminUsersResponse,
 } from "@/lib/admin";
+import { buildServiceUnavailableHref } from "@/lib/safe-redirect";
 import { cn } from "@/lib/utils";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
@@ -64,7 +65,7 @@ const roleBadgeVariant = (role: AdminViewUser["role"]): BadgeVariant => {
 
 export default function AdminPage() {
   const router = useRouter();
-  const { user: me, isLoading } = useAuth();
+  const { user: me, isLoading, isUnavailable, errorMessage } = useAuth();
   const isAdmin = me?.role === "admin";
 
   const [users, setUsers] = useState<AdminViewUser[]>([]);
@@ -80,12 +81,6 @@ export default function AdminPage() {
   const [banTarget, setBanTarget] = useState<AdminViewUser | null>(null);
 
   const requestSeq = useRef(0);
-
-  useEffect(() => {
-    if (!isLoading && !me) {
-      router.replace(buildAuthHref("/login", "/admin"));
-    }
-  }, [me, isLoading, router]);
 
   useEffect(() => {
     const seq = ++requestSeq.current;
@@ -215,6 +210,18 @@ export default function AdminPage() {
   const totalPages = pagination?.totalPages ?? 1;
   const currentPage = pagination?.page ?? page;
   const totalItems = pagination?.totalItems ?? users.length;
+
+  if (isUnavailable && !me) {
+    return (
+      <AuthUnavailableNotice
+        description={
+          errorMessage ??
+          "FairPlay could not confirm your session right now, so admin tools are temporarily unavailable."
+        }
+        actionHref={buildServiceUnavailableHref("/admin")}
+      />
+    );
+  }
 
   if (!isLoading && me && !isAdmin) {
     return (

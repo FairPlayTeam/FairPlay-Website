@@ -1,16 +1,27 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { AUTH_ROLE_COOKIE, AUTH_SESSION_COOKIE } from "@/lib/auth/cookies";
-import { buildAuthHref } from "@/lib/safe-redirect";
+import { buildAuthHref, buildServiceUnavailableHref } from "@/lib/safe-redirect";
+import { isAuthServiceUnavailableError } from "@/lib/auth/session-status";
+import { getCurrentUserServer } from "@/lib/auth/server-session";
 import type { UserRole } from "@/lib/users";
 
 export async function requireAuthenticatedUser(callbackUrl: string) {
-  const cookieStore = await cookies();
-  const sessionHint = cookieStore.get(AUTH_SESSION_COOKIE)?.value;
+  let user: Awaited<ReturnType<typeof getCurrentUserServer>>;
 
-  if (!sessionHint) {
+  try {
+    user = await getCurrentUserServer();
+  } catch (error) {
+    if (isAuthServiceUnavailableError(error)) {
+      redirect(buildServiceUnavailableHref(callbackUrl));
+    }
+
+    throw error;
+  }
+
+  if (!user) {
     redirect(buildAuthHref("/login", callbackUrl));
   }
+
+  return user;
 }
 
 export async function requireAuthorizedRole(
@@ -18,15 +29,25 @@ export async function requireAuthorizedRole(
   callbackUrl: string,
   fallbackUrl = "/explore",
 ) {
-  const cookieStore = await cookies();
-  const sessionHint = cookieStore.get(AUTH_SESSION_COOKIE)?.value;
+  let user: Awaited<ReturnType<typeof getCurrentUserServer>>;
 
-  if (!sessionHint) {
+  try {
+    user = await getCurrentUserServer();
+  } catch (error) {
+    if (isAuthServiceUnavailableError(error)) {
+      redirect(buildServiceUnavailableHref(callbackUrl));
+    }
+
+    throw error;
+  }
+
+  if (!user) {
     redirect(buildAuthHref("/login", callbackUrl));
   }
 
-  const roleHint = cookieStore.get(AUTH_ROLE_COOKIE)?.value as UserRole | undefined;
-  if (!roleHint || !roles.includes(roleHint)) {
+  if (!roles.includes(user.role)) {
     redirect(fallbackUrl);
   }
+
+  return user;
 }
