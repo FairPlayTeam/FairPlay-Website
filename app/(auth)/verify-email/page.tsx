@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { MailCheck, XCircle } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { resendVerificationEmail, verifyEmail } from "@/lib/auth/api";
@@ -9,9 +9,10 @@ import { getApiErrorMessage } from "@/lib/api-error";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 
+const SESSION_SYNC_RETRY_DELAYS_MS = [150, 300, 600];
+
 export default function VerifyEmailPage() {
   const params = useSearchParams();
-  const router = useRouter();
   const { refetchUser } = useAuth();
   const token = params.get("token");
 
@@ -33,10 +34,19 @@ export default function VerifyEmailPage() {
     void (async () => {
       try {
         await verifyEmail(token);
-        await refetchUser();
         if (!isMounted) return;
         setStatus("success");
-        redirectTimeout = setTimeout(() => router.replace("/explore"), 2500);
+
+        for (const delay of SESSION_SYNC_RETRY_DELAYS_MS) {
+          try {
+            await refetchUser();
+            break;
+          } catch {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+
+        redirectTimeout = setTimeout(() => window.location.replace("/explore"), 1200);
       } catch (error) {
         if (!isMounted) return;
         setStatus("error");
@@ -48,7 +58,7 @@ export default function VerifyEmailPage() {
       isMounted = false;
       if (redirectTimeout) clearTimeout(redirectTimeout);
     };
-  }, [refetchUser, router, token]);
+  }, [refetchUser, token]);
 
   const handleResend = async () => {
     if (!resendEmail || resendStatus === "sending" || resendStatus === "sent") return;
