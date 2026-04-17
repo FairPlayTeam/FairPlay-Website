@@ -390,6 +390,7 @@ export default function ChannelPageClient({
                 <VideoCard
                   key={v.id}
                   thumbnailUrl={v.thumbnailUrl}
+                  durationSeconds={v.duration}
                   title={v.title}
                   displayName={user.displayName || user.username}
                   meta={meta}

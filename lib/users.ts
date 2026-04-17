@@ -61,6 +61,7 @@ export type UserVideoItem = {
   createdAt: string;
   viewCount: string;
   thumbnailUrl: string | null;
+  duration: number | null;
 };
 
 export type UserVideosResponse = {

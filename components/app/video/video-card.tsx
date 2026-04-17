@@ -6,9 +6,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
+import { formatVideoDuration } from "@/lib/time";
 
 type VideoCardProps = {
   thumbnailUrl: string | null;
+  durationSeconds?: number | null;
   title: string;
   displayName?: string | null;
   meta?: string;
@@ -24,6 +26,7 @@ type VideoCardProps = {
 
 export function VideoCard({
   thumbnailUrl,
+  durationSeconds,
   title,
   displayName,
   meta,
@@ -39,6 +42,10 @@ export function VideoCard({
   const isGrid = variant === "grid";
   const isLarge = variant === "listLarge";
   const imgSrc = thumbnailUrl ?? undefined;
+  const durationLabel =
+    typeof durationSeconds === "number" && durationSeconds > 0
+      ? formatVideoDuration(durationSeconds)
+      : null;
 
   const router = useRouter();
 
@@ -50,7 +57,6 @@ export function VideoCard({
     const resolvedHref = href?.trim();
     if (resolvedHref) {
       return (
-        // use div with click handler instead of Link to avoid nested anchors
         <div
           className={classes}
           role="link"
@@ -67,13 +73,20 @@ export function VideoCard({
     return <div className={classes}>{children}</div>;
   };
 
-  const ImageBlock = (
-    <div className="relative w-full aspect-video overflow-hidden rounded-xl">
+  const renderThumbnail = (classes: string) => (
+    <div className={classes}>
       {overlayCenter && <div className="absolute inset-0 z-10">{overlayCenter}</div>}
       {overlayTopRight && <div className="absolute top-1 right-1 z-20">{overlayTopRight}</div>}
       {overlayTopLeft && <div className="absolute top-1 left-1 z-20">{overlayTopLeft}</div>}
       {overlayBottomLeft && (
         <div className="absolute bottom-1 left-1 z-20">{overlayBottomLeft}</div>
+      )}
+      {durationLabel && (
+        <div className="pointer-events-none absolute right-2 bottom-2 z-20">
+          <span className="inline-flex items-center rounded-sm bg-background/80 px-2 py-1 text-xs font-semibold leading-none">
+            {durationLabel}
+          </span>
+        </div>
       )}
 
       {imgSrc ? (
@@ -92,7 +105,7 @@ export function VideoCard({
   if (isGrid) {
     return cardWrapper(
       <>
-        {ImageBlock}
+        {renderThumbnail("relative w-full aspect-video overflow-hidden rounded-xl")}
 
         <div className="flex flex-1 flex-col gap-2 p-3">
           <h3 className="font-semibold text-foreground line-clamp-2">{title}</h3>
@@ -137,18 +150,9 @@ export function VideoCard({
   if (isLarge) {
     return cardWrapper(
       <>
-        <div className="relative w-full aspect-video sm:w-72 sm:h-40 overflow-hidden rounded-xl shrink-0">
-          {imgSrc ? (
-            <Image
-              src={imgSrc}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-            />
-          ) : (
-            <div className="h-full w-full bg-muted" />
-          )}
-        </div>
+        {renderThumbnail(
+          "relative w-full aspect-video overflow-hidden rounded-xl shrink-0 sm:h-40 sm:w-72",
+        )}
 
         <div className="flex flex-1 flex-col gap-2 sm:gap-1 p-3 sm:py-2">
           <h3 className="font-semibold text-xl line-clamp-2">{title}</h3>
@@ -166,18 +170,9 @@ export function VideoCard({
 
   return cardWrapper(
     <>
-      <div className="relative w-full aspect-video sm:w-45 sm:h-25 overflow-hidden rounded-xl sm:rounded-lg shrink-0">
-        {imgSrc ? (
-          <Image
-            src={imgSrc}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-          />
-        ) : (
-          <div className="h-full w-full bg-muted" />
-        )}
-      </div>
+      {renderThumbnail(
+        "relative w-full aspect-video overflow-hidden rounded-xl shrink-0 sm:h-25 sm:w-45 sm:rounded-lg",
+      )}
 
       <div className="flex flex-1 flex-col gap-2 sm:gap-1 p-3 sm:p-0">
         <h3 className="font-semibold text-foreground line-clamp-2">{title}</h3>
