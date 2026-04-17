@@ -78,7 +78,7 @@ export default function MissionSection() {
             strokeLinejoin="round"
             aria-hidden="true"
             role="presentation"
-            className="pointer-events-none absolute -left-0 top-1/2 -translate-y-1/2 text-primary/20"
+            className="pointer-events-none absolute -left-0 top-1/2 hidden -translate-y-1/2 text-primary/20 md:block"
             style={{ maskImage: MASK_FADE_RIGHT, WebkitMaskImage: MASK_FADE_RIGHT }}
             variants={floatVariants}
             initial="hidden"
@@ -99,7 +99,7 @@ export default function MissionSection() {
             strokeLinejoin="round"
             aria-hidden="true"
             role="presentation"
-            className="pointer-events-none absolute -right-0 bottom-0 text-primary/15"
+            className="pointer-events-none absolute -right-0 bottom-0 hidden text-primary/15 md:block"
             style={{ maskImage: MASK_FADE_LEFT, WebkitMaskImage: MASK_FADE_LEFT }}
             variants={floatRightVariants}
             initial="hidden"
