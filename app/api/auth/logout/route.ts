@@ -79,10 +79,13 @@ async function revokeCurrentBackendSession(token: string) {
   let revokeResponse: Response;
 
   try {
-    revokeResponse = await fetch(`${apiBaseUrl}/auth/sessions/${encodeURIComponent(currentSession.id)}`, {
-      method: "DELETE",
-      headers: authHeaders,
-    });
+    revokeResponse = await fetch(
+      `${apiBaseUrl}/auth/sessions/${encodeURIComponent(currentSession.id)}`,
+      {
+        method: "DELETE",
+        headers: authHeaders,
+      },
+    );
   } catch {
     return {
       ok: false,
