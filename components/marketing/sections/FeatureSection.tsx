@@ -28,7 +28,7 @@ const features = [
     title: "Watch the way",
     titleAccent: "you want.",
     description:
-      "Toggle ambilight for an immersive glow, switch between light and dark mode, or dial in a custom accent colour. Your setup, saved automatically.",
+      "Toggle ambilight for an immersive glow, switch between light and dark mode, or enter theatre mode. Your setup, saved automatically.",
     screenshot: "/screenshots/feature-customization.png",
     alt: "Player customization panel with ambilight and theme options",
     imageLeft: false,
@@ -52,7 +52,7 @@ function FeatureRow({
     >
       <div className="w-full md:w-3/5">
         <div className="group">
-          <BrowserFrame url="lab.fairplay.video">
+          <BrowserFrame url="fairplay.video">
             <Image
               src={screenshot}
               alt={alt}

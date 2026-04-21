@@ -1,38 +1,34 @@
 import type { UploadState } from "./upload-constants";
+import { DEFAULT_UPLOADING_LABEL } from "./upload-constants";
+import { getApiErrorMessage } from "../../lib/api-error";
 
 export type UploadRequestState = {
   state: UploadState;
   progress: number;
   error: string | null;
+  uploadingLabel: string;
 };
 
 export const createIdleUploadRequestState = (): UploadRequestState => ({
   state: "idle",
   progress: 0,
   error: null,
+  uploadingLabel: DEFAULT_UPLOADING_LABEL,
 });
 
 export const resolveUploadErrorMessage = (error: unknown, fallback = "Something went wrong!") => {
   const responseData = (
     error as {
-      response?: { data?: { error?: string; message?: string } };
+      code?: string;
+      name?: string;
     }
-  )?.response?.data;
-  const message = responseData?.error ?? responseData?.message;
+  );
 
-  if (typeof message === "string" && message.trim().length > 0) {
-    return message;
+  if (responseData?.code === "ERR_CANCELED" || responseData?.name === "CanceledError") {
+    return "Upload canceled.";
   }
 
-  if (typeof error === "string" && error.trim().length > 0) {
-    return error;
-  }
-
-  if (error instanceof Error && error.message.trim().length > 0) {
-    return error.message;
-  }
-
-  return fallback;
+  return getApiErrorMessage(error, fallback);
 };
 
 export const getCombinedUploadState = ({ video }: { video: UploadRequestState }) => {
@@ -42,7 +38,7 @@ export const getCombinedUploadState = ({ video }: { video: UploadRequestState })
 
   const labels = {
     idle: "Ready to upload",
-    uploading: "Uploading video",
+    uploading: video.uploadingLabel || DEFAULT_UPLOADING_LABEL,
     done: "Upload complete",
     error: "Upload failed",
   };

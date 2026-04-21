@@ -105,11 +105,11 @@ function StatDisplay({ value, label }: StatItem) {
 export default function HeroSection({
   titleLine1 = "The video platform",
   titleLine2 = "that plays fair.",
-  description = "An open-source project for a healthier internet, built around transparency, fairness, and creators.",
+  description = "An open-source project for a healthier internet, built around transparency, fairness, and users.",
   primaryCTA = "Explore the app",
   primaryCTAHref = "/explore?popup",
   secondaryCTA = "Watch Intro",
-  secondaryCTAHref = "https://lab.fairplay.video/video/b79f9273-16de-434c-8f69-4fd9f1a2f959",
+  secondaryCTAHref = "https://fairplay.video/video/QGdnptWkwU",
   stats = DEFAULT_STATS,
 }: HeroProps) {
   const [animate, setAnimate] = useState(false);

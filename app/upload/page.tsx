@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,15 @@ import ThumbnailDropzone from "./components/thumbnail-dropzone";
 import UploadProgress from "./components/upload-progress";
 import UploadDetailsFormFields from "./components/details-fields";
 import UploadStepScreen from "./components/upload-step";
-import { UPLOAD_STEPS, type UploadStep } from "./upload-constants";
+import {
+  DEFAULT_UPLOADING_LABEL,
+  MAX_THUMBNAIL_BYTES,
+  MAX_THUMBNAIL_MB,
+  MAX_VIDEO_UPLOAD_TOTAL_BYTES,
+  MAX_VIDEO_UPLOAD_TOTAL_MB,
+  UPLOAD_STEPS,
+  type UploadStep,
+} from "./upload-constants";
 import { uploadVideo } from "./upload-api";
 import {
   createIdleUploadRequestState,
@@ -50,6 +58,7 @@ export default function UploadPage() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<UploadStep>(1);
+  const uploadAbortControllerRef = useRef<AbortController | null>(null);
 
   const {
     register,
@@ -82,6 +91,13 @@ export default function UploadPage() {
     reset();
   };
 
+  useEffect(() => {
+    return () => {
+      uploadAbortControllerRef.current?.abort();
+      uploadAbortControllerRef.current = null;
+    };
+  }, []);
+
   const handleFileSelect = (nextFile: File | null) => {
     resetUploadSession();
     setCurrentStep(1);
@@ -95,6 +111,12 @@ export default function UploadPage() {
     if (!nextFile.type.startsWith("video/")) {
       setFile(null);
       setFileError("The selected file must be a video.");
+      return;
+    }
+
+    if (nextFile.size > MAX_VIDEO_UPLOAD_TOTAL_BYTES) {
+      setFile(null);
+      setFileError(`Videos are limited to ${MAX_VIDEO_UPLOAD_TOTAL_MB} MB.`);
       return;
     }
 
@@ -116,6 +138,12 @@ export default function UploadPage() {
       return;
     }
 
+    if (nextFile.size > MAX_THUMBNAIL_BYTES) {
+      setThumbnailFile(null);
+      setThumbnailError(`Thumbnails are limited to ${MAX_THUMBNAIL_MB} MB.`);
+      return;
+    }
+
     setThumbnailFile(nextFile);
     setThumbnailError(null);
   };
@@ -128,19 +156,37 @@ export default function UploadPage() {
     }
 
     setCurrentStep(4);
-    setVideoRequest({ state: "uploading", progress: 0, error: null });
+    setVideoRequest({
+      state: "uploading",
+      progress: 0,
+      error: null,
+      uploadingLabel: DEFAULT_UPLOADING_LABEL,
+    });
 
     try {
+      const controller = new AbortController();
+      uploadAbortControllerRef.current = controller;
+
       await uploadVideo({
         file,
         thumbnail: thumbnailFile,
         values: data,
-        onProgress: (progress) => {
-          setVideoRequest((prev) => ({ ...prev, progress }));
+        signal: controller.signal,
+        onProgress: ({ progress, label }) => {
+          setVideoRequest((prev) => ({
+            ...prev,
+            progress,
+            uploadingLabel: label,
+          }));
         },
       });
 
-      setVideoRequest({ state: "done", progress: 100, error: null });
+      setVideoRequest({
+        state: "done",
+        progress: 100,
+        error: null,
+        uploadingLabel: DEFAULT_UPLOADING_LABEL,
+      });
 
       toast.success(
         thumbnailFile
@@ -149,8 +195,15 @@ export default function UploadPage() {
       );
     } catch (error) {
       const message = resolveUploadErrorMessage(error);
-      setVideoRequest((prev) => ({ ...prev, state: "error", error: message }));
+      setVideoRequest((prev) => ({
+        ...prev,
+        state: "error",
+        error: message,
+        uploadingLabel: DEFAULT_UPLOADING_LABEL,
+      }));
       toast.error(message);
+    } finally {
+      uploadAbortControllerRef.current = null;
     }
   };
 
@@ -277,6 +330,16 @@ export default function UploadPage() {
       case 4:
         return (
           <>
+            {isUploading && (
+              <Button
+                type="button"
+                variant="ghost"
+                className={secondaryActionClassName}
+                onClick={() => uploadAbortControllerRef.current?.abort()}
+              >
+                Cancel upload
+              </Button>
+            )}
             {videoRequest.state === "error" && (
               <Button
                 type="button"

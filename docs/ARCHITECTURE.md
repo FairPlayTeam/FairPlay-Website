@@ -329,7 +329,13 @@ The upload flow is implemented as a client-side multi-step process:
 3. optionally add a thumbnail
 4. upload and monitor progress
 
-The actual upload request is sent as `multipart/form-data` to `/upload/video-bundle`.
+The upload client automatically switches to the chunked backend flow for video files:
+
+1. `POST /upload/video-chunks/init`
+2. `POST /upload/video-chunks/:uploadId/chunk`
+3. `POST /upload/video-chunks/:uploadId/complete`
+
+Large videos are therefore streamed in multiple requests instead of a single monolithic `video-bundle` request.
 
 ### Moderator and Admin
 
