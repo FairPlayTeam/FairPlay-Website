@@ -30,6 +30,14 @@ const passwordSchema = z
     }
   });
 
+export const forgotPasswordFormSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Invalid email")
+    .transform((value) => value.toLowerCase()),
+});
+
 export const registerFormSchema = z
   .object({
     email: z
@@ -50,5 +58,17 @@ export const registerFormSchema = z
     path: ["confirmPassword"],
   });
 
+export const resetPasswordFormSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
+export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>;
 export type RegisterFormValues = z.infer<typeof registerFormSchema>;
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordFormSchema>;

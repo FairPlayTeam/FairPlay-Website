@@ -13,6 +13,7 @@ type AuthPasswordFieldProps = {
   label: string;
   placeholder?: string;
   autoComplete?: string;
+  autoFocus?: boolean;
   registration: UseFormRegisterReturn;
   error?: string;
   descriptionId?: string;
@@ -25,6 +26,7 @@ export function AuthPasswordField({
   label,
   placeholder,
   autoComplete,
+  autoFocus,
   registration,
   error,
   descriptionId,
@@ -50,6 +52,7 @@ export function AuthPasswordField({
           type={isVisible ? "text" : "password"}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          autoFocus={autoFocus}
           aria-invalid={!!error}
           aria-describedby={describedBy || undefined}
           className="border-input bg-card pr-10 text-foreground placeholder:text-muted-foreground focus-visible:ring-ring"

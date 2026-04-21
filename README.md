@@ -11,7 +11,7 @@ The FairPlay web frontend, built with Next.js App Router, TypeScript, Tailwind C
 ## What This Repository Contains
 
 - A marketing homepage at `/`
-- Authentication flows at `/login`, `/register`, and `/verify-email`
+- Authentication flows at `/login`, `/register`, `/forgot-password`, `/reset-password`, and `/verify-email`
 - Discovery and search experiences at `/explore`, `/subscriptions`, and `/search`
 - Video playback pages at `/video/[id]`
 - Public creator pages at `/channel/[username]`

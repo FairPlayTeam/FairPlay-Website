@@ -13,6 +13,15 @@ export type RegisterInput = {
   password: string;
 };
 
+export type ForgotPasswordInput = {
+  email: string;
+};
+
+export type ResetPasswordInput = {
+  token: string;
+  password: string;
+};
+
 export async function getCurrentUser() {
   return api.get<User>("/auth/me");
 }
@@ -34,6 +43,18 @@ export async function verifyEmail(token: string) {
 
 export async function resendVerificationEmail(email: string) {
   return api.post<void>("/auth/resend-verification", { email });
+}
+
+export async function requestPasswordReset(input: ForgotPasswordInput) {
+  return axios.post<{ message: string }>("/api/auth/forgot-password", input, {
+    withCredentials: true,
+  });
+}
+
+export async function resetPassword(input: ResetPasswordInput) {
+  return axios.post<{ message: string; sessionsLoggedOut: number }>("/api/auth/reset-password", input, {
+    withCredentials: true,
+  });
 }
 
 export async function logout() {
