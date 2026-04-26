@@ -117,7 +117,7 @@ docs/         Repository-level technical documentation
 - Sensitive areas are checked server-side against the backend session and reinforced client-side with sanitized callback URLs.
 - Protected routes distinguish between an expired session and a temporarily unavailable auth backend, redirecting the latter to a dedicated recovery screen instead of treating it as a logout.
 - Client-side auth hydration preserves a distinct "service unavailable" state so public surfaces do not misleadingly fall back to login prompts when the auth backend is down.
-- Uploads are sent as multipart form data to the backend.
+- Large video uploads automatically use the backend chunked-upload flow instead of a single monolithic request.
 
 For a more detailed technical walkthrough, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
