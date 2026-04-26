@@ -10,7 +10,7 @@ export default function PlayerShowcaseSection() {
         <div className="relative mx-auto max-w-6xl">
           <div className="relative mx-auto">
             <div
-              className="pointer-events-none absolute inset-x-0 -top-8 mx-auto h-[60%] w-[70%] rounded-full opacity-20 blur-3xl"
+              className="pointer-events-none absolute inset-x-0 -top-8 mx-auto hidden h-[60%] w-[70%] rounded-full opacity-20 blur-3xl md:block"
               style={{
                 background:
                   "radial-gradient(ellipse at center, hsl(var(--primary)) 0%, transparent 70%)",

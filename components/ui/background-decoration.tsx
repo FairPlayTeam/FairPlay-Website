@@ -92,21 +92,60 @@ const PARTICLES_CONFIG: ISourceOptions = {
   detectRetina: true,
 };
 
-function BackgroundDecoration({ className }: { className?: string }) {
+interface BackgroundDecorationProps {
+  className?: string;
+  disableOnMobile?: boolean;
+}
+
+const MOBILE_MEDIA_QUERY = "(max-width: 767px)";
+
+function BackgroundDecoration({
+  className,
+  disableOnMobile = false,
+}: BackgroundDecorationProps) {
   const [engineReady, setEngineReady] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [shouldRenderDecoration, setShouldRenderDecoration] = useState(!disableOnMobile);
 
   useEffect(() => {
+    if (!disableOnMobile) return;
+
+    const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+    const syncViewport = () => setShouldRenderDecoration(!mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener("change", syncViewport);
+
+    return () => mediaQuery.removeEventListener("change", syncViewport);
+  }, [disableOnMobile]);
+
+  useEffect(() => {
+    if (!shouldRenderDecoration) return;
+
+    let mounted = true;
+
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
-    }).then(() => setEngineReady(true));
-  }, []);
+    }).then(() => {
+      if (mounted) {
+        setEngineReady(true);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [shouldRenderDecoration]);
 
   useEffect(() => {
     if (!engineReady) return;
     const t = setTimeout(() => setVisible(true), 300);
     return () => clearTimeout(t);
   }, [engineReady]);
+
+  if (!shouldRenderDecoration) {
+    return null;
+  }
 
   return (
     <div className={cn("absolute inset-0 z-0", className)}>

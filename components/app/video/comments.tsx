@@ -345,7 +345,8 @@ export function Comments({ videoId, initialComments, allowComments = true }: Com
       ) : isUnavailable && !user ? (
         <div className="mb-8 flex flex-col items-center gap-4 p-4 text-center">
           <p className="text-sm text-muted-foreground">
-            {errorMessage ?? "Authentication is temporarily unavailable, so posting comments is disabled."}
+            {errorMessage ??
+              "Authentication is temporarily unavailable, so posting comments is disabled."}
           </p>
           <Link href={buildServiceUnavailableHref(`/video/${videoId}#comments`)}>
             <Button variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold">

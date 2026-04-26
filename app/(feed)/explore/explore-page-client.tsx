@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { VideoCard } from "@/components/app/video/video-card";
 import { getVideos, type VideoDetails } from "@/lib/video";
 import { Spinner } from "@/components/ui/spinner";
@@ -45,6 +45,8 @@ export default function ExplorePageClient({
   initialTotalPages,
   initialError,
 }: ExplorePageClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const params = useSearchParams();
 
   const shouldFetchInit = Boolean(initialError);
@@ -111,8 +113,14 @@ export default function ExplorePageClient({
   }, [fetchVideos, shouldFetchInit]);
 
   useEffect(() => {
-    setIsPopupOpen(params.has("popup"));
-  }, [params]);
+    if (!params.has("popup")) return;
+
+    const nextParams = new URLSearchParams(params.toString());
+    nextParams.delete("popup");
+
+    const nextUrl = nextParams.toString() ? `${pathname}?${nextParams.toString()}` : pathname;
+    router.replace(nextUrl, { scroll: false });
+  }, [params, pathname, router]);
 
   const loadMore = useCallback(() => {
     if (isLoading || isLoadingMore || !hasMore) return;
@@ -151,6 +159,7 @@ export default function ExplorePageClient({
             <VideoCard
               key={video.id}
               thumbnailUrl={video.thumbnailUrl}
+              durationSeconds={video.duration}
               title={video.title}
               displayName={video.user?.displayName || video.user?.username}
               meta={`${video.viewCount} views • ${new Date(video.createdAt).toLocaleDateString()}`}

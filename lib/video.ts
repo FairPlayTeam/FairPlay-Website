@@ -13,6 +13,7 @@ export type VideoDetails = {
   title: string;
   hls: HlsInfo;
   thumbnailUrl: string | null;
+  duration: number | null;
   viewCount: string;
   avgRating: number;
   userRating?: number | null;

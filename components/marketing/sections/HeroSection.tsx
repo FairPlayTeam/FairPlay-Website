@@ -121,11 +121,11 @@ export default function HeroSection({
 
   return (
     <Section className="relative overflow-hidden">
-      <BackgroundDecoration />
+      <BackgroundDecoration disableOnMobile />
 
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-transparent via-background/60 to-background" />
+      <div className="pointer-events-none absolute inset-0 z-[1] hidden bg-gradient-to-b from-transparent via-background/60 to-background md:block" />
 
-      <div className="relative z-10 flex w-full flex-col items-center px-5 sm:px-8">
+      <div className="relative z-10 flex w-full flex-col items-center">
         <h1
           className={cn(
             "mb-6 max-w-3xl text-center transition-all duration-700 ease-out delay-100",

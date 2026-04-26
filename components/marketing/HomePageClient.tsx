@@ -13,7 +13,7 @@ import OpenSourceSection from "@/components/marketing/sections/OpenSourceSection
 import PlayerShowcaseSection from "@/components/marketing/sections/PlayerShowcaseSection";
 import SupportSection from "@/components/marketing/sections/SupportSection";
 
-const PAGE_SHELL = "mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12";
+const PAGE_SHELL = "mx-auto w-full max-w-7xl";
 
 function useScrollToHash() {
   useEffect(() => {

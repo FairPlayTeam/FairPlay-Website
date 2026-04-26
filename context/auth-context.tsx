@@ -4,10 +4,7 @@ import { createContext, useCallback, useContext, useMemo, type ReactNode } from 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { clearAuthSession, getCurrentUser } from "@/lib/auth/api";
-import {
-  type ClientAuthStatus,
-  resolveClientAuthState,
-} from "@/lib/auth/client-auth-state";
+import { type ClientAuthStatus, resolveClientAuthState } from "@/lib/auth/client-auth-state";
 import { authQueryKeys } from "@/lib/auth/query";
 import type { User } from "@/lib/users";
 

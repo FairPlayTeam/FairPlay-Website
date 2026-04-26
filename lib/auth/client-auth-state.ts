@@ -1,11 +1,7 @@
 import { getApiErrorMessage } from "../api-error";
 import type { User } from "../users";
 
-export type ClientAuthStatus =
-  | "loading"
-  | "authenticated"
-  | "unauthenticated"
-  | "unavailable";
+export type ClientAuthStatus = "loading" | "authenticated" | "unauthenticated" | "unavailable";
 
 type ResolveClientAuthStateOptions = {
   user: User | null | undefined;
@@ -13,11 +9,7 @@ type ResolveClientAuthStateOptions = {
   error: unknown;
 };
 
-export function resolveClientAuthState({
-  user,
-  isLoading,
-  error,
-}: ResolveClientAuthStateOptions) {
+export function resolveClientAuthState({ user, isLoading, error }: ResolveClientAuthStateOptions) {
   const status: ClientAuthStatus = isLoading
     ? "loading"
     : error
