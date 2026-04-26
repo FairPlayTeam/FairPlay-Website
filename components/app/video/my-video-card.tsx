@@ -42,7 +42,7 @@ export function MyVideoCard({ video, user, onDelete }: MyVideoCardProps) {
             !isProcessing && (
               <button
                 type="button"
-                className="cursor-pointer p-2 bg-background/80 hover:bg-red-600 text-white rounded-full shadow"
+                className="cursor-pointer p-2 bg-background/80 hover:bg-red-600 text-foreground rounded-full shadow"
                 aria-label="Delete video"
                 onClick={(e) => {
                   e.preventDefault();

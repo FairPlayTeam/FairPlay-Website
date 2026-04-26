@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -46,7 +47,9 @@ export default function LoginPage() {
     defaultValue: "",
   });
   const isUnverifiedError = error?.includes("Please verify your email address before logging in.");
-  const emailForResend = identifierValue.includes("@") ? identifierValue : undefined;
+  const normalizedIdentifier = identifierValue.trim();
+  const emailForResend = normalizedIdentifier.includes("@") ? normalizedIdentifier : undefined;
+  const resetSuccess = params.get("reset") === "success";
 
   return (
     <AuthPageShell
@@ -79,6 +82,24 @@ export default function LoginPage() {
         registration={form.register("password", { onChange: clearError })}
         error={form.formState.errors.password?.message}
       />
+      <div className="flex justify-end">
+        <Link
+          href={
+            emailForResend
+              ? `/forgot-password?email=${encodeURIComponent(emailForResend)}`
+              : "/forgot-password"
+          }
+          className="text-sm text-muted-foreground underline underline-offset-2 hover:text-primary"
+        >
+          Forgot your password?
+        </Link>
+      </div>
+
+      {resetSuccess && (
+        <p className="text-sm text-muted-foreground">
+          Your password was reset. You can now sign in with your new password.
+        </p>
+      )}
 
       {isUnverifiedError && (
         <p className="text-sm text-destructive">

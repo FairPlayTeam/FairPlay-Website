@@ -72,7 +72,7 @@ export function ModVideoCard({
             !isProcessing && (
               <button
                 type="button"
-                className="cursor-pointer rounded-full bg-background/80 p-2 text-white shadow hover:bg-red-600"
+                className="cursor-pointer rounded-full bg-background/80 p-2 text-foreground shadow hover:bg-red-600"
                 aria-label="Delete video"
                 onClick={(e) => {
                   e.preventDefault();

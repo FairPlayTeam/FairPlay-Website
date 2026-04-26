@@ -61,6 +61,8 @@ The routing model is organized around user-facing areas.
 
 - `/login`
 - `/register`
+- `/forgot-password`
+- `/reset-password`
 - `/register/verify`
 - `/verify-email`
 
@@ -173,6 +175,8 @@ Authentication is session-based from the frontend's point of view, while the bac
 The frontend uses a lightweight BFF-style layer:
 
 - `app/api/auth/login/route.ts` exchanges credentials for a backend session key and stores it in the `HttpOnly` cookie
+- `app/api/auth/forgot-password/route.ts` forwards password reset requests with the original client metadata headers preserved
+- `app/api/auth/reset-password/route.ts` completes password resets and clears any stale local session cookie after success
 - `app/api/auth/verify-email/route.ts` does the same after email verification
 - `app/api/auth/logout/route.ts` revokes the current backend session before clearing the cookie, so client logout success stays aligned with backend revocation
 - `app/api/proxy/[...path]/route.ts` forwards authenticated API calls and injects the bearer token server-side
