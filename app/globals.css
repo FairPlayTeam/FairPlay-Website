@@ -147,6 +147,26 @@ html {
   scrollbar-gutter: stable;
 }
 
+/*
+ * Radix UI injects the following CSS when a dialog box is opened:
+ * margin-right: 6px !important;
+ * --removed-body-scroll-bar-size: 6px;
+ * to compensate for the removal of the scrollbar.
+ * 
+ * However, the scrollbar is already managed by "scrollbar-gutter: stable" on <html>,
+ * these causes an overlay shift.
+ *
+ * The following style corrects this shift.
+*/
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+body[data-scroll-locked] {
+  margin-right: 0 !important;
+}
+
 body {
   font-family: var(--font-body);
   line-height: 1.6;
