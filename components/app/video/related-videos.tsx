@@ -26,7 +26,7 @@ export function RelatedVideos({
 
   return (
     <div className="px-4 lg:px-0">
-      <h2 className="text-xl font-bold text-foreground sm:text-2xl mb-3">Other Videos</h2>
+      <h2 className="text-xl font-bold text-foreground sm:text-xl mb-3">Other Videos</h2>
 
       <div className="flex flex-col">
         {videos.map((video) => (
