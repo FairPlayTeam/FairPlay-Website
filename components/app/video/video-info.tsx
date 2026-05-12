@@ -75,7 +75,7 @@ export function VideoInfo({ video }: { video: VideoDetails }) {
   }, [video.user?.username]);
 
   return (
-    <div className="mt-4 space-y-6">
+    <div className="space-y-6">
       <h1 className="text-xl font-bold text-foreground sm:text-xl">{video.title}</h1>
 
       <div className="flex flex-col justify-between gap-6 sm:flex-row">
