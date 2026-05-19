@@ -60,7 +60,7 @@ export function FollowButton({
         "rounded-full transition-colors duration-200",
         following
           ? "bg-secondary text-foreground"
-          : "bg-foreground text-background border border-border",
+          : "bg-foreground text-background",
       )}
     >
       <AnimatePresence mode="popLayout">

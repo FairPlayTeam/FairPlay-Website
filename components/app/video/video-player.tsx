@@ -674,7 +674,7 @@ export function VideoPlayer({
       layout
       transition={{ type: "spring", bounce: 0, duration: 0.3 }}
       className={cn(
-        "relative z-0 max-w-full overflow-visible",
+        "relative z-0 max-w-full overflow-visible md:mb-4",
         isTheatreMode && "lg:mx-auto lg:w-full lg:max-w-[calc(80vh*16/9)]",
       )}
     >

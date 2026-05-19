@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
 const PAGE_SIZE = 24;
+const EXPLORE_POPUP_DISMISSED_KEY = "fairplay:explore-popup-dismissed";
 
 function mergeUniqueById(prev: VideoDetails[], next: VideoDetails[]) {
   if (next.length === 0) return prev;
@@ -58,7 +59,7 @@ export default function ExplorePageClient({
     shouldFetchInit ? null : (initialError ?? null),
   );
 
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(params.has("popup"));
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   const [page, setPage] = useState<number>(1);
 
@@ -112,15 +113,28 @@ export default function ExplorePageClient({
     fetchVideos(1, "initial");
   }, [fetchVideos, shouldFetchInit]);
 
-  useEffect(() => {
-    if (!params.has("popup")) return;
-
+  const removePopupParam = useCallback(() => {
     const nextParams = new URLSearchParams(params.toString());
     nextParams.delete("popup");
 
     const nextUrl = nextParams.toString() ? `${pathname}?${nextParams.toString()}` : pathname;
     router.replace(nextUrl, { scroll: false });
   }, [params, pathname, router]);
+
+  const closePopup = useCallback(() => {
+    window.localStorage.setItem(EXPLORE_POPUP_DISMISSED_KEY, "true");
+    setIsPopupOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!params.has("popup")) return;
+
+    const hasDismissedPopup =
+      window.localStorage.getItem(EXPLORE_POPUP_DISMISSED_KEY) === "true";
+
+    setIsPopupOpen(!hasDismissedPopup);
+    removePopupParam();
+  }, [params, removePopupParam]);
 
   const loadMore = useCallback(() => {
     if (isLoading || isLoadingMore || !hasMore) return;
@@ -177,7 +191,17 @@ export default function ExplorePageClient({
         ) : null}
       </div>
 
-      <AlertDialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
+      <AlertDialog
+        open={isPopupOpen}
+        onOpenChange={(open) => {
+          if (open) {
+            setIsPopupOpen(true);
+            return;
+          }
+
+          closePopup();
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Hang on a sec...</AlertDialogTitle>
@@ -188,7 +212,7 @@ export default function ExplorePageClient({
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setIsPopupOpen(false)}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={closePopup}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
