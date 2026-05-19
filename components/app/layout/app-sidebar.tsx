@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   TrendingUp,
   Upload,
+  Palette,
 } from "lucide-react";
 import { SiDiscord, SiKofi, SiMatrix } from "react-icons/si";
 import { cn } from "@/lib/utils";
@@ -35,6 +36,8 @@ const categories = [
   { icon: BookOpen, label: "Learning", href: "/search?q=learning" },
   { icon: Gamepad2, label: "Gaming", href: "/search?q=gaming" },
 ];
+
+const otherCategories = [{ icon: Palette, label: "Themes", href: "/themes" }];
 
 export default function AppSidebar() {
   const pathname = usePathname();
@@ -133,6 +136,32 @@ export default function AppSidebar() {
               const linkQuery = new URLSearchParams(link.href.split("?")[1] ?? "").get("q");
               const currentQuery = searchParams.get("q");
               const isActive = pathname === "/search" && currentQuery === linkQuery;
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={close}
+                  className={cn(
+                    "flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
+                    isActive
+                      ? "bg-card text-foreground"
+                      : "text-foreground hover:bg-card hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4" />
+                  <span>{link.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          <Separator />
+
+          <div className="flex flex-col gap-1">
+            {otherCategories.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
 
               return (
                 <Link
