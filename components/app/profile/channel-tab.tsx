@@ -98,7 +98,7 @@ export default function ChannelTab({ user }: ChannelTabProps) {
         <button
           type="button"
           onClick={() => bannerInputRef.current?.click()}
-          className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+          className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full cursor-pointer"
           title="Change Banner"
           aria-label="Change banner"
         >
