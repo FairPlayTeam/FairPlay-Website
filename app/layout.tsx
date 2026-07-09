@@ -8,6 +8,9 @@ import {
   SITE_NAME,
   TWITTER_HANDLE,
 } from "@/lib/seo";
+import { ThemeColorsSchema, themeColorsToCSSVars } from "@/lib/theme";
+import { cookies } from "next/headers";
+import { ThemeSync } from "@/components/theme/theme-sync";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,11 +36,36 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get("theme");
+  let injectedCSSObj = "";
+
+  if (themeCookie?.value) {
+    try {
+      const decodedTheme = JSON.parse(decodeURIComponent(themeCookie.value));
+      const parsedTheme = ThemeColorsSchema.safeParse(decodedTheme);
+      if (parsedTheme.success) {
+        injectedCSSObj = themeColorsToCSSVars(parsedTheme.data);
+      }
+    } catch (e) {
+      console.error("Error while loading theme:", e);
+    }
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased">
-        <Providers>{children}</Providers>
+        {injectedCSSObj && (
+          <style
+            id="theme-style-tag"
+            dangerouslySetInnerHTML={{ __html: `:root{${injectedCSSObj}}` }}
+          />
+        )}
+        <Providers>
+          <ThemeSync />
+          {children}
+        </Providers>
         <Toaster />
       </body>
     </html>
