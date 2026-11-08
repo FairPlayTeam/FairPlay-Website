@@ -51,7 +51,8 @@ export function VideoCard({
 
   const wrapperBase =
     "group block cursor-pointer rounded-2xl transition-colors p-1 mb-2 outline-none";
-  const hoverStyle = "hover:bg-accent/50";
+  const hoverStyle =
+    "hover:bg-accent/50 hover:border-solid hover:border-4 hover:border-[var(--primary)]";
 
   const cardWrapper = (children: ReactNode, classes: string) => {
     const resolvedHref = href?.trim();
