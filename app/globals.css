@@ -203,6 +203,14 @@ body {
   z-index: -1;
 }
 
+.explore-gradient-bg {
+  background: radial-gradient(
+    rgba(0, 0, 0, 0.9),
+    color-mix(in srgb, var(--primary-400) 90%, transparent),
+    color-mix(in srgb, var(--color-background) 90%, transparent)
+  );
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
