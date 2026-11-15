@@ -114,7 +114,7 @@ export default function AppSidebar() {
                   className={cn(
                     "flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? "bg-secondary text-foreground"
+                      ? "bg-primary text-foreground"
                       : "text-foreground hover:bg-secondary hover:text-foreground",
                   )}
                 >
@@ -142,8 +142,8 @@ export default function AppSidebar() {
                   className={cn(
                     "flex items-center gap-4 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? "bg-card text-foreground"
-                      : "text-foreground hover:bg-card hover:text-foreground",
+                      ? "bg-primary text-foreground"
+                      : "text-foreground hover:bg-secondary hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4" />
@@ -165,14 +165,18 @@ export default function AppSidebar() {
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </Button>
             )}
-            <div className="flex gap-2 text-muted-foreground">
+            <div className="flex gap-1.5 text-muted-foreground justify-center w-full">
               <Link
                 href="https://discord.gg/K68Z9HbsA5"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button variant="ghost" className="w-full" aria-label="Join Discord">
+                <Button
+                  variant="ghost"
+                  className="w-10 h-10 rounded-4xl hover:border-2 hover:border-primary"
+                  aria-label="Join Discord"
+                >
                   <SiDiscord className="size-5" />
                 </Button>
               </Link>
@@ -183,7 +187,11 @@ export default function AppSidebar() {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button variant="ghost" className="w-full" aria-label="Join Matrix">
+                <Button
+                  variant="ghost"
+                  className="w-10 h-10 rounded-4xl hover:border-2 hover:border-primary"
+                  aria-label="Join Matrix"
+                >
                   <SiMatrix className="size-5" />
                 </Button>
               </Link>
@@ -194,7 +202,11 @@ export default function AppSidebar() {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button variant="ghost" className="w-full" aria-label="Support on Ko-fi">
+                <Button
+                  variant="ghost"
+                  className="w-10 h-10 rounded-4xl hover:border-2 hover:border-primary"
+                  aria-label="Support on Ko-fi"
+                >
                   <SiKofi className="size-5" />
                 </Button>
               </Link>
