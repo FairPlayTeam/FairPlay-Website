@@ -34,5 +34,9 @@ export const metadata: Metadata = {
 };
 
 export default function ExploreLayout({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={null}>{children}</Suspense>;
+  return (
+    <Suspense fallback={null}>
+      <div className=" min-h-[calc(100dvh-4rem)] explore-gradient-bg">{children}</div>
+    </Suspense>
+  );
 }

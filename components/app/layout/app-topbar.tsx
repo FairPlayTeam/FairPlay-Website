@@ -193,7 +193,7 @@ export default function AppTopbar() {
             {shouldShowUnavailableAuthState ? (
               <Button
                 asChild
-                variant="outline"
+                variant="default"
                 className={cn(TOPBAR_ITEM_HEIGHT, "hidden rounded-full px-4 lg:inline-flex")}
                 title={errorMessage ?? undefined}
               >
@@ -206,17 +206,17 @@ export default function AppTopbar() {
                 <Separator orientation="vertical" />
                 <Button
                   variant="secondary"
-                  className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full px-4")}
+                  className={cn(TOPBAR_ITEM_HEIGHT, "rounded-full px-4 border-primary-200")}
                   onClick={() => router.push("/login")}
                 >
                   Login
                 </Button>
 
                 <Button
-                  variant="secondary"
+                  variant="default"
                   className={cn(
                     TOPBAR_ITEM_HEIGHT,
-                    "rounded-full bg-foreground px-4 text-background hover:bg-foreground-muted hover:text-background-muted",
+                    "rounded-full bg-primary-200 px-4 text-primary-foreground hover:bg-foreground-muted hover:text-background-muted",
                   )}
                   onClick={() => router.push("/register")}
                 >
